@@ -7,7 +7,7 @@ uses
   System.SysUtils, System.Variants, System.Classes;
 
 type
-  TLazyThreadTimer = class(TThread)
+  TLZThreadTimer = class(TThread)
   private
     FActive: boolean;
     FOnTimer: TNotifyEvent;
@@ -21,9 +21,9 @@ type
 
 implementation
 
-{ TLazyThreadTimer }
+{ TLZThreadTimer }
 
-constructor TLazyThreadTimer.Create(AOnTimer: TNotifyEvent;
+constructor TLZThreadTimer.Create(AOnTimer: TNotifyEvent;
   ATimeout: integer = 1000);
 begin
   FOnTimer := AOnTimer;
@@ -32,13 +32,13 @@ begin
   FreeOnTerminate := True;
 end;
 
-destructor TLazyThreadTimer.Destroy;
+destructor TLZThreadTimer.Destroy;
 begin
   FActive := false;
   inherited;
 end;
 
-procedure TLazyThreadTimer.SyncOnTimer;
+procedure TLZThreadTimer.SyncOnTimer;
 begin
   if Assigned(FOnTimer) and (FActive) then
   begin
@@ -49,7 +49,7 @@ begin
   end;
 end;
 
-procedure TLazyThreadTimer.Execute;
+procedure TLZThreadTimer.Execute;
 begin
   FActive := True;
   while (not Terminated) do

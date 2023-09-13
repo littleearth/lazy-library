@@ -6,14 +6,14 @@ uses
   Classes;
 
 type
-  TUtc = class(TObject)
+  TLZUtc = class(TObject)
   public
     class function FromUtc(const Value: TDateTime): TDateTime; static;
     class function ToUtc(const Value: TDateTime): TDateTime; static;
     class function UtcNow: TDateTime; static;
   end;
 
-  TToIso8601 = class(TUtc)
+  TLZToIso8601 = class(TLZUtc)
   public
     class function DateTimeToIso8601(const Value: TDateTime;
       AReturnUTC: boolean = false): string; static;
@@ -22,7 +22,7 @@ type
     class function UtcTimeToIso8601(const Value: TTime): string; static;
   end;
 
-  TIso8601 = class(TToIso8601)
+  TLZIso8601 = class(TLZToIso8601)
   public
     class function DateFromIso8601(const Value: string): TDate; static;
     class function DateTimeFromIso8601(const Value: string;
@@ -36,7 +36,7 @@ implementation
 uses
   XSBuiltIns, System.DateUtils, SysUtils, IdGlobal, IdGlobalProtocols;
 
-class function TIso8601.DateFromIso8601(const Value: string): TDate;
+class function TLZIso8601.DateFromIso8601(const Value: string): TDate;
 begin
   with TXSDate.Create() do
     try
@@ -51,7 +51,7 @@ begin
     end;
 end;
 
-class function TIso8601.DateTimeFromIso8601(const Value: string;
+class function TLZIso8601.DateTimeFromIso8601(const Value: string;
   AReturnUTC: boolean): TDateTime;
 begin
   try
@@ -73,7 +73,7 @@ begin
   end;
 end;
 
-class function TIso8601.TimeFromIso8601(const Value: string): TTime;
+class function TLZIso8601.TimeFromIso8601(const Value: string): TTime;
 begin
   with TXSTime.Create() do
     try
@@ -88,7 +88,7 @@ begin
     end;
 end;
 
-class function TIso8601.UtcDateTimeToIso8601(const Value: TDateTime): string;
+class function TLZIso8601.UtcDateTimeToIso8601(const Value: TDateTime): string;
 begin
   with TXSDateTime.Create() do
     try
@@ -103,24 +103,24 @@ begin
     end;
 end;
 
-class function TUtc.FromUtc(const Value: TDateTime): TDateTime;
+class function TLZUtc.FromUtc(const Value: TDateTime): TDateTime;
 begin
   // Result := Value - TimeZoneBias;
   Result := UTCTimeToLocalTime(Value);
 end;
 
-class function TUtc.ToUtc(const Value: TDateTime): TDateTime;
+class function TLZUtc.ToUtc(const Value: TDateTime): TDateTime;
 begin
   // Result := Value + TimeZoneBias;
   Result := LocalTimeToUTCTime(Value);
 end;
 
-class function TUtc.UtcNow: TDateTime;
+class function TLZUtc.UtcNow: TDateTime;
 begin
   Result := ToUtc(Now);
 end;
 
-class function TToIso8601.DateTimeToIso8601(const Value: TDateTime;
+class function TLZToIso8601.DateTimeToIso8601(const Value: TDateTime;
   AReturnUTC: boolean): string;
 begin
   try
@@ -147,7 +147,7 @@ begin
   end;
 end;
 
-class function TToIso8601.DateToIso8601(const Value: TDate): string;
+class function TLZToIso8601.DateToIso8601(const Value: TDate): string;
 begin
   with TXSDate.Create() do
     try
@@ -162,7 +162,7 @@ begin
     end;
 end;
 
-class function TToIso8601.TimeToIso8601(const Value: TTime): string;
+class function TLZToIso8601.TimeToIso8601(const Value: TTime): string;
 begin
   with TXSTime.Create() do
     try
@@ -177,7 +177,7 @@ begin
     end;
 end;
 
-class function TToIso8601.UtcTimeToIso8601(const Value: TTime): string;
+class function TLZToIso8601.UtcTimeToIso8601(const Value: TTime): string;
 begin
   with TXSTime.Create() do
     try

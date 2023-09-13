@@ -5,7 +5,7 @@ interface
 uses Lazy.Types, Classes;
 
 type
-  TLazyToken = class(TLazyObject)
+  TLZToken = class(TLZObject)
   private
     FTokens: TStringList;
     FSource: string;
@@ -45,7 +45,7 @@ implementation
 
 uses SysUtils;
 
-constructor TLazyToken.Create(ASource: string; ASeperator: char);
+constructor TLZToken.Create(ASource: string; ASeperator: char);
 begin
   inherited Create;
   FTokens := TStringList.Create;
@@ -56,18 +56,18 @@ begin
   FOutOfBoundsValue := '';
 end;
 
-constructor TLazyToken.Create;
+constructor TLZToken.Create;
 begin
   Create('', ',');
 end;
 
-destructor TLazyToken.Destroy;
+destructor TLZToken.Destroy;
 begin
   FreeAndNil(FTokens);
   inherited Destroy;
 end;
 
-procedure TLazyToken.SetSource(AValue: string);
+procedure TLZToken.SetSource(AValue: string);
 begin
   FSource := Trim(AValue);
   if FSource <> '' then
@@ -81,13 +81,13 @@ begin
   end;
 end;
 
-procedure TLazyToken.SetSeperator(AValue: char);
+procedure TLZToken.SetSeperator(AValue: char);
 begin
   FSeperator := AValue;
   Split;
 end;
 
-function TLazyToken.GetNextToken(const S: string; Separator: char;
+function TLZToken.GetNextToken(const S: string; Separator: char;
   var StartPos: integer): string;
 var
   Index: integer;
@@ -115,7 +115,7 @@ begin
   StartPos := Index + 1;
 end;
 
-procedure TLazyToken.Split;
+procedure TLZToken.Split;
 var
   SourceArray: TArray<string>;
   TokenStr: string;
@@ -141,7 +141,7 @@ begin
   end;
 end;
 
-function TLazyToken.TokenExists(AValue: string;
+function TLZToken.TokenExists(AValue: string;
   ACaseSensitive: Boolean): Boolean;
 var
   Idx: integer;
@@ -162,7 +162,7 @@ begin
   end;
 end;
 
-function TLazyToken.GetToken(AIndex: integer): string;
+function TLZToken.GetToken(AIndex: integer): string;
 begin
   if (AIndex >= 0) and (AIndex < FTokens.Count) then
   begin
@@ -181,17 +181,17 @@ begin
   end;
 end;
 
-procedure TLazyToken.SetToken(AIndex: integer; AValue: string);
+procedure TLZToken.SetToken(AIndex: integer; AValue: string);
 begin
   FTokens[AIndex] := AValue;
 end;
 
-function TLazyToken.GetText: string;
+function TLZToken.GetText: string;
 begin
   Result := FTokens.Text;
 end;
 
-function TLazyToken.GetCount: integer;
+function TLZToken.GetCount: integer;
 begin
   Result := FTokens.Count;
 end;

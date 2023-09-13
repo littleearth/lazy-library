@@ -47,6 +47,10 @@ contains
   WinApi.SystemInformation in '..\..\source\vcl\winapi\WinApi.SystemInformation.pas',
   VCL.Lazy.Types in '..\..\source\vcl\base\VCL.Lazy.Types.pas',
   WinAPi.WinPerf in '..\..\source\vcl\winapi\WinAPi.WinPerf.pas',
-  WinAPI.PerformanceDataHelper in '..\..\source\vcl\winapi\WinAPI.PerformanceDataHelper.pas';
+  WinAPI.PerformanceDataHelper in '..\..\source\vcl\winapi\WinAPI.PerformanceDataHelper.pas',
+  WinApi.VSS.Api in '..\..\source\vcl\winapi\WinApi.VSS.Api.pas',
+  WinApi.VSS.Consts in '..\..\source\vcl\winapi\WinApi.VSS.Consts.pas',
+  WinApi.VSS.Copy in '..\..\source\vcl\winapi\WinApi.VSS.Copy.pas',
+  WinApi.VSS.Utils in '..\..\source\vcl\winapi\WinApi.VSS.Utils.pas';
 
 end.

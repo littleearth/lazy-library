@@ -10,7 +10,7 @@ const
   PWA_DEFAULT_END_POINT = 'https://api.pulseway.com/v2/';
 
 type
-  TPWACore = class(TLazyRESTClientBasicAuth)
+  TLZPWACore = class(TLZRESTClientBasicAuth)
   private
     FEndPoint: string;
     procedure SetEndPoint(const Value: string);
@@ -21,21 +21,21 @@ type
     property EndPoint: string read FEndPoint write SetEndPoint;
   end;
 
-  TPWAPriority = (pwaLow, pwaNormal, pwaElevated, pwaCritical);
+  TLZPWAPriority = (pwaLow, pwaNormal, pwaElevated, pwaCritical);
 
-  TPWAPriorityHelper = class(TLazyObject)
+  TLZPWAPriorityHelper = class(TLZObject)
   public
-    class function AsString(APWAPriority: TPWAPriority): string;
-    class function FromString(AValue: string): TPWAPriority;
+    class function AsString(APWAPriority: TLZPWAPriority): string;
+    class function FromString(AValue: string): TLZPWAPriority;
   end;
 
-  TPWANotifications = class(TPWACore)
+  TLZPWANotifications = class(TLZPWACore)
   public
     procedure RegisterSytem(AInstanceID: string; AName: string;
       AGroup: string = ''; ADescription: string = '';
       ANextRefreshInterval: integer = 5; ANotifyWhenOffline: boolean = true);
     procedure Notify(AInstanceID: string; ATitle: string; AMessage: string;
-      APriority: TPWAPriority);
+      APriority: TLZPWAPriority);
 
   end;
 
@@ -46,26 +46,26 @@ implementation
 uses
   System.JSON;
 
-function TPWACore.GetBaseURL: string;
+function TLZPWACore.GetBaseURL: string;
 begin
   REsult := EndPoint;
 end;
 
-procedure TPWACore.SetDefaults;
+procedure TLZPWACore.SetDefaults;
 begin
   inherited;
   FEndPoint := PWA_DEFAULT_END_POINT;
 end;
 
-procedure TPWACore.SetEndPoint(const Value: string);
+procedure TLZPWACore.SetEndPoint(const Value: string);
 begin
   FEndPoint := Value;
 end;
 
 { TPWANotifications }
 
-procedure TPWANotifications.Notify(AInstanceID, ATitle, AMessage: string;
-  APriority: TPWAPriority);
+procedure TLZPWANotifications.Notify(AInstanceID, ATitle, AMessage: string;
+  APriority: TLZPWAPriority);
 var
   LJSON: TJSONObject;
 begin
@@ -74,7 +74,7 @@ begin
     LJSON.AddPair('instance_id', AInstanceID);
     LJSON.AddPair('title', ATitle);
     LJSON.AddPair('message', AMessage);
-    LJSON.AddPair('priority', TPWAPriorityHelper.AsString(APriority));
+    LJSON.AddPair('priority', TLZPWAPriorityHelper.AsString(APriority));
 
     Post('notifications', LJSON.ToJSON,
       procedure(Asender: TObject; ASuccess: boolean; AMessage: string;
@@ -94,7 +94,7 @@ begin
   end;
 end;
 
-procedure TPWANotifications.RegisterSytem(AInstanceID, AName, AGroup,
+procedure TLZPWANotifications.RegisterSytem(AInstanceID, AName, AGroup,
   ADescription: string; ANextRefreshInterval: integer;
 ANotifyWhenOffline: boolean);
 var
@@ -127,7 +127,8 @@ end;
 
 { TPWAPriorityHelper }
 
-class function TPWAPriorityHelper.AsString(APWAPriority: TPWAPriority): string;
+class function TLZPWAPriorityHelper.AsString(APWAPriority
+  : TLZPWAPriority): string;
 begin
   REsult := 'normal';
   case APWAPriority of
@@ -140,7 +141,7 @@ begin
   end;
 end;
 
-class function TPWAPriorityHelper.FromString(AValue: string): TPWAPriority;
+class function TLZPWAPriorityHelper.FromString(AValue: string): TLZPWAPriority;
 begin
   REsult := pwaNormal;
   if SameText(AValue, 'low') then

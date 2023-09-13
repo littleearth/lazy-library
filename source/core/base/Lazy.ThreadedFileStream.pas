@@ -19,7 +19,7 @@ uses
   System.Classes, System.SyncObjs, Winapi.Windows;
 
 type
-  TThreadedFileStream = class(TThread)
+  TLZThreadedFileStream = class(TThread)
   private
     FFileStream: TFileStream;
     FFileTime: TDateTime;
@@ -50,22 +50,22 @@ type
 implementation
 
 
-procedure TThreadedFileStream.AppendStr(const S: RawByteString);
+procedure TLZThreadedFileStream.AppendStr(const S: RawByteString);
 begin
   Write(S[1], Length(S));
 end;
 
-procedure TThreadedFileStream.AppendStr(const S: UTF8String);
+procedure TLZThreadedFileStream.AppendStr(const S: UTF8String);
 begin
   AppendStr(RawByteString(S));
 end;
 
-procedure TThreadedFileStream.AppendStr(const S: UnicodeString);
+procedure TLZThreadedFileStream.AppendStr(const S: UnicodeString);
 begin
   AppendStr(UTF8Encode(S));
 end;
 
-procedure TThreadedFileStream.Clear;
+procedure TLZThreadedFileStream.Clear;
 begin
   Lock;
   try
@@ -76,7 +76,7 @@ begin
   end;
 end;
 
-constructor TThreadedFileStream.Create(const AFileName: string);
+constructor TLZThreadedFileStream.Create(const AFileName: string);
 var
   UTF8Header: RawByteString;
 begin
@@ -110,7 +110,7 @@ begin
   Suspended := false;
 end;
 
-destructor TThreadedFileStream.Destroy;
+destructor TLZThreadedFileStream.Destroy;
 begin
   Lock;
   try
@@ -131,7 +131,7 @@ begin
   inherited Destroy;
 end;
 
-function TThreadedFileStream.CalcTickDiff(const StartTick, EndTick: LongWord)
+function TLZThreadedFileStream.CalcTickDiff(const StartTick, EndTick: LongWord)
   : LongWord;
 begin
   if EndTick >= StartTick then
@@ -140,7 +140,7 @@ begin
     Result := High(LongWord) - StartTick + EndTick;
 end;
 
-procedure TThreadedFileStream.Execute;
+procedure TLZThreadedFileStream.Execute;
 var
   t: Cardinal;
 begin
@@ -161,7 +161,7 @@ begin
   Flush;
 end;
 
-procedure TThreadedFileStream.Flush;
+procedure TLZThreadedFileStream.Flush;
 var
   Buffer: TMemoryStream;
 begin
@@ -183,17 +183,17 @@ begin
   Buffer.Position := 0;
 end;
 
-procedure TThreadedFileStream.Lock;
+procedure TLZThreadedFileStream.Lock;
 begin
   FLocker.Enter;
 end;
 
-procedure TThreadedFileStream.Unlock;
+procedure TLZThreadedFileStream.Unlock;
 begin
   FLocker.Leave;
 end;
 
-function TThreadedFileStream.Write(const Buffer; Count: integer): Longint;
+function TLZThreadedFileStream.Write(const Buffer; Count: integer): Longint;
 begin
   Lock;
   try

@@ -18,7 +18,7 @@ uses
   System.SyncObjs, System.SysUtils, System.Variants, System.Classes;
 
 type
-  TThreadStringList = class
+  TLZThreadStringList = class
   private
     FStringList: TStringList;
     FLock: TCriticalSection;
@@ -79,7 +79,7 @@ type
 implementation
 
 
-constructor TThreadStringList.Create;
+constructor TLZThreadStringList.Create;
 begin
   FLock := TCriticalSection.Create;
   FStringList := TStringList.Create;
@@ -87,7 +87,7 @@ begin
   FStringList.Duplicates := dupIgnore;
 end;
 
-destructor TThreadStringList.Destroy;
+destructor TLZThreadStringList.Destroy;
 begin
   if LockList then
   begin
@@ -106,7 +106,7 @@ begin
 
 end;
 
-function TThreadStringList.LockList: boolean;
+function TLZThreadStringList.LockList: boolean;
 begin
   Result := false;
   if Assigned(FLock) and Assigned(FStringList) then
@@ -120,7 +120,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.UnlockList;
+procedure TLZThreadStringList.UnlockList;
 begin
   if Assigned(FLock) then
   begin
@@ -128,7 +128,7 @@ begin
   end;
 end;
 
-function TThreadStringList.Add(const S: string): integer;
+function TLZThreadStringList.Add(const S: string): integer;
 begin
   Result := -1;
   if not LockList then
@@ -140,7 +140,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.AddStrings(Strings: TStrings);
+procedure TLZThreadStringList.AddStrings(Strings: TStrings);
 begin
   if not LockList then
     Exit;
@@ -151,7 +151,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.Delete(Index: integer);
+procedure TLZThreadStringList.Delete(Index: integer);
 begin
   if not LockList then
     Exit;
@@ -162,7 +162,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.Clear;
+procedure TLZThreadStringList.Clear;
 begin
   if not LockList then
     Exit;
@@ -173,7 +173,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.Exchange(Index1, Index2: integer);
+procedure TLZThreadStringList.Exchange(Index1, Index2: integer);
 begin
   if not LockList then
     Exit;
@@ -184,7 +184,7 @@ begin
   end;
 end;
 
-function TThreadStringList.Find(const S: string; var Index: integer): boolean;
+function TLZThreadStringList.Find(const S: string; var Index: integer): boolean;
 begin
   Result := false;
   if not LockList then
@@ -196,7 +196,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.Insert(Index: integer; const S: string);
+procedure TLZThreadStringList.Insert(Index: integer; const S: string);
 begin
   if not LockList then
     Exit;
@@ -207,7 +207,7 @@ begin
   end;
 end;
 
-function TThreadStringList.IndexOf(const S: string): integer;
+function TLZThreadStringList.IndexOf(const S: string): integer;
 begin
   Result := -1;
   if not LockList then
@@ -220,7 +220,7 @@ begin
   end;
 end;
 
-function TThreadStringList.IndexOfName(const Name: string): integer;
+function TLZThreadStringList.IndexOfName(const Name: string): integer;
 begin
   Result := -1;
   if not LockList then
@@ -232,7 +232,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.Sort;
+procedure TLZThreadStringList.Sort;
 begin
   if not LockList then
     Exit;
@@ -243,7 +243,7 @@ begin
   end;
 end;
 
-function TThreadStringList.GetText: PChar;
+function TLZThreadStringList.GetText: PChar;
 begin
   Result := nil;
   if not LockList then
@@ -255,7 +255,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.LoadFromFile(const FileName: string);
+procedure TLZThreadStringList.LoadFromFile(const FileName: string);
 begin
   if not LockList then
     Exit;
@@ -266,7 +266,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.LoadFromStream(Stream: TStream);
+procedure TLZThreadStringList.LoadFromStream(Stream: TStream);
 begin
   if not LockList then
     Exit;
@@ -277,7 +277,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.SaveToFile(const FileName: string);
+procedure TLZThreadStringList.SaveToFile(const FileName: string);
 begin
   if not LockList then
     Exit;
@@ -288,7 +288,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.SaveToStream(Stream: TStream);
+procedure TLZThreadStringList.SaveToStream(Stream: TStream);
 begin
   if not LockList then
     Exit;
@@ -299,7 +299,7 @@ begin
   end;
 end;
 
-function TThreadStringList.GetDuplicates: TDuplicates;
+function TLZThreadStringList.GetDuplicates: TDuplicates;
 begin
   Result := dupIgnore;
   if not LockList then
@@ -311,7 +311,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.SetDuplicates(dup: TDuplicates);
+procedure TLZThreadStringList.SetDuplicates(dup: TDuplicates);
 begin
   if not LockList then
     Exit;
@@ -322,7 +322,7 @@ begin
   end;
 end;
 
-function TThreadStringList.GetCapacity: integer;
+function TLZThreadStringList.GetCapacity: integer;
 begin
   Result := 0;
   if not LockList then
@@ -334,7 +334,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.SetCapacity(capa: integer);
+procedure TLZThreadStringList.SetCapacity(capa: integer);
 begin
   if not LockList then
     Exit;
@@ -345,7 +345,7 @@ begin
   end;
 end;
 
-function TThreadStringList.GetCommaText: string;
+function TLZThreadStringList.GetCommaText: string;
 begin
   if not LockList then
     Exit;
@@ -356,7 +356,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.SetCommaText(const S: string);
+procedure TLZThreadStringList.SetCommaText(const S: string);
 begin
   if not LockList then
     Exit;
@@ -367,7 +367,7 @@ begin
   end;
 end;
 
-function TThreadStringList.GetCount: integer;
+function TLZThreadStringList.GetCount: integer;
 begin
   Result := 0;
   if not LockList then
@@ -379,7 +379,7 @@ begin
   end;
 end;
 
-function TThreadStringList.GetDelimiter: Char;
+function TLZThreadStringList.GetDelimiter: Char;
 begin
   Result := ',';
   if not LockList then
@@ -391,7 +391,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.SetDelimiter(delim: Char);
+procedure TLZThreadStringList.SetDelimiter(delim: Char);
 begin
   if not LockList then
     Exit;
@@ -402,7 +402,7 @@ begin
   end;
 end;
 
-function TThreadStringList.GetDelimitedText: string;
+function TLZThreadStringList.GetDelimitedText: string;
 begin
   if not LockList then
     Exit;
@@ -413,7 +413,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.SetDelimitedText(const S: string);
+procedure TLZThreadStringList.SetDelimitedText(const S: string);
 begin
   if not LockList then
     Exit;
@@ -424,7 +424,7 @@ begin
   end;
 end;
 
-function TThreadStringList.GetNames(Index: integer): string;
+function TLZThreadStringList.GetNames(Index: integer): string;
 begin
   if not LockList then
     Exit;
@@ -435,7 +435,7 @@ begin
   end;
 end;
 
-function TThreadStringList.GetValues(const Name: string): string;
+function TLZThreadStringList.GetValues(const Name: string): string;
 begin
   if not LockList then
     Exit;
@@ -446,7 +446,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.SetValues(const Name: string; S: string);
+procedure TLZThreadStringList.SetValues(const Name: string; S: string);
 begin
   if not LockList then
     Exit;
@@ -457,7 +457,7 @@ begin
   end;
 end;
 
-function TThreadStringList.GetSorted: boolean;
+function TLZThreadStringList.GetSorted: boolean;
 begin
   Result := false;
   if not LockList then
@@ -469,7 +469,7 @@ begin
   end;
 end;
 
-function TThreadStringList.GetStrings(Index: integer): string;
+function TLZThreadStringList.GetStrings(Index: integer): string;
 begin
   if not LockList then
     Exit;
@@ -480,7 +480,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.SetSorted(const Value: boolean);
+procedure TLZThreadStringList.SetSorted(const Value: boolean);
 begin
   if not LockList then
     Exit;
@@ -494,7 +494,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.SetStrings(Index: integer; S: string);
+procedure TLZThreadStringList.SetStrings(Index: integer; S: string);
 begin
   if not LockList then
     Exit;
@@ -505,7 +505,7 @@ begin
   end;
 end;
 
-function TThreadStringList.GetAsText: string;
+function TLZThreadStringList.GetAsText: string;
 begin
   if not LockList then
     Exit;
@@ -516,7 +516,7 @@ begin
   end;
 end;
 
-procedure TThreadStringList.SetAsText(S: string);
+procedure TLZThreadStringList.SetAsText(S: string);
 begin
   if not LockList then
     Exit;

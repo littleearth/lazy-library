@@ -2,8 +2,8 @@ object frmSystemInformation: TfrmSystemInformation
   Left = 0
   Top = 0
   Caption = 'System information'
-  ClientHeight = 442
-  ClientWidth = 628
+  ClientHeight = 424
+  ClientWidth = 618
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -18,22 +18,19 @@ object frmSystemInformation: TfrmSystemInformation
     AlignWithMargins = True
     Left = 3
     Top = 112
-    Width = 622
-    Height = 327
+    Width = 612
+    Height = 309
     Align = alClient
     Lines.Strings = (
       'memoSystemInformation')
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
-    ExplicitTop = 47
-    ExplicitWidth = 618
-    ExplicitHeight = 391
   end
   object GridPanel1: TGridPanel
     Left = 0
     Top = 0
-    Width = 628
+    Width = 618
     Height = 109
     Align = alTop
     ColumnCollection = <
@@ -60,6 +57,7 @@ object frmSystemInformation: TfrmSystemInformation
       end>
     TabOrder = 1
     ExplicitTop = 44
+    ExplicitWidth = 628
     object Panel1: TPanel
       Left = 1
       Top = 1
@@ -76,11 +74,10 @@ object frmSystemInformation: TfrmSystemInformation
         AlignWithMargins = True
         Left = 3
         Top = 3
-        Width = 620
+        Width = 71
         Height = 15
         Align = alTop
         Caption = 'Memory load'
-        ExplicitWidth = 71
       end
       object ProgressBarMemoryLoad: TProgressBar
         AlignWithMargins = True
@@ -110,11 +107,10 @@ object frmSystemInformation: TfrmSystemInformation
         AlignWithMargins = True
         Left = 3
         Top = 3
-        Width = 620
+        Width = 49
         Height = 15
         Align = alTop
         Caption = 'CPU load'
-        ExplicitWidth = 49
       end
       object ProgressBarCPULoad: TProgressBar
         AlignWithMargins = True

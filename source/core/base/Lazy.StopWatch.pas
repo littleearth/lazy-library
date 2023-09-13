@@ -7,9 +7,9 @@ uses
   System.SysUtils, System.DateUtils, System.Generics.Collections;
 
 type
-  TLazyStopWatch = class;
+  TLZStopWatch = class;
 
-  TTimeElapsedEntry = class(TLazyObject)
+  TLZTimeElapsedEntry = class(TLZObject)
   private
     FStartTime: TDateTime;
     FEndTime: TDateTime;
@@ -26,19 +26,19 @@ type
     property ElapsedMilliseconds: Int64 read GetElapsedMilliseconds;
   end;
 
-  TTimeElapsed = TObjectList<TTimeElapsedEntry>;
+  TLZTimeElapsed = TObjectList<TLZTimeElapsedEntry>;
 
-  TLazyStopWatch = class(TLazyObject)
+  TLZStopWatch = class(TLZObject)
   private
-    FTimeElapsed: TTimeElapsed;
-    FActiveTimeElapsedEntry: TTimeElapsedEntry;
+    FTimeElapsed: TLZTimeElapsed;
+    FActiveTimeElapsedEntry: TLZTimeElapsedEntry;
     FElapsedFormat: string;
     FStartTime: TDateTime;
     FEndTime: TDateTime;
     function GetElapsed: string;
     function GetIsRunning: boolean;
     function GetIsPaused: boolean;
-    function GetElapsedEntry(AIndex: integer): TTimeElapsedEntry;
+    function GetElapsedEntry(AIndex: integer): TLZTimeElapsedEntry;
     procedure SetElapsedFormat(const Value: string);
     function GetStatus: string;
     function GetRunTimeMilliseconds: Int64;
@@ -55,7 +55,7 @@ type
     procedure Resume;
     procedure Reset;
     property Count: integer read GetCount;
-    property ElapsedEntry[AIndex: integer]: TTimeElapsedEntry
+    property ElapsedEntry[AIndex: integer]: TLZTimeElapsedEntry
       read GetElapsedEntry;
     property ElapsedMilliseconds: Int64 read GetElapsedMilliseconds;
     property RuntimeMilliseconds: Int64 read GetRunTimeMilliseconds;
@@ -71,10 +71,10 @@ type
 
 implementation
 
-constructor TLazyStopWatch.Create(const AStartOnCreate: boolean);
+constructor TLZStopWatch.Create(const AStartOnCreate: boolean);
 begin
   inherited Create;
-  FTimeElapsed := TTimeElapsed.Create;
+  FTimeElapsed := TLZTimeElapsed.Create;
   FActiveTimeElapsedEntry := nil;
   FStartTime := 0;
   FEndTime := 0;
@@ -83,9 +83,9 @@ begin
     Start;
 end;
 
-function TLazyStopWatch.GetElapsedMilliseconds: Int64;
+function TLZStopWatch.GetElapsedMilliseconds: Int64;
 var
-  LEntry: TTimeElapsedEntry;
+  LEntry: TLZTimeElapsedEntry;
 begin
   result := 0;
   for LEntry in FTimeElapsed do
@@ -94,7 +94,7 @@ begin
   end;
 end;
 
-function TLazyStopWatch.GetIsPaused: boolean;
+function TLZStopWatch.GetIsPaused: boolean;
 begin
   result := false;
   if IsRunning then
@@ -103,18 +103,18 @@ begin
   end;
 end;
 
-function TLazyStopWatch.GetIsRunning: boolean;
+function TLZStopWatch.GetIsRunning: boolean;
 begin
   result := Assigned(FActiveTimeElapsedEntry);
 end;
 
-function TLazyStopWatch.GetRunTimeElapsed: string;
+function TLZStopWatch.GetRunTimeElapsed: string;
 begin
-  result := TLazyDateTime.DurationFromMilliseconds(RuntimeMilliseconds, false,
+  result := TLZDateTime.DurationFromMilliseconds(RuntimeMilliseconds, false,
     FElapsedFormat);
 end;
 
-function TLazyStopWatch.GetRunTimeMilliseconds: Int64;
+function TLZStopWatch.GetRunTimeMilliseconds: Int64;
 var
   LEndTime: TDateTime;
 begin
@@ -124,7 +124,7 @@ begin
   result := MilliSecondsBetween(LEndTime, FStartTime);
 end;
 
-function TLazyStopWatch.GetStatus: string;
+function TLZStopWatch.GetStatus: string;
 begin
   result := 'Stopped';
   if IsRunning then
@@ -135,7 +135,7 @@ begin
   end;
 end;
 
-procedure TLazyStopWatch.Pause;
+procedure TLZStopWatch.Pause;
 begin
   if IsRunning then
   begin
@@ -143,7 +143,7 @@ begin
   end;
 end;
 
-procedure TLazyStopWatch.Reset;
+procedure TLZStopWatch.Reset;
 begin
   Stop;
   FStartTime := Now;
@@ -151,19 +151,19 @@ begin
   FTimeElapsed.Clear;
 end;
 
-procedure TLazyStopWatch.Resume;
+procedure TLZStopWatch.Resume;
 begin
   if Assigned(FActiveTimeElapsedEntry) then
   begin
     if FActiveTimeElapsedEntry.IsRunning then
       FActiveTimeElapsedEntry.Stop;
   end;
-  FActiveTimeElapsedEntry := TTimeElapsedEntry.Create;
+  FActiveTimeElapsedEntry := TLZTimeElapsedEntry.Create;
   FTimeElapsed.Add(FActiveTimeElapsedEntry);
   FActiveTimeElapsedEntry.Start;
 end;
 
-destructor TLazyStopWatch.Destroy;
+destructor TLZStopWatch.Destroy;
 begin
   try
     Reset;
@@ -173,28 +173,28 @@ begin
   end;
 end;
 
-function TLazyStopWatch.GetCount: integer;
+function TLZStopWatch.GetCount: integer;
 begin
   result := FTimeElapsed.Count;
 end;
 
-function TLazyStopWatch.GetElapsed: string;
+function TLZStopWatch.GetElapsed: string;
 begin
-  result := TLazyDateTime.DurationFromMilliseconds(ElapsedMilliseconds, false,
+  result := TLZDateTime.DurationFromMilliseconds(ElapsedMilliseconds, false,
     FElapsedFormat);
 end;
 
-function TLazyStopWatch.GetElapsedEntry(AIndex: integer): TTimeElapsedEntry;
+function TLZStopWatch.GetElapsedEntry(AIndex: integer): TLZTimeElapsedEntry;
 begin
   result := FTimeElapsed.Items[AIndex];
 end;
 
-procedure TLazyStopWatch.SetElapsedFormat(const Value: string);
+procedure TLZStopWatch.SetElapsedFormat(const Value: string);
 begin
   FElapsedFormat := Value;
 end;
 
-procedure TLazyStopWatch.Start;
+procedure TLZStopWatch.Start;
 begin
   if not IsRunning then
   begin
@@ -203,7 +203,7 @@ begin
   end;
 end;
 
-procedure TLazyStopWatch.Stop;
+procedure TLZStopWatch.Stop;
 begin
   if IsRunning then
   begin
@@ -215,13 +215,13 @@ end;
 
 { TTimeElapsedEntry }
 
-constructor TTimeElapsedEntry.Create;
+constructor TLZTimeElapsedEntry.Create;
 begin
   FStartTime := 0;
   FEndTime := 0;
 end;
 
-function TTimeElapsedEntry.GetElapsedMilliseconds: Int64;
+function TLZTimeElapsedEntry.GetElapsedMilliseconds: Int64;
 var
   LEndTime: TDateTime;
 begin
@@ -231,17 +231,17 @@ begin
   result := MilliSecondsBetween(LEndTime, FStartTime);
 end;
 
-function TTimeElapsedEntry.GetIsRunning: boolean;
+function TLZTimeElapsedEntry.GetIsRunning: boolean;
 begin
   result := FEndTime = 0;
 end;
 
-procedure TTimeElapsedEntry.Start;
+procedure TLZTimeElapsedEntry.Start;
 begin
   FStartTime := Now;
 end;
 
-procedure TTimeElapsedEntry.Stop;
+procedure TLZTimeElapsedEntry.Stop;
 begin
   FEndTime := Now;
 end;

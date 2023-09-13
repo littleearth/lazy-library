@@ -16,11 +16,11 @@ uses
   SysUtils, Classes, Lazy.Log, Lazy.Types, Lazy.ThreadedStringList;
 
 type
-  TLazyLogBasic = class(TLazyLog)
+  TLZLogBasic = class(TLZLog)
   private
-    FLog: TThreadStringList;
+    FLog: TLZThreadStringList;
   protected
-    procedure LogMessage(ALogLevel: TLazyLogLevel; AMessage: string);
+    procedure LogMessage(ALogLevel: TLZLogLevel; AMessage: string);
   public
     procedure AfterConstruction; override;
     procedure BeforeDestruction; override;
@@ -39,45 +39,45 @@ type
 
 implementation
 
-{ TLazyLogBasic }
+{ TLZLogBasic }
 
-procedure TLazyLogBasic.AfterConstruction;
+procedure TLZLogBasic.AfterConstruction;
 begin
   inherited;
-  FLog := TThreadStringList.Create;
+  FLog := TLZThreadStringList.Create;
   FLog.Sorted := False;
 end;
 
-procedure TLazyLogBasic.BeforeDestruction;
+procedure TLZLogBasic.BeforeDestruction;
 begin
   inherited;
   FreeAndNil(FLog);
 end;
 
-procedure TLazyLogBasic.Debug(ASender: TObject; AProcedure, AMessage: string);
+procedure TLZLogBasic.Debug(ASender: TObject; AProcedure, AMessage: string);
 begin
   LogMessage(logDebug, Format('[%s] %s', [AProcedure, AMessage]));
 end;
 
-procedure TLazyLogBasic.Error(ASender: TObject; AException: Exception;
+procedure TLZLogBasic.Error(ASender: TObject; AException: Exception;
   AMessage: string);
 begin
   LogMessage(logError, Format('%s %s', [AException.Message, AMessage]));
 end;
 
-procedure TLazyLogBasic.Error(ASender: TObject; AMessage: string;
+procedure TLZLogBasic.Error(ASender: TObject; AMessage: string;
   AErrorCode: integer);
 begin
   LogMessage(logError, Format('(%d) %s', [AErrorCode, AMessage]));
 end;
 
-procedure TLazyLogBasic.Log(ASender: TObject; AMessage: string);
+procedure TLZLogBasic.Log(ASender: TObject; AMessage: string);
 begin
   LogMessage(logInformation, AMessage);
 
 end;
 
-procedure TLazyLogBasic.LogMessage(ALogLevel: TLazyLogLevel; AMessage: string);
+procedure TLZLogBasic.LogMessage(ALogLevel: TLZLogLevel; AMessage: string);
 begin
   if IsLogLevel(ALogLevel) then
   begin
@@ -85,21 +85,21 @@ begin
   end;
 end;
 
-function TLazyLogBasic.LogText: string;
+function TLZLogBasic.LogText: string;
 begin
   if Assigned(FLog) then
     Result := FLog.Text;
 
 end;
 
-class function TLazyLogBasic.Text: string;
+class function TLZLogBasic.Text: string;
 begin
   Result := '';
-  if (LazyLog is TLazyLogBasic) then
-    Result := (LazyLog as TLazyLogBasic).LogText;
+  if (LazyLog is TLZLogBasic) then
+    Result := (LazyLog as TLZLogBasic).LogText;
 end;
 
-procedure TLazyLogBasic.Warning(ASender: TObject; AMessage: string);
+procedure TLZLogBasic.Warning(ASender: TObject; AMessage: string);
 begin
   LogMessage(logWarning, AMessage);
 end;

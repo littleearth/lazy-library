@@ -27,6 +27,9 @@
         <Projects Include="vcl\systeminformation\DelphiSystemInformationVCL.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="vcl\vsscopy\DelphiVSSCopyVCL.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -107,14 +110,23 @@
     <Target Name="DelphiSystemInformationVCL:Make">
         <MSBuild Projects="vcl\systeminformation\DelphiSystemInformationVCL.dproj" Targets="Make"/>
     </Target>
+    <Target Name="DelphiVSSCopyVCL">
+        <MSBuild Projects="vcl\vsscopy\DelphiVSSCopyVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiVSSCopyVCL:Clean">
+        <MSBuild Projects="vcl\vsscopy\DelphiVSSCopyVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiVSSCopyVCL:Make">
+        <MSBuild Projects="vcl\vsscopy\DelphiVSSCopyVCL.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DelphiAzureManagementVCL;DelphiAzureManagementFMX;DelphiPWAVCL;DelphiStopWatchVCL;DelphiDuoAccountsDemoVCL;DelphiDuoAdminDemoVCL;DelphiDuoAuthDemoVCL;DelphiSystemInformationVCL"/>
+        <CallTarget Targets="DelphiAzureManagementVCL;DelphiAzureManagementFMX;DelphiPWAVCL;DelphiStopWatchVCL;DelphiDuoAccountsDemoVCL;DelphiDuoAdminDemoVCL;DelphiDuoAuthDemoVCL;DelphiSystemInformationVCL;DelphiVSSCopyVCL"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DelphiAzureManagementVCL:Clean;DelphiAzureManagementFMX:Clean;DelphiPWAVCL:Clean;DelphiStopWatchVCL:Clean;DelphiDuoAccountsDemoVCL:Clean;DelphiDuoAdminDemoVCL:Clean;DelphiDuoAuthDemoVCL:Clean;DelphiSystemInformationVCL:Clean"/>
+        <CallTarget Targets="DelphiAzureManagementVCL:Clean;DelphiAzureManagementFMX:Clean;DelphiPWAVCL:Clean;DelphiStopWatchVCL:Clean;DelphiDuoAccountsDemoVCL:Clean;DelphiDuoAdminDemoVCL:Clean;DelphiDuoAuthDemoVCL:Clean;DelphiSystemInformationVCL:Clean;DelphiVSSCopyVCL:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DelphiAzureManagementVCL:Make;DelphiAzureManagementFMX:Make;DelphiPWAVCL:Make;DelphiStopWatchVCL:Make;DelphiDuoAccountsDemoVCL:Make;DelphiDuoAdminDemoVCL:Make;DelphiDuoAuthDemoVCL:Make;DelphiSystemInformationVCL:Make"/>
+        <CallTarget Targets="DelphiAzureManagementVCL:Make;DelphiAzureManagementFMX:Make;DelphiPWAVCL:Make;DelphiStopWatchVCL:Make;DelphiDuoAccountsDemoVCL:Make;DelphiDuoAdminDemoVCL:Make;DelphiDuoAuthDemoVCL:Make;DelphiSystemInformationVCL:Make;DelphiVSSCopyVCL:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

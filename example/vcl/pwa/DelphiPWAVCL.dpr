@@ -9,7 +9,7 @@ uses
 {$R *.res}
 
 begin
-  SetLazyLogClass(TLazyLogBasic);
+  SetLazyLogClass(TLZLogBasic);
   ReportMemoryLeaksOnShutdown := True;
   Application.Initialize;
   Application.MainFormOnTaskbar := True;

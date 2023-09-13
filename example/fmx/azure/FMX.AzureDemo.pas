@@ -10,7 +10,8 @@ uses
   FMX.ScrollBox, FMX.Memo, FMX.Edit, IPPeerClient,
   Lazy.Types, Azure.Core, Data.Bind.Components,
   Data.Bind.ObjectScope, REST.Client, REST.Types, REST.Json, System.Json,
-  FMX.Memo.Types, Azure.Management, System.Actions, FMX.ActnList;
+  FMX.Memo.Types, Azure.Management, System.Actions, FMX.ActnList,
+  Lazy.REST.Types;
 
 type
   TfrmAzureDemo = class(TForm)
@@ -62,12 +63,12 @@ type
     procedure FormDestroy(Sender: TObject);
   private
     { Private declarations }
-    FAzureManagement: TAzureManagement;
+    FAzureManagement: TLZAzureManagement;
     procedure Log(AMessage: string);
     procedure OnAzureBrowserLoginRequest(ASender: TObject; AURL: string;
-      AConnection: TLazyOAuth2Connection; AToken: TLazyOAuth2Token);
+      AConnection: TLZOAuth2Connection; AToken: TLZOAuth2Token);
     procedure OnLazyOAuth2TokenRequestComplete(ASender: TObject;
-      ASuccess: boolean; AMessage: string; AToken: TLazyOAuth2Token);
+      ASuccess: boolean; AMessage: string; AToken: TLZOAuth2Token);
   public
     { Public declarations }
   end;
@@ -168,7 +169,7 @@ procedure TfrmAzureDemo.ActionLoginExecute(Sender: TObject);
 begin
   if not FAzureManagement.IsAuthenticated then
   begin
-    (FAzureManagement.Connection as TAzureManagementOAuth2Connection).TenantId
+    (FAzureManagement.Connection as TLZAzureManagementOAuth2Connection).TenantId
       := editTennantId.Text;
     FAzureManagement.Connection.ClientId := editClientID.Text;
     FAzureManagement.Connection.ClientSecret := editClientSecret.Text;
@@ -197,12 +198,12 @@ begin
 end;
 
 procedure TfrmAzureDemo.OnAzureBrowserLoginRequest(ASender: TObject;
-AURL: string; AConnection: TLazyOAuth2Connection; AToken: TLazyOAuth2Token);
+AURL: string; AConnection: TLZOAuth2Connection; AToken: TLZOAuth2Token);
 var
   LMessage: string;
-  LForm: TLazyAuthorizeBrowserForm;
+  LForm: TLZAuthorizeBrowserForm;
 begin
-  LForm := TLazyAuthorizeBrowserForm.Create(Self);
+  LForm := TLZAuthorizeBrowserForm.Create(Self);
   try
     if LForm.GetAuthToken(LMessage, AURL, AConnection, AToken) then
     begin
@@ -219,7 +220,7 @@ begin
 end;
 
 procedure TfrmAzureDemo.OnLazyOAuth2TokenRequestComplete(ASender: TObject;
-ASuccess: boolean; AMessage: string; AToken: TLazyOAuth2Token);
+ASuccess: boolean; AMessage: string; AToken: TLZOAuth2Token);
 begin
   if ASuccess then
   begin
@@ -241,12 +242,12 @@ end;
 
 procedure TfrmAzureDemo.TimerLogTimer(Sender: TObject);
 begin
-  memoLog.Lines.Text := (LazyLog as TLazyLogBasic).LogText;
+  memoLog.Lines.Text := (LazyLog as TLZLogBasic).LogText;
 end;
 
 procedure TfrmAzureDemo.FormCreate(Sender: TObject);
 begin
-  FAzureManagement := TAzureManagement.Create;
+  FAzureManagement := TLZAzureManagement.Create;
   FAzureManagement.OnBrowserLoginRequest := OnAzureBrowserLoginRequest;
   FAzureManagement.OnOAuth2TokenRequestComplete :=
     OnLazyOAuth2TokenRequestComplete;

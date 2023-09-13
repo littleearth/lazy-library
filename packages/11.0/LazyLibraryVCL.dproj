@@ -110,6 +110,10 @@
         <DCCReference Include="..\..\source\vcl\base\VCL.Lazy.Types.pas"/>
         <DCCReference Include="..\..\source\vcl\winapi\WinAPi.WinPerf.pas"/>
         <DCCReference Include="..\..\source\vcl\winapi\WinAPI.PerformanceDataHelper.pas"/>
+        <DCCReference Include="..\..\source\vcl\winapi\WinApi.VSS.Api.pas"/>
+        <DCCReference Include="..\..\source\vcl\winapi\WinApi.VSS.Consts.pas"/>
+        <DCCReference Include="..\..\source\vcl\winapi\WinApi.VSS.Copy.pas"/>
+        <DCCReference Include="..\..\source\vcl\winapi\WinApi.VSS.Utils.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

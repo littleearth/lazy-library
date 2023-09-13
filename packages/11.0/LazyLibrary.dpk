@@ -64,6 +64,14 @@ contains
   PWA.Core in '..\..\source\core\rest\pwa\PWA.Core.pas',
   Lazy.Utils.Base in '..\..\source\core\base\Lazy.Utils.Base.pas',
   Lazy.NATO in '..\..\source\core\base\Lazy.NATO.pas',
-  Lazy.Passwords in '..\..\source\core\base\Lazy.Passwords.pas';
+  Lazy.Passwords in '..\..\source\core\base\Lazy.Passwords.pas',
+  duo.accounts in '..\..\source\core\rest\duo\duo.accounts.pas',
+  duo.admin in '..\..\source\core\rest\duo\duo.admin.pas',
+  duo.api in '..\..\source\core\rest\duo\duo.api.pas',
+  duo.auth in '..\..\source\core\rest\duo\duo.auth.pas',
+  duo.models in '..\..\source\core\rest\duo\duo.models.pas',
+  Lazy.REST.Types in '..\..\source\core\rest\Lazy.REST.Types.pas',
+  Lazy.SNMP.Client in '..\..\source\core\network\Lazy.SNMP.Client.pas',
+  Lazy.NetworkTools in '..\..\source\core\network\Lazy.NetworkTools.pas';
 
 end.

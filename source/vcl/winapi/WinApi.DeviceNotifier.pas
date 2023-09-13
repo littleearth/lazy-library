@@ -3,8 +3,8 @@ unit WinApi.DeviceNotifier;
 interface
 
 uses
-  Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
-  System.Classes;
+  WinApi.Windows, WinApi.Messages, System.SysUtils, System.Variants,
+  System.Classes, Lazy.Types;
 
 type
   PDevBroadcastHdr = ^DEV_BROADCAST_HDR;
@@ -66,7 +66,7 @@ type
   TDeviceNotifyProc = procedure(ASender: TObject; const ADeviceName: String;
     ADeviceType: Cardinal) of Object;
 
-  TDeviceNotifier = class
+  TLZDeviceNotifier = class(TLZObject)
   private
     hRecipient: HWND;
     FNotificationHandle: Pointer;
@@ -85,7 +85,7 @@ type
 
 implementation
 
-constructor TDeviceNotifier.Create(GUID_DEVINTERFACE: TGUID);
+constructor TLZDeviceNotifier.Create(GUID_DEVINTERFACE: TGUID);
 var
   NotificationFilter: TDevBroadcastDeviceInterface;
 begin
@@ -100,7 +100,7 @@ begin
     @NotificationFilter, DEVICE_NOTIFY_WINDOW_HANDLE);
 end;
 
-function TDeviceNotifier.GetDrive(pDBVol: PDevBroadcastVolume): string;
+function TLZDeviceNotifier.GetDrive(pDBVol: PDevBroadcastVolume): string;
 var
   i: Byte;
   Maske: DWORD;
@@ -117,7 +117,7 @@ begin
   // end;
 end;
 
-procedure TDeviceNotifier.WndProc(var Msg: TMessage);
+procedure TLZDeviceNotifier.WndProc(var Msg: TMessage);
 var
   Dbi: PDevBroadcastDeviceInterface;
   Dbv: PDevBroadcastVolume;
@@ -159,7 +159,7 @@ begin
       Result := DefWindowProc(hRecipient, Msg, WParam, LParam);
 end;
 
-destructor TDeviceNotifier.Destroy;
+destructor TLZDeviceNotifier.Destroy;
 begin
   try
     UnregisterDeviceNotification(FNotificationHandle);

@@ -8,7 +8,7 @@ uses
 {$ELSE}
   WinTypes, WinProcs,
 {$ENDIF}
-  SysUtils, Classes, WinSock;
+  SysUtils, Classes, WinSock, Lazy.Types;
 
 const
   IcmpDLL = 'icmp.dll';
@@ -141,7 +141,7 @@ type
   TICMPReply = procedure(Sender: TObject; Error: Integer) of object;
 
   // The object wich encapsulate the ICMP.DLL
-  TICMP = class(TObject)
+  TLZICMP = class(TLZObject)
   private
     hICMPdll: HModule; // Handle for ICMP.DLL
     IcmpCreateFile: TIcmpCreateFile;
@@ -192,7 +192,7 @@ type
 implementation
 
 { * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * }
-constructor TICMP.Create;
+constructor TLZICMP.Create;
 var
   WSAData: TWSAData;
 begin
@@ -224,7 +224,7 @@ begin
 end;
 
 { * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * }
-destructor TICMP.Destroy;
+destructor TLZICMP.Destroy;
 begin
   if hICMP <> INVALID_HANDLE_VALUE then
     IcmpCloseHandle(hICMP);
@@ -244,7 +244,7 @@ begin
 end;
 
 { * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * }
-procedure TICMP.ResolveAddr;
+procedure TLZICMP.ResolveAddr;
 var
   Phe: PHostEnt; // HostEntry buffer for name lookup
 begin
@@ -274,7 +274,7 @@ begin
 end;
 
 { * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * }
-procedure TICMP.SetAddress(Value: String);
+procedure TLZICMP.SetAddress(Value: String);
 begin
   // Only change if needed (could take a long time)
   if FAddress = Value then
@@ -285,7 +285,7 @@ begin
 end;
 
 { * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * }
-function TICMP.GetErrorString: String;
+function TLZICMP.GetErrorString: String;
 begin
   case FLastError of
     IP_SUCCESS:
@@ -342,7 +342,7 @@ begin
 end;
 
 { * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * }
-function TICMP.Ping: Integer;
+function TLZICMP.Ping: Integer;
 var
   BufferSize: Integer;
   pReqData, pData: Pointer;

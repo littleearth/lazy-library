@@ -3,7 +3,7 @@ unit Lazy.Test.Base;
 interface
 
 type
-  TLazyTestBase = class
+  TLZTestBase = class
   end;
 
 implementation

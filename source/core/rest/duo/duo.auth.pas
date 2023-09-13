@@ -11,9 +11,9 @@ type
 
   TDuoLoginResponse = (loginFail, loginSuccess, loginSMSCodes);
 
-  TOnDuoPreAuthEvent = procedure(ASender: TObject; ADevices: TDUODevices;
+  TOnDuoPreAuthEvent = procedure(ASender: TObject; ADevices: TLZDUODevices;
     AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean) of object;
-  TOnDuoPreAuthProc = reference to procedure(ADevices: TDUODevices;
+  TOnDuoPreAuthProc = reference to procedure(ADevices: TLZDUODevices;
     AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean);
 
   TOnDuoLoginEvent = procedure(ASender: TObject; AMessage: string;
@@ -21,7 +21,7 @@ type
   TOnDuoLoginProc = reference to procedure(AMessage: string;
     AResponse: TDuoLoginResponse);
 
-  TDUOAuthAPI = class(TDuoAPIBase)
+  TLZDUOAuthAPI = class(TLZDuoAPIBase)
   private
     FOnLogin: TOnDuoLoginEvent;
     FOnCheck: TOnDuoNotifyEvent;
@@ -58,12 +58,12 @@ implementation
 
 { TDUOAuth }
 
-function TDUOAuthAPI.GetBaseResource: string;
+function TLZDUOAuthAPI.GetBaseResource: string;
 begin
   Result := '/auth/v2/';
 end;
 
-procedure TDUOAuthAPI.Check(AOnDuoNotifyProc: TOnDuoNotifyProc);
+procedure TLZDUOAuthAPI.Check(AOnDuoNotifyProc: TOnDuoNotifyProc);
 var
   LResult: boolean;
   LMessage: string;
@@ -99,7 +99,7 @@ begin
     FOnCheck(Self, LMessage, LResult);
 end;
 
-procedure TDUOAuthAPI.Login(AUsername, ADisplayName, APushInfo, AType, ADevice,
+procedure TLZDUOAuthAPI.Login(AUsername, ADisplayName, APushInfo, AType, ADevice,
   AFactor, APasscode, AHostname, AIPAddr: string; AUserID, AAsync: boolean;
 AOnDuoLoginProc: TOnDuoLoginProc);
 var
@@ -232,7 +232,7 @@ begin
     FOnLogin(Self, LMessage, LLoginResponse);
 end;
 
-procedure TDUOAuthAPI.Logo(AFileName: TFilename; var AMessage: string;
+procedure TLZDUOAuthAPI.Logo(AFileName: TFilename; var AMessage: string;
 var ASuccess: boolean);
 begin
   ASuccess := ExecuteRequest(AMessage, BaseResource + 'logo', rmGET, nil,
@@ -265,7 +265,7 @@ begin
     end);
 end;
 
-procedure TDUOAuthAPI.Ping(AOnDuoNotifyProc: TOnDuoNotifyProc);
+procedure TLZDUOAuthAPI.Ping(AOnDuoNotifyProc: TOnDuoNotifyProc);
 var
   LResult: boolean;
   LMessage: string;
@@ -301,15 +301,15 @@ begin
     FOnPing(Self, LMessage, LResult);
 end;
 
-procedure TDUOAuthAPI.PreAuth(AUsername, AHostname, AIPAddr, ATrustedDeviceToken
+procedure TLZDUOAuthAPI.PreAuth(AUsername, AHostname, AIPAddr, ATrustedDeviceToken
   : string; AUserID: boolean; AOnDuoPreAuthProc: TOnDuoPreAuthProc);
 var
   LResult, LOwnsObjects: boolean;
   LMessage: string;
-  LDevices: TDUODevices;
+  LDevices: TLZDUODevices;
 begin
   LOwnsObjects := True;
-  LDevices := TDUODevices.Create;
+  LDevices := TLZDUODevices.Create;
   try
     LResult := ExecuteRequest(LMessage, BaseResource + 'preauth', rmPOST,
       procedure(ARESTRequest: TRESTRequest)
@@ -387,22 +387,22 @@ begin
   end;
 end;
 
-procedure TDUOAuthAPI.SetOnCheck(const Value: TOnDuoNotifyEvent);
+procedure TLZDUOAuthAPI.SetOnCheck(const Value: TOnDuoNotifyEvent);
 begin
   FOnCheck := Value;
 end;
 
-procedure TDUOAuthAPI.SetOnLogin(const Value: TOnDuoLoginEvent);
+procedure TLZDUOAuthAPI.SetOnLogin(const Value: TOnDuoLoginEvent);
 begin
   FOnLogin := Value;
 end;
 
-procedure TDUOAuthAPI.SetOnPing(const Value: TOnDuoNotifyEvent);
+procedure TLZDUOAuthAPI.SetOnPing(const Value: TOnDuoNotifyEvent);
 begin
   FOnPing := Value;
 end;
 
-procedure TDUOAuthAPI.SetOnPreAuth(const Value: TOnDuoPreAuthEvent);
+procedure TLZDUOAuthAPI.SetOnPreAuth(const Value: TOnDuoPreAuthEvent);
 begin
   FOnPreAuth := Value;
 end;

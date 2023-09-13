@@ -59,7 +59,7 @@ type
       AAcountID, AEdition, Amessage: string; ASuccess: Boolean);
     procedure OnGetTelephonyCredits(ASender: TObject; AAcountID: string;
       ACredits: integer; Amessage: string; ASuccess: Boolean);
-    procedure OnGetUsers(ASender: TObject; AUsers: TDUOUsers; Amessage: string;
+    procedure OnGetUsers(ASender: TObject; AUsers: TLZDUOUsers; Amessage: string;
       ASuccess: Boolean; var AOwnsObjects: Boolean);
   public
     { Public declarations }
@@ -103,10 +103,10 @@ begin
   end;
 end;
 
-procedure TfrmAccountsDemo.OnGetUsers(ASender: TObject; AUsers: TDUOUsers;
+procedure TfrmAccountsDemo.OnGetUsers(ASender: TObject; AUsers: TLZDUOUsers;
   Amessage: string; ASuccess: Boolean; var AOwnsObjects: Boolean);
 var
-  LUser: TDUOUser;
+  LUser: TLZDUOUser;
 begin
   if not ASuccess then
   begin
@@ -126,9 +126,9 @@ end;
 
 procedure TfrmAccountsDemo.ActionGetAllUsersExecute(Sender: TObject);
 var
-  LDUOAdmin: TDUOAdminApi;
+  LDUOAdmin: TLZDUOAdminApi;
 begin
-  LDUOAdmin := TDUOAdminApi.Create(nil);
+  LDUOAdmin := TLZDUOAdminApi.Create(nil);
   try
     LDUOAdmin.IntegrationKey := editIntegrationKey.Text;
     LDUOAdmin.SecretKey := editSecretKey.Text;
@@ -143,9 +143,9 @@ end;
 
 procedure TfrmAccountsDemo.ActionGetBillingExecute(Sender: TObject);
 var
-  LAPI: TDUOAccountsApi;
+  LAPI: TLZDUOAccountsApi;
 begin
-  LAPI := TDUOAccountsApi.Create(nil);
+  LAPI := TLZDUOAccountsApi.Create(nil);
   try
     LAPI.IntegrationKey := editIntegrationKey.Text;
     LAPI.SecretKey := editSecretKey.Text;
@@ -159,11 +159,11 @@ end;
 
 procedure TfrmAccountsDemo.ActionGetLogoExecute(Sender: TObject);
 var
-  LDUOAdmin: TDUOAdminApi;
+  LDUOAdmin: TLZDUOAdminApi;
   LMessage: string;
   LSuccess: Boolean;
 begin
-  LDUOAdmin := TDUOAdminApi.Create(nil);
+  LDUOAdmin := TLZDUOAdminApi.Create(nil);
   try
     LDUOAdmin.IntegrationKey := editIntegrationKey.Text;
     LDUOAdmin.SecretKey := editSecretKey.Text;
@@ -188,9 +188,9 @@ end;
 
 procedure TfrmAccountsDemo.ActionGetTelephonyCreditsExecute(Sender: TObject);
 var
-  LAPI: TDUOAccountsApi;
+  LAPI: TLZDUOAccountsApi;
 begin
-  LAPI := TDUOAccountsApi.Create(nil);
+  LAPI := TLZDUOAccountsApi.Create(nil);
   try
     LAPI.IntegrationKey := editIntegrationKey.Text;
     LAPI.SecretKey := editSecretKey.Text;
@@ -205,7 +205,7 @@ end;
 procedure TfrmAccountsDemo.ActionListUpdate(Action: TBasicAction;
   var Handled: Boolean);
 begin
-  memoLog.Lines.Text := TLazyLogBasic.Text;
+  memoLog.Lines.Text := TLZLogBasic.Text;
 end;
 
 procedure TfrmAccountsDemo.FormCreate(Sender: TObject);
@@ -223,11 +223,11 @@ end;
 procedure TfrmAccountsDemo.LoadSettings;
 var
   LFileName: TFileName;
-  LSettings: TCryptINI;
+  LSettings: TLZCryptINI;
 begin
   LFileName := IncludeTrailingPathDelimiter(TPath.GetDocumentsPath) +
     'duo_accountsdemo.ini';
-  LSettings := TCryptINI.Create(LFileName);
+  LSettings := TLZCryptINI.Create(LFileName);
   try
     editIntegrationKey.Text := LSettings.ReadString('duo',
       'integrationkey', '');
@@ -241,11 +241,11 @@ end;
 procedure TfrmAccountsDemo.SaveSettings;
 var
   LFileName: TFileName;
-  LSettings: TCryptINI;
+  LSettings: TLZCryptINI;
 begin
   LFileName := IncludeTrailingPathDelimiter(TPath.GetDocumentsPath) +
     'duo_accountsdemo.ini';
-  LSettings := TCryptINI.Create(LFileName);
+  LSettings := TLZCryptINI.Create(LFileName);
   try
     LSettings.WriteString('duo', 'integrationkey', editIntegrationKey.Text);
     LSettings.WriteString('duo', 'secretkey', editSecretKey.Text);
@@ -258,18 +258,18 @@ end;
 
 procedure TfrmAccountsDemo.ActionGetAccountsExecute(Sender: TObject);
 var
-  LAPI: TDUOAccountsApi;
+  LAPI: TLZDUOAccountsApi;
 begin
-  LAPI := TDUOAccountsApi.Create(nil);
+  LAPI := TLZDUOAccountsApi.Create(nil);
   try
     LAPI.IntegrationKey := editIntegrationKey.Text;
     LAPI.SecretKey := editSecretKey.Text;
     LAPI.Hostname := editHostname.Text;
     LAPI.GetAccounts(true, true,
-      procedure(AAccounts: TDUOAccounts; Amessage: string; ASuccess: Boolean;
+      procedure(AAccounts: TLZDUOAccounts; Amessage: string; ASuccess: Boolean;
         var AOwnsObjects: Boolean)
       var
-        LItem: TDUOAccount;
+        LItem: TLZDUOAccount;
       begin
         if not ASuccess then
         begin

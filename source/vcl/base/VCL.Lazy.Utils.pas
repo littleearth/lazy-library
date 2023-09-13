@@ -6,7 +6,7 @@ uses Windows, Messages, SysUtils, Classes, Lazy.Utils.Base, Lazy.Types,
   VCL.Lazy.Types;
 
 type
-  TLazyFile = class(TLazyFileBase)
+  TLZFile = class(TLZFileBase)
   public
     class function GetKnownFolderPath(AGUID: TGUID): string;
     class function GetDesktopFolder: string;
@@ -22,15 +22,15 @@ type
     class function GetWindowsSystemX86Folder: string;
     class function GetWindowsFolder: string;
     class function GetProgramFilesFolder(APlatform
-      : TLazyOSArchitecture): string;
+      : TLZOSArchitecture): string;
     class function CopyFileToClipboard(AFileName: TFileName): Boolean;
     class function CopyFilesToClipboard(AFiles: TStrings): Boolean;
   end;
 
-  TLazySystem = class(TLazySystemBase)
+  TLZSystem = class(TLZSystemBase)
   public
     class function GetElevationLevel(var AIsElevated: Boolean)
-      : TLazyOSElevationLevel;
+      : TLZOSElevationLevel;
     class function IsDelphiRunning: Boolean;
     class function IsAdministrator: Boolean;
     class function IsRemoteSession: Boolean;
@@ -47,14 +47,14 @@ type
     class function GetEnvironmentVariableValue(AVariable: string): string;
   end;
 
-  TLazyString = class(TLazyStringBase)
+  TLZString = class(TLZStringBase)
   public
     class function AlphaFriendlyStringCompare(S1: string; S2: string): integer;
   end;
 
-  TLazyDateTime = class(TLazyDateTimeBase);
-  TLazyBoolean = class(TLazyBooleanBase);
-  TLazyMath = class(TLazyMathBase);
+  TLZDateTime = class(TLZDateTimeBase);
+  TLZBoolean = class(TLZBooleanBase);
+  TLZMath = class(TLZMathBase);
 
 implementation
 
@@ -62,16 +62,16 @@ uses
   WinAPi.ShLwApi, WinAPi.psAPI, WinAPi.KnownFolders, WinAPi.ShlObj, VCL.Forms,
   System.Win.Registry, VCL.Clipbrd, WinAPi.ShellApi;
 
-{ TLazyString }
+{ TLZString }
 
-class function TLazyString.AlphaFriendlyStringCompare(S1, S2: string): integer;
+class function TLZString.AlphaFriendlyStringCompare(S1, S2: string): integer;
 begin
   Result := StrCmpLogicalW(PChar(S1), PChar(S2));
 end;
 
-{ TlazyApplication }
+{ TLZApplication }
 
-class function TLazySystem.IsAdministrator: Boolean;
+class function TLZSystem.IsAdministrator: Boolean;
 const
   SECURITY_NT_AUTHORITY: TSIDIdentifierAuthority = (Value: (0, 0, 0, 0, 0, 5));
   SECURITY_BUILTIN_DOMAIN_RID = $00000020;
@@ -126,9 +126,9 @@ begin
   end;
 end;
 
-{ TLazyFile }
+{ TLZFile }
 
-class function TLazyFile.CopyFileToClipboard(AFileName: TFileName): Boolean;
+class function TLZFile.CopyFileToClipboard(AFileName: TFileName): Boolean;
 var
   DropFiles: PDropFiles;
   hGlobal: THandle;
@@ -164,7 +164,7 @@ begin
   end;
 end;
 
-class function TLazyFile.CopyFilesToClipboard(AFiles: TStrings): Boolean;
+class function TLZFile.CopyFilesToClipboard(AFiles: TStrings): Boolean;
 var
   FileList: string;
 begin
@@ -175,24 +175,24 @@ begin
   Result := CopyFileToClipboard(FileList);
 end;
 
-class function TLazyFile.GetCommonAppDataFolder: string;
+class function TLZFile.GetCommonAppDataFolder: string;
 begin
   Result := IncludeTrailingPathDelimiter
     (GetKnownFolderPath(FOLDERID_LocalAppDataLow) + Application.Title);
   CheckDirectoryExists(Result, True);
 end;
 
-class function TLazyFile.GetDesktopFolder: string;
+class function TLZFile.GetDesktopFolder: string;
 begin
   Result := GetKnownFolderPath(FOLDERID_Desktop);
 end;
 
-class function TLazyFile.GetDocumentFolder: string;
+class function TLZFile.GetDocumentFolder: string;
 begin
   Result := GetKnownFolderPath(FOLDERID_Documents);
 end;
 
-class function TLazyFile.GetKnownFolderPath(AGUID: TGUID): string;
+class function TLZFile.GetKnownFolderPath(AGUID: TGUID): string;
 var
   LFolderPath: PWideChar;
 begin
@@ -203,13 +203,13 @@ begin
   end;
 end;
 
-class function TLazyFile.GetPicturesFolder: string;
+class function TLZFile.GetPicturesFolder: string;
 begin
   Result := GetKnownFolderPath(FOLDERID_Pictures);
 end;
 
-class function TLazyFile.GetProgramFilesFolder
-  (APlatform: TLazyOSArchitecture): string;
+class function TLZFile.GetProgramFilesFolder
+  (APlatform: TLZOSArchitecture): string;
 begin
   case APlatform of
     oaX86:
@@ -227,56 +227,56 @@ begin
   end;
 end;
 
-class function TLazyFile.GetPublicDocumentFolder: string;
+class function TLZFile.GetPublicDocumentFolder: string;
 begin
   Result := GetKnownFolderPath(FOLDERID_PublicDesktop);
 end;
 
-class function TLazyFile.GetUserAppDataFolder: string;
+class function TLZFile.GetUserAppDataFolder: string;
 begin
   Result := GetKnownFolderPath(FOLDERID_RoamingAppData);
   Result := IncludeTrailingPathDelimiter(Result + Application.Title);
   CheckDirectoryExists(Result, True);
 end;
 
-class function TLazyFile.GetUserLocalAppDataFolder: string;
+class function TLZFile.GetUserLocalAppDataFolder: string;
 begin
   Result := GetKnownFolderPath(FOLDERID_LocalAppData);
   Result := IncludeTrailingPathDelimiter(Result + Application.Title);
   CheckDirectoryExists(Result, True);
 end;
 
-class function TLazyFile.GetUserProfileFolder: string;
+class function TLZFile.GetUserProfileFolder: string;
 begin
   Result := GetKnownFolderPath(FOLDERID_Profile);
 end;
 
-class function TLazyFile.GetVideoFolder: string;
+class function TLZFile.GetVideoFolder: string;
 begin
   Result := GetKnownFolderPath(FOLDERID_Videos);
 end;
 
-class function TLazyFile.GetWindowsFolder: string;
+class function TLZFile.GetWindowsFolder: string;
 begin
   Result := GetKnownFolderPath(FOLDERID_Windows);
 end;
 
-class function TLazyFile.GetWindowsSystemFolder: string;
+class function TLZFile.GetWindowsSystemFolder: string;
 begin
   Result := GetKnownFolderPath(FOLDERID_System);
 end;
 
-class function TLazyFile.GetWindowsSystemX86Folder: string;
+class function TLZFile.GetWindowsSystemX86Folder: string;
 begin
   Result := GetKnownFolderPath(FOLDERID_SystemX86);
 end;
 
-class function TLazySystem.IsCapsLockOn: Boolean;
+class function TLZSystem.IsCapsLockOn: Boolean;
 begin
   Result := 0 <> (GetKeyState(VK_CAPITAL) and $01);
 end;
 
-class function TLazySystem.IsCitrixSession: Boolean;
+class function TLZSystem.IsCitrixSession: Boolean;
 begin
   try
     Result := (Copy(GetEnvironmentVariableValue('SESSIONNAME'), 1, 4) = 'ICA-');
@@ -285,19 +285,19 @@ begin
   end;
 end;
 
-class function TLazySystem.IsDelphiRunning: Boolean;
+class function TLZSystem.IsDelphiRunning: Boolean;
 begin
 {$WARN SYMBOL_PLATFORM OFF}
   Result := DebugHook <> 0;
 {$WARN SYMBOL_PLATFORM ON}
 end;
 
-class function TLazySystem.IsNumLockOn: Boolean;
+class function TLZSystem.IsNumLockOn: Boolean;
 begin
   Result := 0 <> (GetKeyState(VK_NUMLOCK));
 end;
 
-class function TLazySystem.IsRemoteSession: Boolean;
+class function TLZSystem.IsRemoteSession: Boolean;
 const
   sm_RemoteSession = $1000; { from WinUser.h }
 begin
@@ -311,12 +311,12 @@ begin
   end;
 end;
 
-class function TLazySystem.IsScrollLockOn: Boolean;
+class function TLZSystem.IsScrollLockOn: Boolean;
 begin
   Result := 0 <> (GetKeyState(VK_SCROLL));
 end;
 
-class function TLazySystem.IsUACEnabled: Boolean;
+class function TLZSystem.IsUACEnabled: Boolean;
 var
   LRegistry: TRegistry;
 begin
@@ -341,7 +341,7 @@ begin
   end;
 end;
 
-class function TLazySystem.IsSystemX64: Boolean;
+class function TLZSystem.IsSystemX64: Boolean;
 {$IFNDEF CPUX64}
 type
   TIsWow64Process = function(Handle: THandle; var Res: BOOL): BOOL; stdcall;
@@ -366,8 +366,8 @@ begin
 {$ENDIF}
 end;
 
-class function TLazySystem.GetElevationLevel(var AIsElevated: Boolean)
-  : TLazyOSElevationLevel;
+class function TLZSystem.GetElevationLevel(var AIsElevated: Boolean)
+  : TLZOSElevationLevel;
 const
   TokenElevationType = 18;
   TokenElevation = 20;
@@ -415,7 +415,7 @@ begin
 
 end;
 
-class function TLazySystem.IsApplicationElevated: Boolean;
+class function TLZSystem.IsApplicationElevated: Boolean;
 begin
   if Win32MajorVersion <= 5 then
   begin
@@ -427,14 +427,14 @@ begin
   end;
 end;
 
-class procedure TLazySystem.RestartApplication;
+class procedure TLZSystem.RestartApplication;
 begin
   ShellExecute(Application.Handle, nil, PChar(Application.ExeName), nil, nil,
     SW_SHOWNORMAL);
   Application.Terminate;
 end;
 
-class function TLazySystem.GetEnvironmentVariableValue
+class function TLZSystem.GetEnvironmentVariableValue
   (AVariable: string): string;
 var
   Buffer: integer;
@@ -449,7 +449,7 @@ begin
     Result := '';
 end;
 
-class function TLazySystem.ExpandEnvironmentVariable(const AString
+class function TLZSystem.ExpandEnvironmentVariable(const AString
   : String): String;
 var
   bufsize: integer;
@@ -460,7 +460,7 @@ begin
   Result := TrimRight(Result);
 end;
 
-class procedure TLazySystem.GetEnvironmentVariables(AVariables: TStrings);
+class procedure TLZSystem.GetEnvironmentVariables(AVariables: TStrings);
 var
   LVariable: Boolean;
   LStr: PChar;

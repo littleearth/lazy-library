@@ -1,13 +1,13 @@
-unit duo.models;
+unit DUO.Models;
 
 interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, REST.Types, REST.client,
-  REST.Authenticator.Basic, System.JSON, duo.api, System.Generics.Collections;
+  REST.Authenticator.Basic, System.JSON, DUO.api, System.Generics.Collections;
 
 type
-  TDUODevice = class(TDuoModel)
+  TLZDUODevice = class(TLZDuoModel)
   private
     FDisplayName: string;
     FDeviceType: string;
@@ -29,7 +29,7 @@ type
       ADeviceName: string; ADeviceType: string; ANumber: string;
       ASMSNextCode: string; ACapabilities: TStrings = nil); overload;
     destructor Destroy; override;
-    procedure Assign(ADUODevice: TDUODevice); reintroduce;
+    procedure Assign(ADUODevice: TLZDUODevice); reintroduce;
     procedure FromJSONValue(AJSONValue: TJSONValue); override;
     property Device: string read FDevice write SetDevice;
     property DisplayName: string read FDisplayName write SetDisplayName;
@@ -40,17 +40,17 @@ type
     property Capabilities: TStrings read GetCapabilities;
   end;
 
-  TDUODevices = class(TDuoModelList<TDUODevice>)
+  TLZDUODevices = class(TLZDuoModelList<TLZDUODevice>)
   protected
   public
     function Add(ADevice, ADisplayName, ADeviceName, ADeviceType, ANumber,
       ASMSNextCode: string; ACapabilities: TStrings;
-      AUpdateExisting: boolean = true): TDUODevice; reintroduce; overload;
-    function Find(ADevice: string): TDUODevice;
-    function FindByNumber(ANumber: string): TDUODevice;
+      AUpdateExisting: boolean = true): TLZDUODevice; reintroduce; overload;
+    function Find(ADevice: string): TLZDUODevice;
+    function FindByNumber(ANumber: string): TLZDUODevice;
   end;
 
-  TDUOPhone = class(TDuoModel)
+  TLZDUOPhone = class(TLZDuoModel)
   private
     FPhoneType: string;
     FTampered: string;
@@ -89,7 +89,7 @@ type
   public
     constructor Create; reintroduce;
     destructor Destroy; override;
-    procedure Assign(ASource: TDUOPhone); reintroduce;
+    procedure Assign(ASource: TLZDUOPhone); reintroduce;
     procedure FromJSONValue(AJSONValue: TJSONValue); override;
     property Activated: boolean read FActivated write SetActivated;
     property Capabilities: TStrings read GetCapabilities;
@@ -111,12 +111,12 @@ type
     property PhoneType: string read FPhoneType write SetPhoneType;
   end;
 
-  TDUOPhones = class(TDuoModelList<TDUOPhone>)
+  TLZDUOPhones = class(TLZDuoModelList<TLZDUOPhone>)
   public
-    function Find(APhoneID: string): TDUOPhone;
+    function Find(APhoneID: string): TLZDUOPhone;
   end;
 
-  TDUOUser = class(TDuoModel)
+  TLZDUOUser = class(TLZDuoModel)
   private
     FCreatedTimeStamp: TDateTIme;
     FLastName: string;
@@ -126,7 +126,7 @@ type
     FIsEnrolled: boolean;
     FRealName: string;
     FAliases: TStringList;
-    FPhones: TDUOPhones;
+    FPhones: TLZDUOPhones;
     FFirstName: string;
     FUsername: string;
     FLastLogin: TDateTIme;
@@ -145,18 +145,18 @@ type
     procedure SetUsername(const Value: string);
     function GetAliases: TStrings;
     procedure SetStatus(const Value: string);
-    function GetPhones: TDUOPhones;
+    function GetPhones: TLZDUOPhones;
   public
     constructor Create; reintroduce;
     destructor Destroy; override;
-    procedure Assign(ASource: TDUOUser); reintroduce;
+    procedure Assign(ASource: TLZDUOUser); reintroduce;
     procedure FromJSONValue(AJSONValue: TJSONValue); override;
     function HasAlias(AAlias: string): boolean;
     function HasPhone(APhoneID: string): boolean;
     property UserID: string read FUserID write SetUserID;
     property Username: string read FUsername write SetUsername;
     property Aliases: TStrings read GetAliases;
-    property Phones: TDUOPhones read GetPhones;
+    property Phones: TLZDUOPhones read GetPhones;
     property CreatedTimeStamp: TDateTIme read FCreatedTimeStamp
       write SetCreatedTimeStamp;
     property Email: string read FEmail write SetEmail;
@@ -171,14 +171,14 @@ type
     property Status: string read FStatus write SetStatus;
   end;
 
-  TDUOUsers = class(TDuoModelList<TDUOUser>)
+  TLZDUOUsers = class(TLZDuoModelList<TLZDUOUser>)
   public
-    function Find(AUsername: string): TDUOUser;
-    function FindUserID(AUserID: string): TDUOUser;
-    function FindAlias(AAlias: string): TDUOUser;
+    function Find(AUsername: string): TLZDUOUser;
+    function FindUserID(AUserID: string): TLZDUOUser;
+    function FindAlias(AAlias: string): TLZDUOUser;
   end;
 
-  TDUOAccount = class(TDuoModel)
+  TLZDUOAccount = class(TLZDuoModel)
   private
     FAPIHostname: string;
     FAccountID: string;
@@ -191,7 +191,7 @@ type
     procedure SetBillingEdition(const Value: string);
     procedure SetTeleponyCredits(const Value: integer);
   public
-    procedure Assign(ASource: TDUOAccount); reintroduce;
+    procedure Assign(ASource: TLZDUOAccount); reintroduce;
     procedure FromJSONValue(AJSONValue: TJSONValue); override;
     property AccountID: string read FAccountID write SetAccountID;
     property AccountName: string read FAccountName write SetAccountName;
@@ -202,13 +202,13 @@ type
       write SetTeleponyCredits;
   end;
 
-  TDUOAccounts = class(TDuoModelList<TDUOAccount>);
+  TLZDUOAccounts = class(TLZDuoModelList<TLZDUOAccount>);
 
 implementation
 
 { TDUODevice }
 
-procedure TDUODevice.Assign(ADUODevice: TDUODevice);
+procedure TLZDUODevice.Assign(ADUODevice: TLZDUODevice);
 begin
   FDevice := ADUODevice.Device;
   FDisplayName := ADUODevice.DisplayName;
@@ -219,7 +219,7 @@ begin
   FCapabilities.Assign(ADUODevice.Capabilities);
 end;
 
-constructor TDUODevice.Create(ADevice, ADisplayName, ADeviceName, ADeviceType,
+constructor TLZDUODevice.Create(ADevice, ADisplayName, ADeviceName, ADeviceType,
   ANumber, ASMSNextCode: string; ACapabilities: TStrings);
 begin
   Create;
@@ -235,13 +235,13 @@ begin
   end;
 end;
 
-constructor TDUODevice.Create;
+constructor TLZDUODevice.Create;
 begin
   inherited Create;
   FCapabilities := TStringList.Create;
 end;
 
-destructor TDUODevice.Destroy;
+destructor TLZDUODevice.Destroy;
 begin
   try
     FreeAndNil(FCapabilities);
@@ -250,7 +250,7 @@ begin
   end;
 end;
 
-procedure TDUODevice.FromJSONValue(AJSONValue: TJSONValue);
+procedure TLZDUODevice.FromJSONValue(AJSONValue: TJSONValue);
 var
   LCapabilitiesArray: TJSONArray;
   LCapabilityIdx: integer;
@@ -271,52 +271,52 @@ begin
   DeviceType := AJSONValue.GetValue<string>('type');
 end;
 
-function TDUODevice.GetCapabilities: TStrings;
+function TLZDUODevice.GetCapabilities: TStrings;
 begin
   Result := FCapabilities;
 end;
 
-procedure TDUODevice.SetDevice(const Value: string);
+procedure TLZDUODevice.SetDevice(const Value: string);
 begin
   FDevice := Value;
 end;
 
-procedure TDUODevice.SetDeviceName(const Value: string);
+procedure TLZDUODevice.SetDeviceName(const Value: string);
 begin
   FDeviceName := Value;
 end;
 
-procedure TDUODevice.SetDeviceType(const Value: string);
+procedure TLZDUODevice.SetDeviceType(const Value: string);
 begin
   FDeviceType := Value;
 end;
 
-procedure TDUODevice.SetDisplayName(const Value: string);
+procedure TLZDUODevice.SetDisplayName(const Value: string);
 begin
   FDisplayName := Value;
 end;
 
-procedure TDUODevice.SetNumber(const Value: string);
+procedure TLZDUODevice.SetNumber(const Value: string);
 begin
   FNumber := Value;
 end;
 
-procedure TDUODevice.SetSMSNextCode(const Value: string);
+procedure TLZDUODevice.SetSMSNextCode(const Value: string);
 begin
   FSMSNextCode := Value;
 end;
 
 { TDUODevices }
 
-function TDUODevices.Add(ADevice, ADisplayName, ADeviceName, ADeviceType,
+function TLZDUODevices.Add(ADevice, ADisplayName, ADeviceName, ADeviceType,
   ANumber, ASMSNextCode: string; ACapabilities: TStrings;
-  AUpdateExisting: boolean): TDUODevice;
+  AUpdateExisting: boolean): TLZDUODevice;
 begin
   Result := Find(ADevice);
   if not Assigned(Result) then
   begin
-    Result := TDUODevice.Create(ADevice, ADisplayName, ADeviceName, ADeviceType,
-      ANumber, ASMSNextCode, ACapabilities);
+    Result := TLZDUODevice.Create(ADevice, ADisplayName, ADeviceName,
+      ADeviceType, ANumber, ASMSNextCode, ACapabilities);
     Add(Result);
   end
   else
@@ -332,7 +332,7 @@ begin
   end;
 end;
 
-function TDUODevices.Find(ADevice: string): TDUODevice;
+function TLZDUODevices.Find(ADevice: string): TLZDUODevice;
 var
   LIdx: integer;
 begin
@@ -348,7 +348,7 @@ begin
   end;
 end;
 
-function TDUODevices.FindByNumber(ANumber: string): TDUODevice;
+function TLZDUODevices.FindByNumber(ANumber: string): TLZDUODevice;
 var
   LIdx: integer;
 begin
@@ -366,7 +366,7 @@ end;
 
 { TDUOUser }
 
-procedure TDUOUser.Assign(ASource: TDUOUser);
+procedure TLZDUOUser.Assign(ASource: TLZDUOUser);
 begin
   FCreatedTimeStamp := ASource.CreatedTimeStamp;
   FLastName := ASource.LastName;
@@ -383,15 +383,15 @@ begin
   FPhones.Assign(ASource.Phones);
 end;
 
-constructor TDUOUser.Create;
+constructor TLZDUOUser.Create;
 begin
   inherited Create;
   FAliases := TStringList.Create;
   FAliases.Duplicates := dupIgnore;
-  FPhones := TDUOPhones.Create;
+  FPhones := TLZDUOPhones.Create;
 end;
 
-destructor TDUOUser.Destroy;
+destructor TLZDUOUser.Destroy;
 begin
   try
     FreeAndNil(FAliases);
@@ -401,17 +401,17 @@ begin
   end;
 end;
 
-function TDUOUser.HasAlias(AAlias: string): boolean;
+function TLZDUOUser.HasAlias(AAlias: string): boolean;
 begin
   Result := FAliases.IndexOf(AAlias) <> -1;
 end;
 
-function TDUOUser.HasPhone(APhoneID: string): boolean;
+function TLZDUOUser.HasPhone(APhoneID: string): boolean;
 begin
   Result := FPhones.Find(APhoneID) <> nil;
 end;
 
-procedure TDUOUser.FromJSONValue(AJSONValue: TJSONValue);
+procedure TLZDUOUser.FromJSONValue(AJSONValue: TJSONValue);
 var
   LAliases: TJSONValue;
   LAlias: string;
@@ -436,15 +436,15 @@ begin
 
   UserID := AJSONValue.GetValue<string>('user_id', '');
   Username := AJSONValue.GetValue<string>('username', '');
-  CreatedTimeStamp := TDuoDateTimeHelpers.UnixTimestampToDateTime
+  CreatedTimeStamp := TLZDuoDateTimeHelpers.UnixTimestampToDateTime
     (AJSONValue.GetValue<string>('created', ''));
-  LastLogin := TDuoDateTimeHelpers.UnixTimestampToDateTime
+  LastLogin := TLZDuoDateTimeHelpers.UnixTimestampToDateTime
     (AJSONValue.GetValue<string>('last_login', ''));
   Email := AJSONValue.GetValue<string>('email', '');
   FirstName := AJSONValue.GetValue<string>('firstname', '');
   LastName := AJSONValue.GetValue<string>('lastname', '');
   RealName := AJSONValue.GetValue<string>('realname', '');
-  LastDirectorySync := TDuoDateTimeHelpers.UnixTimestampToDateTime
+  LastDirectorySync := TLZDuoDateTimeHelpers.UnixTimestampToDateTime
     (AJSONValue.GetValue<string>('last_directory_sync', ''));
   IsEnrolled := AJSONValue.GetValue<boolean>('is_enrolled', false);
   Notes := AJSONValue.GetValue<string>('notes', '');
@@ -452,79 +452,79 @@ begin
 
 end;
 
-function TDUOUser.GetAliases: TStrings;
+function TLZDUOUser.GetAliases: TStrings;
 begin
   Result := FAliases;
 end;
 
-function TDUOUser.GetPhones: TDUOPhones;
+function TLZDUOUser.GetPhones: TLZDUOPhones;
 begin
   Result := FPhones;
 end;
 
-procedure TDUOUser.SetCreatedTimeStamp(const Value: TDateTIme);
+procedure TLZDUOUser.SetCreatedTimeStamp(const Value: TDateTIme);
 begin
   FCreatedTimeStamp := Value;
 end;
 
-procedure TDUOUser.SetEmail(const Value: string);
+procedure TLZDUOUser.SetEmail(const Value: string);
 begin
   FEmail := Value;
 end;
 
-procedure TDUOUser.SetFirstName(const Value: string);
+procedure TLZDUOUser.SetFirstName(const Value: string);
 begin
   FFirstName := Value;
 end;
 
-procedure TDUOUser.SetIsEnrolled(const Value: boolean);
+procedure TLZDUOUser.SetIsEnrolled(const Value: boolean);
 begin
   FIsEnrolled := Value;
 end;
 
-procedure TDUOUser.SetLastDirectorySync(const Value: TDateTIme);
+procedure TLZDUOUser.SetLastDirectorySync(const Value: TDateTIme);
 begin
   FLastDirectorySync := Value;
 end;
 
-procedure TDUOUser.SetLastLogin(const Value: TDateTIme);
+procedure TLZDUOUser.SetLastLogin(const Value: TDateTIme);
 begin
   FLastLogin := Value;
 end;
 
-procedure TDUOUser.SetLastName(const Value: string);
+procedure TLZDUOUser.SetLastName(const Value: string);
 begin
   FLastName := Value;
 end;
 
-procedure TDUOUser.SetNotes(const Value: string);
+procedure TLZDUOUser.SetNotes(const Value: string);
 begin
   FNotes := Value;
 end;
 
-procedure TDUOUser.SetRealName(const Value: string);
+procedure TLZDUOUser.SetRealName(const Value: string);
 begin
   FRealName := Value;
 end;
 
-procedure TDUOUser.SetStatus(const Value: string);
+procedure TLZDUOUser.SetStatus(const Value: string);
 begin
   FStatus := Value;
 end;
 
-procedure TDUOUser.SetUserID(const Value: string);
+procedure TLZDUOUser.SetUserID(const Value: string);
 begin
   FUserID := Value;
 end;
 
-procedure TDUOUser.SetUsername(const Value: string);
+procedure TLZDUOUser.SetUsername(const Value: string);
 begin
   FUsername := Value;
 end;
 
 { TDUOUsers }
 
-function TDUOUsers.Find(AUsername: string): TDUOUser;
+function TLZDUOUsers.Find(AUsername: string): TLZDUOUser;
 var
   LIdx: integer;
 begin
@@ -540,7 +540,7 @@ begin
   end;
 end;
 
-function TDUOUsers.FindAlias(AAlias: string): TDUOUser;
+function TLZDUOUsers.FindAlias(AAlias: string): TLZDUOUser;
 var
   LIdx: integer;
 begin
@@ -556,7 +556,7 @@ begin
   end;
 end;
 
-function TDUOUsers.FindUserID(AUserID: string): TDUOUser;
+function TLZDUOUsers.FindUserID(AUserID: string): TLZDUOUser;
 var
   LIdx: integer;
 begin
@@ -574,7 +574,7 @@ end;
 
 { TDUOPhone }
 
-procedure TDUOPhone.Assign(ASource: TDUOPhone);
+procedure TLZDUOPhone.Assign(ASource: TLZDUOPhone);
 begin
   FPhoneType := ASource.PhoneType;
   FTampered := ASource.Tampered;
@@ -595,13 +595,13 @@ begin
   FCapabilities.Assign(ASource.Capabilities);
 end;
 
-constructor TDUOPhone.Create;
+constructor TLZDUOPhone.Create;
 begin
   inherited Create;
   FCapabilities := TStringList.Create;
 end;
 
-destructor TDUOPhone.Destroy;
+destructor TLZDUOPhone.Destroy;
 begin
   try
     FreeAndNil(FCapabilities);
@@ -611,100 +611,100 @@ begin
 
 end;
 
-procedure TDUOPhone.FromJSONValue(AJSONValue: TJSONValue);
+procedure TLZDUOPhone.FromJSONValue(AJSONValue: TJSONValue);
 begin
   PhoneID := AJSONValue.GetValue<string>('phone_id', '');
   Number := AJSONValue.GetValue<string>('number', '');
 end;
 
-function TDUOPhone.GetCapabilities: TStrings;
+function TLZDUOPhone.GetCapabilities: TStrings;
 begin
   Result := FCapabilities;
 end;
 
-procedure TDUOPhone.SetActivated(const Value: boolean);
+procedure TLZDUOPhone.SetActivated(const Value: boolean);
 begin
   FActivated := Value;
 end;
 
-procedure TDUOPhone.SetEncrypted(const Value: string);
+procedure TLZDUOPhone.SetEncrypted(const Value: string);
 begin
   FEncrypted := Value;
 end;
 
-procedure TDUOPhone.SetExtension(const Value: string);
+procedure TLZDUOPhone.SetExtension(const Value: string);
 begin
   FExtension := Value;
 end;
 
-procedure TDUOPhone.SetFingerprint(const Value: string);
+procedure TLZDUOPhone.SetFingerprint(const Value: string);
 begin
   FFingerprint := Value;
 end;
 
-procedure TDUOPhone.SetLastSeen(const Value: TDateTIme);
+procedure TLZDUOPhone.SetLastSeen(const Value: TDateTIme);
 begin
   FLastSeen := Value;
 end;
 
-procedure TDUOPhone.SetModel(const Value: string);
+procedure TLZDUOPhone.SetModel(const Value: string);
 begin
   FModel := Value;
 end;
 
-procedure TDUOPhone.SetNumber(const Value: string);
+procedure TLZDUOPhone.SetNumber(const Value: string);
 begin
   FNumber := Value;
 end;
 
-procedure TDUOPhone.SetPhoneID(const Value: string);
+procedure TLZDUOPhone.SetPhoneID(const Value: string);
 begin
   FPhoneID := Value;
 end;
 
-procedure TDUOPhone.SetPhoneName(const Value: string);
+procedure TLZDUOPhone.SetPhoneName(const Value: string);
 begin
   FPhoneName := Value;
 end;
 
-procedure TDUOPhone.SetPhoneType(const Value: string);
+procedure TLZDUOPhone.SetPhoneType(const Value: string);
 begin
   FPhoneType := Value;
 end;
 
-procedure TDUOPhone.SetPlatform(const Value: string);
+procedure TLZDUOPhone.SetPlatform(const Value: string);
 begin
   FPlatform := Value;
 end;
 
-procedure TDUOPhone.SetPostDelay(const Value: string);
+procedure TLZDUOPhone.SetPostDelay(const Value: string);
 begin
   FPostDelay := Value;
 end;
 
-procedure TDUOPhone.SetPreDelay(const Value: string);
+procedure TLZDUOPhone.SetPreDelay(const Value: string);
 begin
   FPreDelay := Value;
 end;
 
-procedure TDUOPhone.SetScreenLock(const Value: string);
+procedure TLZDUOPhone.SetScreenLock(const Value: string);
 begin
   FScreenLock := Value;
 end;
 
-procedure TDUOPhone.SetSMSPasscodesSent(const Value: boolean);
+procedure TLZDUOPhone.SetSMSPasscodesSent(const Value: boolean);
 begin
   FSMSPasscodesSent := Value;
 end;
 
-procedure TDUOPhone.SetTampered(const Value: string);
+procedure TLZDUOPhone.SetTampered(const Value: string);
 begin
   FTampered := Value;
 end;
 
 { TDUOPhones }
 
-function TDUOPhones.Find(APhoneID: string): TDUOPhone;
+function TLZDUOPhones.Find(APhoneID: string): TLZDUOPhone;
 var
   LIdx: integer;
 begin
@@ -722,7 +722,7 @@ end;
 
 { TDUOAccount }
 
-procedure TDUOAccount.Assign(ASource: TDUOAccount);
+procedure TLZDUOAccount.Assign(ASource: TLZDUOAccount);
 begin
   inherited;
   APIHostname := ASource.APIHostname;
@@ -732,7 +732,7 @@ begin
   TeleponyCredits := ASource.TeleponyCredits;
 end;
 
-procedure TDUOAccount.FromJSONValue(AJSONValue: TJSONValue);
+procedure TLZDUOAccount.FromJSONValue(AJSONValue: TJSONValue);
 begin
   BillingEdition := '';
   TeleponyCredits := 0;
@@ -741,27 +741,27 @@ begin
   AccountID := AJSONValue.GetValue<string>('account_id', '');
 end;
 
-procedure TDUOAccount.SetAccountID(const Value: string);
+procedure TLZDUOAccount.SetAccountID(const Value: string);
 begin
   FAccountID := Value;
 end;
 
-procedure TDUOAccount.SetAccountName(const Value: string);
+procedure TLZDUOAccount.SetAccountName(const Value: string);
 begin
   FAccountName := Value;
 end;
 
-procedure TDUOAccount.SetAPIHostname(const Value: string);
+procedure TLZDUOAccount.SetAPIHostname(const Value: string);
 begin
   FAPIHostname := Value;
 end;
 
-procedure TDUOAccount.SetBillingEdition(const Value: string);
+procedure TLZDUOAccount.SetBillingEdition(const Value: string);
 begin
   FBillingEdition := Value;
 end;
 
-procedure TDUOAccount.SetTeleponyCredits(const Value: integer);
+procedure TLZDUOAccount.SetTeleponyCredits(const Value: integer);
 begin
   FTeleponyCredits := Value;
 end;

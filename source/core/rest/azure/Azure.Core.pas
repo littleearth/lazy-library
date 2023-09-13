@@ -3,10 +3,10 @@ unit Azure.Core;
 interface
 
 uses
-  Lazy.Types;
+  Lazy.REST.Types;
 
 type
-  TAzureOAuth2Connection = class(TLazyOAuth2Connection)
+  TLZAzureOAuth2Connection = class(TLZOAuth2Connection)
   private
     FTenantID: string;
     procedure SetTenantID(const Value: string);
@@ -22,14 +22,14 @@ uses
 
 { TAzureConnection }
 
-function TAzureOAuth2Connection.ProcessURLVariables(AURL: string): string;
+function TLZAzureOAuth2Connection.ProcessURLVariables(AURL: string): string;
 begin
   Result := inherited;
   Result := StringReplace(Result, '%tenantid%', TenantID,
     [rfReplaceAll, rfIgnoreCase]);
 end;
 
-procedure TAzureOAuth2Connection.SetTenantID(const Value: string);
+procedure TLZAzureOAuth2Connection.SetTenantID(const Value: string);
 begin
   FTenantID := Value;
 end;

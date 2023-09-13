@@ -38,7 +38,7 @@ type
     procedure ActionPublishSystemsExecute(Sender: TObject);
   private
   public
-    FPWACore: TPWACore;
+    FPWACore: TLZPWACore;
   end;
 
 var
@@ -136,12 +136,12 @@ end;
 procedure TfrmPWAExample.ApplicationEventsIdle(Sender: TObject;
 var Done: Boolean);
 begin
-  memoLog.Lines.Text := (LazyLog as TLazyLogBasic).LogText;
+  memoLog.Lines.Text := (LazyLog as TLZLogBasic).LogText;
 end;
 
 procedure TfrmPWAExample.FormCreate(Sender: TObject);
 begin
-  FPWACore := TPWACore.Create;
+  FPWACore := TLZPWACore.Create;
 end;
 
 procedure TfrmPWAExample.FormDestroy(Sender: TObject);

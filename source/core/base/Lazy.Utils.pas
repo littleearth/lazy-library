@@ -1,3 +1,13 @@
+{ -----------------------------------------------------------------------------
+  Unit Name: Lazy.Types
+  Author: Tristan Marlow
+  Purpose: Generic platform utilties
+
+  ----------------------------------------------------------------------------
+  Copyright (c) 2023 Tristan David Marlow
+  Copyright (c) 2023 Little Earth Solutions
+
+  ----------------------------------------------------------------------------; }
 unit Lazy.Utils;
 
 interface
@@ -8,12 +18,12 @@ uses
 // File and Folder Routines
 
 type
-  TLazyFile = class(TLazyFileBase);
-  TLazySystem = class(TLazySystemBase);
-  TLazyString = class(TLazyStringBase);
-  TLazyDateTime = class(TLazyDateTimeBase);
-  TLazyBoolean = class(TLazyBooleanBase);
-  TLazyMath = class(TLazyMathBase);
+  TLZFile = class(TLZFileBase);
+  TLZSystem = class(TLZSystemBase);
+  TLZString = class(TLZStringBase);
+  TLZDateTime = class(TLZDateTimeBase);
+  TLZBoolean = class(TLZBooleanBase);
+  TLZMath = class(TLZMathBase);
 
 implementation
 

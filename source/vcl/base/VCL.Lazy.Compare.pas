@@ -5,17 +5,17 @@ interface
 uses Classes, Windows, SysUtils, VCL.Lazy.Utils, Lazy.Types, Lazy.Compare;
 
 type
-  TCompare = class(TCompareBase)
+  TLZCompare = class(TLZCompareBase)
   public
     function GetFileVersion(AFilename: TFileName): string;
     function GetFileProductVersion(AFilename: TFileName): string;
   end;
 
-  TCompareConsole = class(TCompare)
+  TCompareConsole = class(TLZCompare)
   protected
     function GetUsage: string;
     function CheckCommandParameter(var AMessage: string;
-      var AMode: TCompareMode; var AValue1: string;
+      var AMode: TLZCompareMode; var AValue1: string;
       var AValue2: string): boolean;
   public
     function Execute(var AMessage: string): integer;
@@ -28,11 +28,11 @@ uses
 
 { TCompare }
 
-function TCompare.GetFileVersion(AFilename: TFileName): string;
+function TLZCompare.GetFileVersion(AFilename: TFileName): string;
 var
-  LFileVersionInformation: TFileVersionInformation;
+  LFileVersionInformation: TLZFileVersionInformation;
 begin
-  LFileVersionInformation := TFileVersionInformation.Create;
+  LFileVersionInformation := TLZFileVersionInformation.Create;
   try
     LFileVersionInformation.FileName := AFilename;
     Result := LFileVersionInformation.FileVersion;
@@ -41,11 +41,11 @@ begin
   end;
 end;
 
-function TCompare.GetFileProductVersion(AFilename: TFileName): string;
+function TLZCompare.GetFileProductVersion(AFilename: TFileName): string;
 var
-  LFileVersionInformation: TFileVersionInformation;
+  LFileVersionInformation: TLZFileVersionInformation;
 begin
-  LFileVersionInformation := TFileVersionInformation.Create;
+  LFileVersionInformation := TLZFileVersionInformation.Create;
   try
     LFileVersionInformation.FileName := AFilename;
     Result := LFileVersionInformation.ProductVersion;
@@ -57,7 +57,7 @@ end;
 { TCompareConsole }
 
 function TCompareConsole.CheckCommandParameter(var AMessage: string;
-  var AMode: TCompareMode; var AValue1, AValue2: string): boolean;
+  var AMode: TLZCompareMode; var AValue1, AValue2: string): boolean;
 var
   LValue: string;
 begin
@@ -65,7 +65,7 @@ begin
   AMessage := '';
   if Result then
   begin
-    if TLazySystem.GetApplicationParameters('/MODE', LValue) then
+    if TLZSystem.GetApplicationParameters('/MODE', LValue) then
     begin
       AMode := GetCompareMode(LValue);
     end
@@ -77,7 +77,7 @@ begin
   end;
   if Result then
   begin
-    if not TLazySystem.GetApplicationParameters('/VALUE1', AValue1) then
+    if not TLZSystem.GetApplicationParameters('/VALUE1', AValue1) then
     begin
       Result := False;
       AMessage := GetUsage;
@@ -85,7 +85,7 @@ begin
   end;
   if Result then
   begin
-    if not TLazySystem.GetApplicationParameters('/VALUE2', AValue2) then
+    if not TLZSystem.GetApplicationParameters('/VALUE2', AValue2) then
     begin
       case AMode of
         vcGetMD5, vcGetVersionProduct, vcGetVersionFile:
@@ -104,7 +104,7 @@ end;
 
 function TCompareConsole.Execute(var AMessage: string): integer;
 var
-  LMode: TCompareMode;
+  LMode: TLZCompareMode;
   LValue1, LValue2: string;
 begin
   Result := -9999;
@@ -120,7 +120,7 @@ begin
       vcVersionFile:
         begin
           LValue1 := GetFileVersion(LValue1);
-          if TLazyFile.IsValidFileName(LValue2) and FileExists(LValue2) then
+          if TLZFile.IsValidFileName(LValue2) and FileExists(LValue2) then
           begin
             LValue2 := GetFileVersion(LValue2);
           end;
@@ -131,7 +131,7 @@ begin
       vcMD5File:
         begin
           LValue1 := GenerateMD5(LValue1);
-          if TLazyFile.IsValidFileName(LValue2) and FileExists(LValue2) then
+          if TLZFile.IsValidFileName(LValue2) and FileExists(LValue2) then
           begin
             LValue2 := GenerateMD5(LValue2);
           end;

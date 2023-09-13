@@ -11,15 +11,16 @@ unit VCL.Lazy.WTSSessionChange;
 
 interface
 
-uses Winapi.Windows, System.SysUtils, Lazy.Types, Lazy.Log, VCL.Lazy.ThreadTimer, Winapi.Messages;
+uses Winapi.Windows, System.SysUtils, Lazy.Types, Lazy.Log,
+  VCL.Lazy.ThreadTimer, Winapi.Messages;
 
 type
   TOnWTSSessionChange = procedure(ASender: TObject; AParam: Cardinal) of object;
 
-  TLazyWTSSessionChange = class(TLazyObject)
+  TLZWTSSessionChange = class(TLZObject)
   private
     FMethodWnd: HWND;
-    FThreadTimer: TLazyThreadTimer;
+    FThreadTimer: TLZThreadTimer;
     FDelayUpdateMetricSettings: boolean;
     FDelayUpdateMetricSettingsDuration: integer;
     FOnWTSSessionChange: TOnWTSSessionChange;
@@ -47,9 +48,9 @@ implementation
 uses
   VCL.Forms, System.Classes;
 
-{ TLazyWTSSessionChange }
+{ TLZWTSSessionChange }
 
-constructor TLazyWTSSessionChange.Create(ADelayUpdateMetricSettings: boolean;
+constructor TLZWTSSessionChange.Create(ADelayUpdateMetricSettings: boolean;
   ADelayUpdateMetricSettingsDuration: integer);
 begin
   FMethodWnd := 0;
@@ -59,7 +60,7 @@ begin
   LoadLibrary;
 end;
 
-destructor TLazyWTSSessionChange.Destroy;
+destructor TLZWTSSessionChange.Destroy;
 begin
   try
     DisableMetricSettingsTimer;
@@ -69,7 +70,7 @@ begin
   end;
 end;
 
-procedure TLazyWTSSessionChange.DisableMetricSettingsTimer;
+procedure TLZWTSSessionChange.DisableMetricSettingsTimer;
 begin
   if Assigned(FThreadTimer) then
   begin
@@ -78,7 +79,7 @@ begin
   end;
 end;
 
-procedure TLazyWTSSessionChange.MetricSettingsOnTimer(Sender: TObject);
+procedure TLZWTSSessionChange.MetricSettingsOnTimer(Sender: TObject);
 begin
   if IsLibraryLoaded then
   begin
@@ -88,13 +89,13 @@ begin
   end;
 end;
 
-procedure TLazyWTSSessionChange.EnableMetricSettingsTimer;
+procedure TLZWTSSessionChange.EnableMetricSettingsTimer;
 begin
-  FThreadTimer := TLazyThreadTimer.Create(MetricSettingsOnTimer,
+  FThreadTimer := TLZThreadTimer.Create(MetricSettingsOnTimer,
     FDelayUpdateMetricSettingsDuration);
 end;
 
-procedure TLazyWTSSessionChange.WTSSessionWndProc(var Message: TMessage);
+procedure TLZWTSSessionChange.WTSSessionWndProc(var Message: TMessage);
 begin
   if Message.Msg = WM_WTSSESSION_CHANGE then
   begin
@@ -130,18 +131,18 @@ begin
     Message.LParam);
 end;
 
-function TLazyWTSSessionChange.IsLibraryLoaded: boolean;
+function TLZWTSSessionChange.IsLibraryLoaded: boolean;
 begin
   Result := FMethodWnd <> 0;
 end;
 
-function TLazyWTSSessionChange.IsOSSupported: boolean;
+function TLZWTSSessionChange.IsOSSupported: boolean;
 begin
   Result := ((Win32MajorVersion = 6) and (Win32MinorVersion >= 2)) or
     (Win32MajorVersion > 6);
 end;
 
-function TLazyWTSSessionChange.LoadLibrary: boolean;
+function TLZWTSSessionChange.LoadLibrary: boolean;
 begin
   if IsOSSupported and (not IsLibraryLoaded) then
   begin
@@ -151,13 +152,13 @@ begin
   Result := IsLibraryLoaded;
 end;
 
-procedure TLazyWTSSessionChange.SetOnWTSSessionChange
+procedure TLZWTSSessionChange.SetOnWTSSessionChange
   (const Value: TOnWTSSessionChange);
 begin
   FOnWTSSessionChange := Value;
 end;
 
-procedure TLazyWTSSessionChange.StartUpdateMetricSettings(ADelay: integer);
+procedure TLZWTSSessionChange.StartUpdateMetricSettings(ADelay: integer);
 begin
   DisableMetricSettingsTimer;
   if ADelay <> -1 then
@@ -167,14 +168,14 @@ begin
   EnableMetricSettingsTimer;
 end;
 
-procedure TLazyWTSSessionChange.StopUpdateMetricSettings;
+procedure TLZWTSSessionChange.StopUpdateMetricSettings;
 begin
   Debug('WTSSessionWndProc', 'Disabling Application.UpdateMetricSettings');
   DisableMetricSettingsTimer;
   Application.UpdateMetricSettings := False;
 end;
 
-function TLazyWTSSessionChange.UnloadLibrary: boolean;
+function TLZWTSSessionChange.UnloadLibrary: boolean;
 begin
   if FMethodWnd <> 0 then
   begin

@@ -1,3 +1,13 @@
+{ -----------------------------------------------------------------------------
+  Unit Name: Lazy.Types
+  Author: Tristan Marlow
+  Purpose: Common utlities base class
+
+  ----------------------------------------------------------------------------
+  Copyright (c) 2023 Tristan David Marlow
+  Copyright (c) 2023 Little Earth Solutions
+
+  ----------------------------------------------------------------------------; }
 unit Lazy.Utils.Base;
 
 interface
@@ -9,7 +19,7 @@ uses
 // File and Folder Routines
 
 type
-  TLazyFileBase = class(TLazyObject)
+  TLZFileBase = class(TLZObject)
   public
     class function GetTempFolder: string;
     class function GetGUIDFileName(AFolder, APrefix,
@@ -28,7 +38,7 @@ type
 
   end;
 
-  TLazySystemBase = class(TLazyObject)
+  TLZSystemBase = class(TLZObject)
   public
     class function GetApplicationParameters(AParameter: string;
       var AValue: string): Boolean;
@@ -37,7 +47,7 @@ type
 
   // String Routines
 
-  TLazyStringBase = class(TLazyObject)
+  TLZStringBase = class(TLZObject)
   public
     class function RemoveHTMLTags(const S: string): string;
     class function IsEmptyString(AValue: string): Boolean;
@@ -74,7 +84,7 @@ type
   end;
 
   // Date and Time Routines
-  TLazyDateTimeBase = class(TLazyObject)
+  TLZDateTimeBase = class(TLZObject)
   protected
     class var NowFunc: TDateTimeFunc;
   public
@@ -83,13 +93,13 @@ type
     class procedure SetNowMock(AFunction: TDateTimeFunc);
 
     class function RoundTime(ADateTime: TDateTime; AMins: double;
-      ARounding: TLazyTimeRounding = trNearest): TDateTime;
+      ARounding: TLZTimeRounding = trNearest): TDateTime;
     class function EncodeTimeTextFromMinutes(AMinutes: integer): string;
     class function DecodeTimeTextToMinutes(ATime: string): integer;
     class function MinutesToDaysHoursMinutes(AMinutes: integer;
       AHoursPerDay: integer = 24; ALongFormat: Boolean = False): string;
     class procedure GenerateMonthList(AMonths: TStrings);
-    class procedure SetTimeFormat(ATimeFormat: TLazyTimeFormat);
+    class procedure SetTimeFormat(ATimeFormat: TLZTimeFormat);
     class function LocalDateTimeFromUTCDateTime(const UTCDateTime: TDateTime)
       : TDateTime;
     class function DateTimeStrEval(const ADateTimeFormat: string;
@@ -98,11 +108,11 @@ type
     class function StringToDateDef(AValue: string; ADefault: TDate): TDate;
     class function StringToTime(AValue: string; ARounding: Boolean = False;
       ARoundUserEntries: Boolean = False; ARoundValue: integer = 10;
-      ARoundingType: TLazyTimeRounding = trNearest): TTime;
+      ARoundingType: TLZTimeRounding = trNearest): TTime;
     class function StringToTimeDef(AValue: string; ADefault: TTime;
       ARounding: Boolean = False; ARoundUserEntries: Boolean = False;
       ARoundValue: integer = 10;
-      ARoundingType: TLazyTimeRounding = trNearest): TTime;
+      ARoundingType: TLZTimeRounding = trNearest): TTime;
     class function StringToDateTime(AValue: string): TDateTime;
     class function StringToDateTimeDef(AValue: string; ADefault: TDateTime)
       : TDateTime;
@@ -149,14 +159,14 @@ type
   end;
 
   // Boolean Routines
-  TLazyBooleanBase = class(TLazyObject)
+  TLZBooleanBase = class(TLZObject)
   public
     class function BoolToInteger(ABoolean: Boolean): integer;
     class function IntegerToBool(AValue: integer): Boolean;
   end;
 
   // Math Routines
-  TLazyMathBase = class(TLazyObject)
+  TLZMathBase = class(TLZObject)
   public
     class function CalculatePercentage(AValue: integer;
       ATotal: integer): integer;
@@ -169,19 +179,19 @@ uses
   System.DateUtils, System.StrUtils, System.IOUtils, System.VarUtils,
   Lazy.ISO8601;
 
-class function TLazyDateTimeBase.MinutesToMetricMinutes
+class function TLZDateTimeBase.MinutesToMetricMinutes
   (AMinutes: integer): integer;
 begin
   Result := Round((AMinutes * 10) / 6);
 end;
 
-class function TLazyDateTimeBase.MetricMinutesToMinutes(AMetricMinutes
+class function TLZDateTimeBase.MetricMinutesToMinutes(AMetricMinutes
   : integer): integer;
 begin
   Result := Round((AMetricMinutes / 10) * 6);
 end;
 
-class function TLazyDateTimeBase.GetEasterDate(AYear: integer;
+class function TLZDateTimeBase.GetEasterDate(AYear: integer;
   var AEaster: TDateTime): Boolean;
 { From Vol 3 of The Art of Computer Programming, Donlad E. Knuth }
 var
@@ -212,7 +222,7 @@ begin
   end;
 end;
 
-class function TLazyDateTimeBase.DateTimeToString(ADateTime: TDateTime;
+class function TLZDateTimeBase.DateTimeToString(ADateTime: TDateTime;
   AFormatSettings: TFormatSettings; ANullText: string = ''): string;
 begin
   if ADateTime = 0 then
@@ -225,13 +235,13 @@ begin
   end;
 end;
 
-class function TLazyDateTimeBase.DateTimeToString(ADateTime: TDateTime;
+class function TLZDateTimeBase.DateTimeToString(ADateTime: TDateTime;
   ANullText: string = ''): string;
 begin
   Result := DateTimeToString(ADateTime, FormatSettings, ANullText);
 end;
 
-class function TLazyDateTimeBase.DateToString(ADate: TDateTime;
+class function TLZDateTimeBase.DateToString(ADate: TDateTime;
   AFormatSettings: TFormatSettings; ANullText: string = ''): string;
 begin
   if ADate = 0 then
@@ -244,19 +254,19 @@ begin
   end;
 end;
 
-class function TLazyDateTimeBase.DateToString(ADate: TDate;
+class function TLZDateTimeBase.DateToString(ADate: TDate;
   ANullText: string = ''): string;
 begin
   Result := DateToString(ADate, FormatSettings, ANullText);
 end;
 
-class function TLazyDateTimeBase.DateToString(ADate: TDateTime;
+class function TLZDateTimeBase.DateToString(ADate: TDateTime;
   ANullText: string = ''): string;
 begin
   Result := DateToString(ADate, FormatSettings, ANullText);
 end;
 
-class function TLazyDateTimeBase.TimeToString(ATime: TDateTime;
+class function TLZDateTimeBase.TimeToString(ATime: TDateTime;
   AFormatSettings: TFormatSettings; ANullText: string = ''): string;
 begin
   if ATime = 0 then
@@ -269,19 +279,19 @@ begin
   end;
 end;
 
-class function TLazyDateTimeBase.TimeToString(ATime: TTime;
+class function TLZDateTimeBase.TimeToString(ATime: TTime;
   ANullText: string = ''): string;
 begin
   Result := TimeToString(ATime, FormatSettings, ANullText);
 end;
 
-class function TLazyDateTimeBase.TimeToString(ATime: TDateTime;
+class function TLZDateTimeBase.TimeToString(ATime: TDateTime;
   ANullText: string = ''): string;
 begin
   Result := TimeToString(ATime, FormatSettings, ANullText);
 end;
 
-class function TLazyDateTimeBase.DateTimeDifference(AStartDate: TDateTime;
+class function TLZDateTimeBase.DateTimeDifference(AStartDate: TDateTime;
   AEndDate: TDateTime): string;
 var
   Days, Hours, Mins, Secs: word;
@@ -289,7 +299,7 @@ begin
   Result := DateTimeDifference(AStartDate, AEndDate, Days, Hours, Mins, Secs);
 end;
 
-class function TLazyDateTimeBase.DateTimeDifference(AStartDate: TDateTime;
+class function TLZDateTimeBase.DateTimeDifference(AStartDate: TDateTime;
   AEndDate: TDateTime; var ADays: word; var AHours: word; var AMinutes: word;
   var ASeconds: word): string;
 begin
@@ -301,7 +311,7 @@ begin
     [ADays, AHours, AMinutes, ASeconds]);
 end;
 
-class function TLazyDateTimeBase.DurationString(AElapsed: TDateTime;
+class function TLZDateTimeBase.DurationString(AElapsed: TDateTime;
   AHoursMinutesOnly: Boolean; ADateTimeFormat: string): string;
 var
   LDays, LHours, LMinutes: integer;
@@ -320,7 +330,7 @@ begin
   end;
 end;
 
-class function TLazyDateTimeBase.DurationFromMinutes(AMinutes: integer;
+class function TLZDateTimeBase.DurationFromMinutes(AMinutes: integer;
   AHoursMinutesOnly: Boolean; ADateTimeFormat: string): string;
 var
   LElapsed: TDateTime;
@@ -329,7 +339,7 @@ begin
   Result := DurationString(LElapsed, AHoursMinutesOnly, ADateTimeFormat);
 end;
 
-class function TLazyDateTimeBase.DurationFromMilliseconds(AMilliseconds: Int64;
+class function TLZDateTimeBase.DurationFromMilliseconds(AMilliseconds: Int64;
   AHoursMinutesOnly: Boolean; ADateTimeFormat: string): string;
 var
   LElapsed: TDateTime;
@@ -338,7 +348,7 @@ begin
   Result := DurationString(LElapsed, AHoursMinutesOnly, ADateTimeFormat);
 end;
 
-class function TLazyDateTimeBase.StringToDuration(AValue: string;
+class function TLZDateTimeBase.StringToDuration(AValue: string;
   var AHours, AMinutes: integer): Boolean;
 var
   LDurationStr: string;
@@ -348,7 +358,7 @@ begin
   AHours := 0;
   LDurationStr := Trim(AValue);
   try
-    if not TLazyStringBase.IsEmptyString(LDurationStr) then
+    if not TLZStringBase.IsEmptyString(LDurationStr) then
     begin
       LDurationStr := StringReplace(LDurationStr, '.', ':', [rfReplaceAll]);
       if Pos(':', LDurationStr) = 0 then
@@ -378,8 +388,8 @@ begin
 
 end;
 
-class function TLazyDateTimeBase.RoundTime(ADateTime: TDateTime; AMins: double;
-  ARounding: TLazyTimeRounding = trNearest): TDateTime;
+class function TLZDateTimeBase.RoundTime(ADateTime: TDateTime; AMins: double;
+  ARounding: TLZTimeRounding = trNearest): TDateTime;
 var
   MinsAsFraction: double;
 begin
@@ -396,7 +406,7 @@ begin
   end;
 end;
 
-class function TLazyFileBase.ExtractUrlFileName(const AURL: string): string;
+class function TLZFileBase.ExtractUrlFileName(const AURL: string): string;
 var
   i: integer;
 begin
@@ -404,12 +414,12 @@ begin
   Result := Copy(AURL, i + 1, length(AURL) - (i));
 end;
 
-class function TLazyFileBase.GetTempFolder: string;
+class function TLZFileBase.GetTempFolder: string;
 begin
   Result := IncludeTrailingPathDelimiter(TPath.GetTempPath);
 end;
 
-class function TLazyFileBase.RandomFileName(ALength: integer): string;
+class function TLZFileBase.RandomFileName(ALength: integer): string;
 var
   str: string;
 begin
@@ -421,7 +431,7 @@ begin
   until (length(Result) = ALength);
 end;
 
-class function TLazyFileBase.GetTempFile(APrefix: string;
+class function TLZFileBase.GetTempFile(APrefix: string;
   AExtension: string = '.tmp'; AFolder: string = ''): string;
 var
   Attempts: Cardinal;
@@ -429,7 +439,7 @@ var
 begin
   Attempts := 0;
   Folder := AFolder;
-  if TLazyStringBase.IsEmptyString(Folder) then
+  if TLZStringBase.IsEmptyString(Folder) then
     Folder := GetTempFolder;
   repeat
     Result := IncludeTrailingPathDelimiter(Folder) + Copy(APrefix, 1, 3) +
@@ -442,7 +452,7 @@ begin
   end;
 end;
 
-class function TLazyFileBase.GetGUIDFileName(AFolder, APrefix,
+class function TLZFileBase.GetGUIDFileName(AFolder, APrefix,
   AExtension: string): string;
 var
   FileName: string;
@@ -465,12 +475,12 @@ begin
   end;
 end;
 
-class function TLazySystemBase.GetApplicationDir: string;
+class function TLZSystemBase.GetApplicationDir: string;
 begin
-  Result := TLazyFileBase.GetApplicationDir;
+  Result := TLZFileBase.GetApplicationDir;
 end;
 
-class function TLazySystemBase.GetApplicationParameters(AParameter: string;
+class function TLZSystemBase.GetApplicationParameters(AParameter: string;
   var AValue: string): Boolean;
 var
   LParamIdx: integer;
@@ -498,12 +508,12 @@ begin
   end;
 end;
 
-class function TLazyFileBase.GetApplicationDir: string;
+class function TLZFileBase.GetApplicationDir: string;
 begin
   Result := IncludeTrailingPathDelimiter(ExtractFilePath(ParamStr(0)));
 end;
 
-class function TLazyFileBase.CheckDirectoryExists(ADirectory: string;
+class function TLZFileBase.CheckDirectoryExists(ADirectory: string;
   ACreate: Boolean): Boolean;
 begin
   try
@@ -519,7 +529,7 @@ begin
   end;
 end;
 
-class function TLazyFileBase.IsValidFileName(AFileName: TFileName): Boolean;
+class function TLZFileBase.IsValidFileName(AFileName: TFileName): Boolean;
 var
   TestFile: TextFile;
 begin
@@ -544,15 +554,15 @@ begin
   end;
 end;
 
-class function TLazyFileBase.ValidateFileName(AFileName: TFileName): TFileName;
+class function TLZFileBase.ValidateFileName(AFileName: TFileName): TFileName;
 begin
   Result := AFileName;
-  Result := TLazyStringBase.StripExtraSpaces(Result, True, True);
-  Result := TLazyStringBase.StripCharsInSet(Result,
+  Result := TLZStringBase.StripExtraSpaces(Result, True, True);
+  Result := TLZStringBase.StripCharsInSet(Result,
     ['\', '/', ':', '*', '?', '"', '<', '>', '|']);
 end;
 
-class procedure TLazyFileBase.QuickFileSearch(const PathName, FileName: string;
+class procedure TLZFileBase.QuickFileSearch(const PathName, FileName: string;
   const Recurse: Boolean; FileList: TStrings);
 var
   Rec: TSearchRec;
@@ -581,7 +591,7 @@ begin
           if ((Rec.Attr and faDirectory) = faDirectory) and (Rec.Name <> '.')
             and (Rec.Name <> '..') then
           begin
-            TLazyFileBase.QuickFileSearch(path + Rec.Name, FileName, True,
+            TLZFileBase.QuickFileSearch(path + Rec.Name, FileName, True,
               FileList);
           end;
         until (FindNext(Rec) <> 0) or (Cancel = True);
@@ -591,7 +601,7 @@ begin
   end;
 end;
 
-class function TLazyStringBase.ContainsNonAlphaNumberic
+class function TLZStringBase.ContainsNonAlphaNumberic
   (const AValue: string): Boolean;
 var
   i: integer;
@@ -608,7 +618,7 @@ begin
   end;
 end;
 
-class function TLazyStringBase.StripNonAlphaNumeric(const AValue
+class function TLZStringBase.StripNonAlphaNumeric(const AValue
   : string): string;
 var
   i: integer;
@@ -622,7 +632,7 @@ begin
   Result := Trim(Result);
 end;
 
-class function TLazyStringBase.StripNonNumeric(const AValue: string;
+class function TLZStringBase.StripNonNumeric(const AValue: string;
   AAllowDecimal: Boolean = False; AAllowNegative: Boolean = False): string;
 var
   i: integer;
@@ -644,7 +654,7 @@ begin
   Result := Trim(Result);
 end;
 
-class function TLazyStringBase.StripCharsInSet(const AValue: string;
+class function TLZStringBase.StripCharsInSet(const AValue: string;
   ACharset: TSysCharSet): string;
 var
   i: integer;
@@ -656,13 +666,13 @@ begin
   end;
 end;
 
-class function TLazyStringBase.StipNonStandard(const AValue: string): string;
+class function TLZStringBase.StipNonStandard(const AValue: string): string;
 begin
   Result := StripCharsInSet(AValue, [#0 .. #9, #11, #12, #14 .. #31,
     #127 .. #255]);
 end;
 
-class function TLazyStringBase.RemoveHTMLTags(const S: string): string;
+class function TLZStringBase.RemoveHTMLTags(const S: string): string;
 var
   i: integer;
   InTag: Boolean;
@@ -680,7 +690,7 @@ begin
   end;
 end;
 
-class function TLazyStringBase.EncodeHTML(AValue: String): string;
+class function TLZStringBase.EncodeHTML(AValue: String): string;
 begin
   Result := AValue;
   Result := ReplaceStr(Result, '&', '&amp;');
@@ -693,7 +703,7 @@ begin
 
 end;
 
-class function TLazyStringBase.DecodeHTML(AValue: String): string;
+class function TLZStringBase.DecodeHTML(AValue: String): string;
 begin
   Result := AValue;
   Result := ReplaceStr(Result, '&lt;', '<');
@@ -710,14 +720,14 @@ begin
   Result := ReplaceStr(Result, '&nbsp;', ' ');
 end;
 
-class function TLazyStringBase.StripHTML(S: string): string;
+class function TLZStringBase.StripHTML(S: string): string;
 begin
   Result := RemoveHTMLTags(S);
   Result := DecodeHTML(Result);
   Result := Trim(Result);
 end;
 
-class function TLazyStringBase.StripExtraSpaces(AValue: string;
+class function TLZStringBase.StripExtraSpaces(AValue: string;
   ARemoveTab: Boolean = False; ARemoveCRLF: Boolean = False): string;
 var
   i: integer;
@@ -758,7 +768,7 @@ begin
   Result := Trim(Result);
 end;
 
-class function TLazyStringBase.StringCleaner(const AValue: string;
+class function TLZStringBase.StringCleaner(const AValue: string;
   ARemoveTab: Boolean = False; ARemoveCRLF: Boolean = False;
   ACharset: TSysCharSet = [#0 .. #8, #11, #12, #14 .. #31,
   #127 .. #255]): string;
@@ -768,7 +778,7 @@ begin
   Result := StripExtraSpaces(Result, ARemoveTab, ARemoveCRLF);
 end;
 
-class function TLazyStringBase.TitleCase(const AText: string;
+class function TLZStringBase.TitleCase(const AText: string;
   const ALowerCaseFirst: Boolean = True): string;
 const
   cDelimiters = [#9, #10, #13, ' ', ',', '.', ':', ';', '"', '\', '/', '(', ')',
@@ -789,12 +799,12 @@ begin
   end;
 end;
 
-class function TLazyStringBase.IsEmptyString(AValue: string): Boolean;
+class function TLZStringBase.IsEmptyString(AValue: string): Boolean;
 begin
   Result := Trim(AValue) = '';
 end;
 
-class function TLazyStringBase.ExtractQuotedString(const S: string;
+class function TLZStringBase.ExtractQuotedString(const S: string;
   Quote: char): string;
 var
   i: integer;
@@ -816,7 +826,7 @@ begin
   end;
 end;
 
-class function TLazyDateTimeBase.DecodeTimeTextToMinutes(ATime: string)
+class function TLZDateTimeBase.DecodeTimeTextToMinutes(ATime: string)
   : integer;
 var
   TempStr: string;
@@ -843,7 +853,7 @@ begin
   Result := (Hours * 60) + Minutes;
 end;
 
-class function TLazyDateTimeBase.EncodeTimeTextFromMinutes
+class function TLZDateTimeBase.EncodeTimeTextFromMinutes
   (AMinutes: integer): string;
 var
   Hours, Minutes: integer;
@@ -853,7 +863,7 @@ begin
   Result := Format('%d:%.2d', [Hours, Minutes]);
 end;
 
-class function TLazyDateTimeBase.MinutesToDaysHoursMinutes(AMinutes: integer;
+class function TLZDateTimeBase.MinutesToDaysHoursMinutes(AMinutes: integer;
   AHoursPerDay: integer = 24; ALongFormat: Boolean = False): string;
 var
   TotalMinutes: integer;
@@ -920,7 +930,7 @@ begin
   end;
 end;
 
-class procedure TLazyDateTimeBase.GenerateMonthList(AMonths: TStrings);
+class procedure TLZDateTimeBase.GenerateMonthList(AMonths: TStrings);
 var
   MonthIdx: integer;
   LocaleFormatSettings: TFormatSettings;
@@ -933,12 +943,12 @@ begin
   end;
 end;
 
-class procedure TLazyDateTimeBase.SetNowMock(AFunction: TDateTimeFunc);
+class procedure TLZDateTimeBase.SetNowMock(AFunction: TDateTimeFunc);
 begin
   NowFunc := AFunction;
 end;
 
-class procedure TLazyDateTimeBase.SetTimeFormat(ATimeFormat: TLazyTimeFormat);
+class procedure TLZDateTimeBase.SetTimeFormat(ATimeFormat: TLZTimeFormat);
 var
   LocaleFormatSettings: TFormatSettings;
 begin
@@ -962,13 +972,13 @@ begin
   end;
 end;
 
-class function TLazyDateTimeBase.LocalDateTimeFromUTCDateTime(const UTCDateTime
+class function TLZDateTimeBase.LocalDateTimeFromUTCDateTime(const UTCDateTime
   : TDateTime): TDateTime;
 begin
   Result := TTimeZone.Local.ToLocalTime(UTCDateTime);
 end;
 
-class function TLazyDateTimeBase.DateTimeStrEval(const ADateTimeFormat: string;
+class function TLZDateTimeBase.DateTimeStrEval(const ADateTimeFormat: string;
   const ADateTimeStr: string): TDateTime;
 var
   i, ii, iii: integer;
@@ -1197,7 +1207,7 @@ begin
     Result := 0;
 end;
 
-class function TLazyDateTimeBase.StringToDate(AValue: string): TDate;
+class function TLZDateTimeBase.StringToDate(AValue: string): TDate;
 var
   DayIdx: integer;
   Day, Month, Year: integer;
@@ -1215,7 +1225,7 @@ begin
 
       LAllowOperation := False;
 
-      Date := TIso8601.DateFromIso8601(AValue);
+      Date := TLZIso8601.DateFromIso8601(AValue);
 
       if Date = 0 then
       begin
@@ -1405,7 +1415,7 @@ begin
   end;
 end;
 
-class function TLazyDateTimeBase.StringToDateDef(AValue: string;
+class function TLZDateTimeBase.StringToDateDef(AValue: string;
   ADefault: TDate): TDate;
 begin
   try
@@ -1415,10 +1425,10 @@ begin
   end;
 end;
 
-class function TLazyDateTimeBase.StringToTime(AValue: string;
+class function TLZDateTimeBase.StringToTime(AValue: string;
   ARounding: Boolean = False; ARoundUserEntries: Boolean = False;
   ARoundValue: integer = 10;
-  ARoundingType: TLazyTimeRounding = trNearest): TTime;
+  ARoundingType: TLZTimeRounding = trNearest): TTime;
 var
   LTime: TTime;
   LDateTime: TDateTime;
@@ -1443,7 +1453,7 @@ begin
 
       if LTime = 0 then
       begin
-        LTimeStr := TLazyStringBase.StringCleaner(AValue, True, True);
+        LTimeStr := TLZStringBase.StringCleaner(AValue, True, True);
         LTimeStr := StringReplace(LTimeStr, '%', '',
           [rfReplaceAll, rfIgnoreCase]);
 
@@ -1506,7 +1516,7 @@ begin
 
         if LTime = 0 then
         begin
-          LTimeValue := StrToIntDef(TLazyStringBase.StripNonNumeric(LTimeStr,
+          LTimeValue := StrToIntDef(TLZStringBase.StripNonNumeric(LTimeStr,
             False, False), -1);
           if (LTimeValue <> -1) and (length(IntToStr(LTimeValue)) <= 6) then
           begin
@@ -1579,9 +1589,9 @@ begin
           if LTime = 0 then
           begin
             try
-              LTime := TIso8601.TimeFromIso8601(AValue);
+              LTime := TLZIso8601.TimeFromIso8601(AValue);
               if LTime = 0 then
-                LTime := TimeOf(TIso8601.DateTimeFromIso8601(AValue));
+                LTime := TimeOf(TLZIso8601.DateTimeFromIso8601(AValue));
             except
               LTime := 0;
             end;
@@ -1610,10 +1620,10 @@ begin
   Result := TimeOf(VarToDateTime(LTimeStr));
 end;
 
-class function TLazyDateTimeBase.StringToTimeDef(AValue: string;
+class function TLZDateTimeBase.StringToTimeDef(AValue: string;
   ADefault: TTime; ARounding: Boolean = False;
   ARoundUserEntries: Boolean = False; ARoundValue: integer = 10;
-  ARoundingType: TLazyTimeRounding = trNearest): TTime;
+  ARoundingType: TLZTimeRounding = trNearest): TTime;
 begin
   try
     Result := StringToTime(AValue, ARounding, ARoundUserEntries, ARoundValue,
@@ -1623,7 +1633,7 @@ begin
   end;
 end;
 
-class function TLazyDateTimeBase.StringToDateTime(AValue: string): TDateTime;
+class function TLZDateTimeBase.StringToDateTime(AValue: string): TDateTime;
 var
   LDate: TDate;
   LTime: TTime;
@@ -1631,10 +1641,10 @@ var
 begin
   LDateTime := 0;
   try
-    if not TLazyStringBase.IsEmptyString(AValue) then
+    if not TLZStringBase.IsEmptyString(AValue) then
     begin
       try
-        LDateTime := TIso8601.DateTimeFromIso8601(AValue);
+        LDateTime := TLZIso8601.DateTimeFromIso8601(AValue);
       except
         LDateTime := 0;
       end;
@@ -1658,7 +1668,7 @@ begin
   end;
 end;
 
-class function TLazyDateTimeBase.StringToDateTimeDef(AValue: string;
+class function TLZDateTimeBase.StringToDateTimeDef(AValue: string;
   ADefault: TDateTime): TDateTime;
 var
   Date: TDate;
@@ -1669,7 +1679,7 @@ begin
   Result := Date + Time;
 end;
 
-class function TLazyDateTimeBase.ConvertDoubleDigitYear
+class function TLZDateTimeBase.ConvertDoubleDigitYear
   (AValue: integer): integer;
 var
   YearWindow: integer;
@@ -1688,7 +1698,7 @@ begin
   end;
 end;
 
-class function TLazyBooleanBase.BoolToInteger(ABoolean: Boolean): integer;
+class function TLZBooleanBase.BoolToInteger(ABoolean: Boolean): integer;
 begin
   Result := 0;
   if ABoolean then
@@ -1697,12 +1707,12 @@ begin
   end;
 end;
 
-class function TLazyBooleanBase.IntegerToBool(AValue: integer): Boolean;
+class function TLZBooleanBase.IntegerToBool(AValue: integer): Boolean;
 begin
   Result := AValue = 1;
 end;
 
-class function TLazyMathBase.CalculatePercentage(AValue: integer;
+class function TLZMathBase.CalculatePercentage(AValue: integer;
   ATotal: integer): integer;
 begin
   Result := 0;
@@ -1712,7 +1722,7 @@ begin
   end;
 end;
 
-class function TLazyMathBase.HexToInt(S: String): LongInt;
+class function TLZMathBase.HexToInt(S: String): LongInt;
 const
   DecDigits = ['0' .. '9'];
   HexVals: Array [0 .. $F] Of integer = (0, 1, 2, 3, 4, 5, 6, 7, 8, 9, $A, $B,
@@ -1764,7 +1774,7 @@ begin
   end;
 end;
 
-class procedure TLazyStringBase.ParseDelimited(const sl: TStrings;
+class procedure TLZStringBase.ParseDelimited(const sl: TStrings;
   const Value: string; const delimiter: string);
 var
   dx: integer;
@@ -1789,7 +1799,7 @@ begin
   end;
 end;
 
-class function TLazyStringBase.GeneratePassword(ALength: integer): string;
+class function TLZStringBase.GeneratePassword(ALength: integer): string;
 var
   i: integer;
   AllowedCharacters: string;
@@ -1804,7 +1814,7 @@ begin
   end;
 end;
 
-class function TLazyStringBase.SplitStringToWords(const AString: string;
+class function TLZStringBase.SplitStringToWords(const AString: string;
   AWords: TStrings): integer;
 var
   idx: integer;
@@ -1841,7 +1851,7 @@ begin
   end;
 end;
 
-class function TLazyStringBase.GetNthNumber(AValue: integer): string;
+class function TLZStringBase.GetNthNumber(AValue: integer): string;
 var
   BaseValue: integer;
 begin
@@ -1883,7 +1893,7 @@ begin
   end;
 end;
 
-class function TLazyStringBase.LeftPad(S: string; Ch: char;
+class function TLZStringBase.LeftPad(S: string; Ch: char;
   Len: integer): string;
 var
   RestLen: integer;
@@ -1895,7 +1905,7 @@ begin
   Result := S + StringOfChar(Ch, RestLen);
 end;
 
-class function TLazyStringBase.RightPad(S: string; Ch: char;
+class function TLZStringBase.RightPad(S: string; Ch: char;
   Len: integer): string;
 var
   RestLen: integer;
@@ -1907,7 +1917,7 @@ begin
   Result := StringOfChar(Ch, RestLen) + S;
 end;
 
-class function TLazyStringBase.StrMaxLen(const S: string;
+class function TLZStringBase.StrMaxLen(const S: string;
   MaxLen: integer): string;
 begin
   Result := S;
@@ -1917,7 +1927,7 @@ begin
   Result[MaxLen] := '…';
 end;
 
-class function TLazyStringBase.FormatByteSize(const bytes: extended): string;
+class function TLZStringBase.FormatByteSize(const bytes: extended): string;
 const
   B = 1; // byte
   KB = 1024 * B; // kilobyte
@@ -1934,7 +1944,7 @@ begin
     Result := FormatFloat('0.00 bytes', bytes);
 end;
 
-class function TLazyStringBase.LeadingZeroes(const ANumber,
+class function TLZStringBase.LeadingZeroes(const ANumber,
   ALength: integer): string;
 begin
   Result := SysUtils.Format('%.*d', [ALength, ANumber]);
@@ -1942,6 +1952,6 @@ end;
 
 initialization
 
-TLazyDateTimeBase.NowFunc := Now;
+TLZDateTimeBase.NowFunc := Now;
 
 end.

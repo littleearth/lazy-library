@@ -2,8 +2,8 @@ object frmAuthDemo: TfrmAuthDemo
   Left = 0
   Top = 0
   Caption = 'DUO authentication demo'
-  ClientHeight = 441
-  ClientWidth = 624
+  ClientHeight = 423
+  ClientWidth = 614
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,8 +17,8 @@ object frmAuthDemo: TfrmAuthDemo
   object Panel1: TPanel
     Left = 0
     Top = 265
-    Width = 624
-    Height = 176
+    Width = 614
+    Height = 158
     Align = alClient
     Caption = 'Panel1'
     TabOrder = 1
@@ -55,7 +55,7 @@ object frmAuthDemo: TfrmAuthDemo
   object Panel2: TPanel
     Left = 0
     Top = 0
-    Width = 624
+    Width = 614
     Height = 265
     Align = alTop
     TabOrder = 0
@@ -259,11 +259,10 @@ object frmAuthDemo: TfrmAuthDemo
         object Label1: TLabel
           Left = 0
           Top = 0
-          Width = 149
+          Width = 80
           Height = 15
           Align = alTop
           Caption = 'Integration Key'
-          ExplicitWidth = 80
         end
         object editIntegrationKey: TEdit
           Left = 0
@@ -286,11 +285,10 @@ object frmAuthDemo: TfrmAuthDemo
         object Label2: TLabel
           Left = 0
           Top = 0
-          Width = 149
+          Width = 54
           Height = 15
           Align = alTop
           Caption = 'Secret Key'
-          ExplicitWidth = 54
         end
         object editSecretKey: TEdit
           Left = 0
@@ -314,11 +312,10 @@ object frmAuthDemo: TfrmAuthDemo
         object Label3: TLabel
           Left = 0
           Top = 0
-          Width = 149
+          Width = 55
           Height = 15
           Align = alTop
           Caption = 'Hostname'
-          ExplicitWidth = 55
         end
         object editHostname: TEdit
           Left = 0
@@ -341,11 +338,10 @@ object frmAuthDemo: TfrmAuthDemo
         object Label4: TLabel
           Left = 0
           Top = 0
-          Width = 149
+          Width = 53
           Height = 15
           Align = alTop
           Caption = 'Username'
-          ExplicitWidth = 53
         end
         object editUsername: TEdit
           Left = 0
@@ -368,11 +364,10 @@ object frmAuthDemo: TfrmAuthDemo
         object Label5: TLabel
           Left = 0
           Top = 0
-          Width = 149
+          Width = 71
           Height = 15
           Align = alTop
           Caption = 'Display name'
-          ExplicitWidth = 71
         end
         object editDisplayName: TEdit
           Left = 0
@@ -395,11 +390,10 @@ object frmAuthDemo: TfrmAuthDemo
         object Label6: TLabel
           Left = 0
           Top = 0
-          Width = 149
+          Width = 50
           Height = 15
           Align = alTop
           Caption = 'Push info'
-          ExplicitWidth = 50
         end
         object editPushInfo: TEdit
           Left = 0
@@ -423,11 +417,10 @@ object frmAuthDemo: TfrmAuthDemo
         object Label7: TLabel
           Left = 0
           Top = 0
-          Width = 149
+          Width = 24
           Height = 15
           Align = alTop
           Caption = 'Type'
-          ExplicitWidth = 24
         end
         object editType: TEdit
           Left = 0
@@ -451,11 +444,10 @@ object frmAuthDemo: TfrmAuthDemo
         object Label8: TLabel
           Left = 0
           Top = 0
-          Width = 149
+          Width = 98
           Height = 15
           Align = alTop
           Caption = 'Request hostname'
-          ExplicitWidth = 98
         end
         object editRequestHostname: TEdit
           Left = 0
@@ -478,11 +470,10 @@ object frmAuthDemo: TfrmAuthDemo
         object Label9: TLabel
           Left = 0
           Top = 0
-          Width = 149
+          Width = 98
           Height = 15
           Align = alTop
           Caption = 'Request ip address'
-          ExplicitWidth = 98
         end
         object editRequestIPAddress: TEdit
           Left = 0

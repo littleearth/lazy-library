@@ -20,16 +20,16 @@ uses
   SysUtils, Classes, Lazy.Types;
 
 type
-  TLazyLog = class(TObject)
+  TLZLog = class(TObject)
   private
-    FLogLevel: TLazyLogLevel;
-    procedure SeTLazyLogLevel(const Value: TLazyLogLevel);
+    FLogLevel: TLZLogLevel;
+    procedure SeTLZLogLevel(const Value: TLZLogLevel);
   protected
     procedure OutputToDebugger(const AMessage: String);
-    function IsLogLevel(ALogLevel: TLazyLogLevel): boolean;
+    function IsLogLevel(ALogLevel: TLZLogLevel): boolean;
   public
     constructor Create;
-    class function GetLogLevelText(ALogLevel: TLazyLogLevel): string;
+    class function GetLogLevelText(ALogLevel: TLZLogLevel): string;
     procedure Log(ASender: TObject; AMessage: string); virtual;
     procedure Debug(ASender: TObject; AProcedure: string;
       AMessage: string); virtual;
@@ -38,36 +38,36 @@ type
       AErrorCode: integer = 0); overload; virtual;
     procedure Error(ASender: TObject; AException: Exception;
       AMessage: string = ''); overload; virtual;
-    property LogLevel: TLazyLogLevel read FLogLevel write SeTLazyLogLevel;
+    property LogLevel: TLZLogLevel read FLogLevel write SeTLZLogLevel;
   end;
 
-  TLazyLogClass = class of TLazyLog;
+  TLZLogClass = class of TLZLog;
 
 var
-  _LazyLog: TLazyLog;
-  _LazyLogClass: TLazyLogClass;
+  _LazyLog: TLZLog;
+  _LazyLogClass: TLZLogClass;
 
-procedure SetLazyLogClass(ALazyLogClass: TLazyLogClass);
-function LazyLog: TLazyLog;
+procedure SetLazyLogClass(ALazyLogClass: TLZLogClass);
+function LazyLog: TLZLog;
 
 implementation
 
 uses
   Winapi.Windows;
 
-{ TLazyLog }
+{ TLZLog }
 
-procedure TLazyLog.OutputToDebugger(const AMessage: String);
+procedure TLZLog.OutputToDebugger(const AMessage: String);
 begin
   OutputDebugString(PChar(AMessage))
 end;
 
-procedure TLazyLog.SeTLazyLogLevel(const Value: TLazyLogLevel);
+procedure TLZLog.SeTLZLogLevel(const Value: TLZLogLevel);
 begin
   FLogLevel := Value;
 end;
 
-constructor TLazyLog.Create;
+constructor TLZLog.Create;
 begin
   inherited;
 {$IFDEF DEBUG}
@@ -77,12 +77,12 @@ begin
 {$ENDIF}
 end;
 
-procedure TLazyLog.Debug(ASender: TObject; AProcedure, AMessage: string);
+procedure TLZLog.Debug(ASender: TObject; AProcedure, AMessage: string);
 begin
   // OutputToDebugger('DEBUG:' + AProcedure + ': ' + AMessage);
 end;
 
-procedure TLazyLog.Error(ASender: TObject; AException: Exception;
+procedure TLZLog.Error(ASender: TObject; AException: Exception;
   AMessage: string);
 begin
 {$IFDEF DEBUG}
@@ -90,7 +90,7 @@ begin
 {$ENDIF}
 end;
 
-class function TLazyLog.GetLogLevelText(ALogLevel: TLazyLogLevel): string;
+class function TLZLog.GetLogLevelText(ALogLevel: TLZLogLevel): string;
 begin
   case ALogLevel of
     logDebug:
@@ -106,27 +106,26 @@ begin
   end;
 end;
 
-function TLazyLog.IsLogLevel(ALogLevel: TLazyLogLevel): boolean;
+function TLZLog.IsLogLevel(ALogLevel: TLZLogLevel): boolean;
 begin
   Result := (ord(ALogLevel) <= ord(FLogLevel));
 end;
 
-procedure TLazyLog.Error(ASender: TObject; AMessage: string;
-  AErrorCode: integer);
+procedure TLZLog.Error(ASender: TObject; AMessage: string; AErrorCode: integer);
 begin
 end;
 
-procedure TLazyLog.Log(ASender: TObject; AMessage: string);
-begin
-
-end;
-
-procedure TLazyLog.Warning(ASender: TObject; AMessage: string);
+procedure TLZLog.Log(ASender: TObject; AMessage: string);
 begin
 
 end;
 
-procedure SetLazyLogClass(ALazyLogClass: TLazyLogClass);
+procedure TLZLog.Warning(ASender: TObject; AMessage: string);
+begin
+
+end;
+
+procedure SetLazyLogClass(ALazyLogClass: TLZLogClass);
 begin
   _LazyLogClass := ALazyLogClass;
   try
@@ -139,7 +138,7 @@ begin
   end;
 end;
 
-function LazyLog: TLazyLog;
+function LazyLog: TLZLog;
 begin
   Result := nil;
   if not Assigned(_LazyLog) then
@@ -150,7 +149,7 @@ begin
     end
     else
     begin
-      _LazyLog := TLazyLog.Create;
+      _LazyLog := TLZLog.Create;
     end;
   end;
   if Assigned(_LazyLog) then
@@ -161,7 +160,7 @@ end;
 
 initialization
 
-SetLazyLogClass(TLazyLog);
+SetLazyLogClass(TLZLog);
 
 finalization
 

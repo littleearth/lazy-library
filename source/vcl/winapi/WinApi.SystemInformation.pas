@@ -29,7 +29,7 @@ type
   ESystemInformationException = class(Exception);
 
 type
-  TSystemInformation = class(TLazyComponent)
+  TLZSystemInformation = class(TLZComponent)
   private
     FNetworkIPList: TStringList;
     FPrinterList: TStringList;
@@ -38,8 +38,8 @@ type
     FActiveProcessList: TStringList;
     FDriveList: TStringList;
   protected
-    function GetOSVersion: TLazyOSVersion;
-    function GetOSStartupState: TLazyOSStartupState;
+    function GetOSVersion: TLZOSVersion;
+    function GetOSStartupState: TLZOSStartupState;
     function GetOSStartupStateString: string;
     function GetOSVersionString: string;
     function GetOSUptime: string;
@@ -120,7 +120,7 @@ implementation
 uses
   IdStack, WinApi.Nb30, IpHlpApi, IpTypes, WinApi.PerformanceDataHelper;
 
-constructor TSystemInformation.Create(AOwner: TComponent);
+constructor TLZSystemInformation.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FDriveList := TStringList.Create;
@@ -131,7 +131,7 @@ begin
   FActiveProcessList := TStringList.Create;
 end;
 
-destructor TSystemInformation.Destroy;
+destructor TLZSystemInformation.Destroy;
 begin
   FreeAndNil(FDriveList);
   FreeAndNil(FNetworkIPList);
@@ -142,7 +142,7 @@ begin
   inherited Destroy;
 end;
 
-function TSystemInformation.IsWOW64: Boolean;
+function TLZSystemInformation.IsWOW64: Boolean;
 type
   TIsWow64Process = function(Handle: THandle; var Res: BOOL): BOOL; stdcall;
 var
@@ -161,25 +161,25 @@ begin
     result := False;
 end;
 
-function TSystemInformation.GetBIOSVendor: string;
+function TLZSystemInformation.GetBIOSVendor: string;
 begin
   result := GetRegistryString(HKEY_LOCAL_MACHINE,
     'HARDWARE\DESCRIPTION\System\Bios\', 'BIOSVendor');
 end;
 
-function TSystemInformation.GetSystemManufacturer: string;
+function TLZSystemInformation.GetSystemManufacturer: string;
 begin
   result := GetRegistryString(HKEY_LOCAL_MACHINE,
     'HARDWARE\DESCRIPTION\System\Bios\', 'SystemManufacturer');
 end;
 
-function TSystemInformation.GetSystemProductName: string;
+function TLZSystemInformation.GetSystemProductName: string;
 begin
   result := GetRegistryString(HKEY_LOCAL_MACHINE,
     'HARDWARE\DESCRIPTION\System\Bios\', 'SystemProductName');
 end;
 
-function TSystemInformation.GetRegistryString(const RootKey: Windows.HKEY;
+function TLZSystemInformation.GetRegistryString(const RootKey: Windows.HKEY;
   const SubKey, Name: string): string;
 var
   Reg: TRegistry; // registry access object
@@ -214,7 +214,7 @@ begin
   end;
 end;
 
-function TSystemInformation.GetOSVersion: TLazyOSVersion;
+function TLZSystemInformation.GetOSVersion: TLZOSVersion;
 var
   osVerInfo: Windows.TOSVersionInfo;
   majorVersion, minorVersion, buildVersion: integer;
@@ -268,12 +268,12 @@ begin
   end;
 end;
 
-function TSystemInformation.GetOSVersionString: string;
+function TLZSystemInformation.GetOSVersionString: string;
 begin
   result := TOSVersion.ToString;
 end;
 
-function TSystemInformation.GetOSArchitecture: string;
+function TLZSystemInformation.GetOSArchitecture: string;
 begin
   case TOSVersion.Architecture of
     arIntelX86:
@@ -285,7 +285,7 @@ begin
   end;
 end;
 
-function TSystemInformation.GetOSStartupState: TLazyOSStartupState;
+function TLZSystemInformation.GetOSStartupState: TLZOSStartupState;
 begin
   result := ssUnknown;
   case GetSystemMetrics(SM_CLEANBOOT) of
@@ -298,7 +298,7 @@ begin
   end;
 end;
 
-function TSystemInformation.GetOSStartupStateString: string;
+function TLZSystemInformation.GetOSStartupStateString: string;
 begin
   case GetOSStartupState of
     ssNormal:
@@ -314,7 +314,7 @@ begin
   end;
 end;
 
-function TSystemInformation.GetOSUptime: string;
+function TLZSystemInformation.GetOSUptime: string;
 const
   ticksperday: cardinal = 1000 * 60 * 60 * 24;
   ticksperhour: cardinal = 1000 * 60 * 60;
@@ -340,7 +340,7 @@ begin
     ' Minutes ' + IntToStr(s) + ' Seconds';
 end;
 
-function TSystemInformation.GetActiveProcessList: TStrings;
+function TLZSystemInformation.GetActiveProcessList: TStrings;
 var
   WinHandleList: HWND;
 
@@ -371,8 +371,9 @@ begin
   result := FActiveProcessList;
 end;
 
-function TSystemInformation.GetDriveUsage(ADrive: char; var AFreeSpace: double;
-  var ATotalSpace: double; var AUsage: integer): Boolean;
+function TLZSystemInformation.GetDriveUsage(ADrive: char;
+  var AFreeSpace: double; var ATotalSpace: double; var AUsage: integer)
+  : Boolean;
 begin
   result := True;
   try
@@ -391,7 +392,7 @@ begin
   end;
 end;
 
-function TSystemInformation.GetDriveList: TStrings;
+function TLZSystemInformation.GetDriveList: TStrings;
 var
   Drive: char;
   DriveLetter: string;
@@ -445,13 +446,13 @@ begin
   result := FDriveList;
 end;
 
-function TSystemInformation.GetPrinterList: TStrings;
+function TLZSystemInformation.GetPrinterList: TStrings;
 begin
   FPrinterList.Assign(Printer.Printers);
   result := FPrinterList;
 end;
 
-function TSystemInformation.GetVideoCardDetails: string;
+function TLZSystemInformation.GetVideoCardDetails: string;
 var
   lpDisplayDevice: TDisplayDevice;
   dwFlags: DWORD;
@@ -462,7 +463,7 @@ begin
   result := lpDisplayDevice.DeviceString;
 end;
 
-function TSystemInformation.GetMemoryLoad: integer;
+function TLZSystemInformation.GetMemoryLoad: integer;
 var
   Status: TMemoryStatus;
 begin
@@ -471,17 +472,17 @@ begin
   result := Status.dwMemoryLoad;
 end;
 
-function TSystemInformation.GetMemoryTotalPhysical: string;
+function TLZSystemInformation.GetMemoryTotalPhysical: string;
 var
   MemStatus: TMemoryStatusEx;
 begin
   FillChar(MemStatus, SizeOf(MemStatus), 0);
   MemStatus.dwLength := SizeOf(MemStatus);
   Win32Check(GlobalMemoryStatusEx(MemStatus));
-  result := TLazyString.FormatByteSize(MemStatus.ullTotalPhys);
+  result := TLZString.FormatByteSize(MemStatus.ullTotalPhys);
 end;
 
-function TSystemInformation.GetMemoryFreePhysical: string;
+function TLZSystemInformation.GetMemoryFreePhysical: string;
 var
   Status: TMemoryStatus;
 begin
@@ -490,7 +491,7 @@ begin
   result := IntToStr((Status.dwAvailPhys div 1024) div 1024);
 end;
 
-function TSystemInformation.GetMemoryTotalPageFile: string;
+function TLZSystemInformation.GetMemoryTotalPageFile: string;
 var
   Status: TMemoryStatus;
 begin
@@ -499,7 +500,7 @@ begin
   result := IntToStr((Status.dwTotalPageFile div 1024) div 1024);
 end;
 
-function TSystemInformation.GetMemoryFreePageFile: string;
+function TLZSystemInformation.GetMemoryFreePageFile: string;
 var
   Status: TMemoryStatus;
 begin
@@ -508,7 +509,7 @@ begin
   result := IntToStr((Status.dwAvailPageFile div 1024) div 1024);
 end;
 
-function TSystemInformation.GetMemoryTotalVirtual: string;
+function TLZSystemInformation.GetMemoryTotalVirtual: string;
 var
   Status: TMemoryStatus;
 begin
@@ -517,7 +518,7 @@ begin
   result := IntToStr((Status.dwTotalVirtual div 1024) div 1024);
 end;
 
-function TSystemInformation.GetMemoryFreeVirtual: string;
+function TLZSystemInformation.GetMemoryFreeVirtual: string;
 var
   Status: TMemoryStatus;
 begin
@@ -526,7 +527,7 @@ begin
   result := IntToStr((Status.dwAvailVirtual div 1024) div 1024);
 end;
 
-function TSystemInformation.GetCPUType: string;
+function TLZSystemInformation.GetCPUType: string;
 var
   Registry: TRegistry;
 begin
@@ -540,7 +541,7 @@ begin
   end;
 end;
 
-function TSystemInformation.GetCPUUsage: double;
+function TLZSystemInformation.GetCPUUsage: double;
 var
   LQuery: HQUERY;
   LCPUTotal: HCOUNTER;
@@ -559,7 +560,7 @@ begin
   end;
 end;
 
-function TSystemInformation.GetCPUVendor: string;
+function TLZSystemInformation.GetCPUVendor: string;
 var
   Registry: TRegistry;
 begin
@@ -583,7 +584,7 @@ asm
 end;
 {$ENDIF}
 
-function TSystemInformation.GetCPUSpeed: double;
+function TLZSystemInformation.GetCPUSpeed: double;
 {$IFDEF CPUX86}
 const
   DelayTime = 500; // measure time in ms
@@ -635,7 +636,7 @@ begin
 end;
 {$ENDIF}
 
-function TSystemInformation.GetCPUSpeedString: string;
+function TLZSystemInformation.GetCPUSpeedString: string;
 var
   CPUSpeed: real;
   CPUSpeedMeasure: string;
@@ -654,7 +655,7 @@ begin
   result := FormatFloat('#.##', CPUSpeed) + ' ' + CPUSpeedMeasure;
 end;
 
-function TSystemInformation.GetNetworkUserName: string;
+function TLZSystemInformation.GetNetworkUserName: string;
 var
   UserName: string;
   UserNameLen: DWORD;
@@ -667,7 +668,7 @@ begin
     result := 'Unknown';
 end;
 
-function TSystemInformation.GetNetworkComputerName: string;
+function TLZSystemInformation.GetNetworkComputerName: string;
 var
   lpBuffer: PWideChar; // lpstr;
   success: Boolean;
@@ -687,33 +688,33 @@ begin
   end;
 end;
 
-function TSystemInformation.GetNetworkIPAddress: string;
+function TLZSystemInformation.GetNetworkIPAddress: string;
 begin
   result := '';
   TIdStack.IncUsage;
   try
     if Assigned(GStack) then
     begin
-      result := TLazyString.StripExtraSpaces(GStack.LocalAddress, True, False);
+      result := TLZString.StripExtraSpaces(GStack.LocalAddress, True, False);
     end;
   finally
     TIdStack.DecUsage;
   end;
-  if TLazyString.IsEmptyString(result) then
+  if TLZString.IsEmptyString(result) then
   begin
     result := '127.0.0.1';
   end;
 end;
 
-function TSystemInformation.GetNetworkIPList: TStrings;
+function TLZSystemInformation.GetNetworkIPList: TStrings;
 begin
   FNetworkIPList.Clear;
   TIdStack.IncUsage;
   try
     if Assigned(GStack) then
     begin
-      FNetworkIPList.Add(TLazyString.StripExtraSpaces
-        (GStack.LocalAddresses.Text, True, False));
+      FNetworkIPList.Add(TLZString.StripExtraSpaces(GStack.LocalAddresses.Text,
+        True, False));
     end;
   finally
     TIdStack.DecUsage;
@@ -722,7 +723,7 @@ begin
   result := FNetworkIPList;
 end;
 
-function TSystemInformation.GetInstalledSoftwareList: TStrings;
+function TLZSystemInformation.GetInstalledSoftwareList: TStrings;
 
 var
   Registry: TRegistry;
@@ -774,37 +775,37 @@ begin
   result := FInstalledSoftwareList;
 end;
 
-function TSystemInformation.GetSessionType: string;
+function TLZSystemInformation.GetSessionType: string;
 begin
   result := 'Local Session';
-  if TLazySystem.IsRemoteSession then
+  if TLZSystem.IsRemoteSession then
   begin
     result := 'RDP Session';
   end;
-  if TLazySystem.IsCitrixSession then
+  if TLZSystem.IsCitrixSession then
   begin
     result := 'Citrix Session';
   end;
 end;
 
-function TSystemInformation.GetShellFolderList: TStrings;
+function TLZSystemInformation.GetShellFolderList: TStrings;
 begin
   FShellFolderList.Clear;
-  FShellFolderList.Add('PERSONAL=' + TLazyFile.GetUserProfileFolder);
-  FShellFolderList.Add('APPDATA=' + TLazyFile.getUserAppDataFolder);
-  FShellFolderList.Add('LOCAL_APPDATA=' + TLazyFile.GetUserLocalAppDataFolder);
+  FShellFolderList.Add('PERSONAL=' + TLZFile.GetUserProfileFolder);
+  FShellFolderList.Add('APPDATA=' + TLZFile.getUserAppDataFolder);
+  FShellFolderList.Add('LOCAL_APPDATA=' + TLZFile.GetUserLocalAppDataFolder);
 
-  FShellFolderList.Add('COMMON_APPDATA=' + TLazyFile.GetCommonAppDataFolder);
-  FShellFolderList.Add('WINDOWS=' + TLazyFile.GEtWindowsFolder);
-  FShellFolderList.Add('SYSTEM=' + TLazyFile.GetWindowsSystemFolder);
-  FShellFolderList.Add('PROGRAM_FILES=' + TLazyFile.GetProgramFilesFolder
+  FShellFolderList.Add('COMMON_APPDATA=' + TLZFile.GetCommonAppDataFolder);
+  FShellFolderList.Add('WINDOWS=' + TLZFile.GEtWindowsFolder);
+  FShellFolderList.Add('SYSTEM=' + TLZFile.GetWindowsSystemFolder);
+  FShellFolderList.Add('PROGRAM_FILES=' + TLZFile.GetProgramFilesFolder
     (oaUnkown));
-  FShellFolderList.Add('MYPICTURES=' + TLazyFile.GetPicturesFolder);
-  FShellFolderList.Add('COMMON_DOCUMENTS=' + TLazyFile.GetPublicDocumentFolder);
+  FShellFolderList.Add('MYPICTURES=' + TLZFile.GetPicturesFolder);
+  FShellFolderList.Add('COMMON_DOCUMENTS=' + TLZFile.GetPublicDocumentFolder);
   result := FShellFolderList;
 end;
 
-function TSystemInformation.DriveUsage(ADrive: char): integer;
+function TLZSystemInformation.DriveUsage(ADrive: char): integer;
 var
   FreeSpace, TotalSpace: double;
 begin
@@ -814,7 +815,7 @@ begin
   end;
 end;
 
-function TSystemInformation.GetNetworkMACAddress: string;
+function TLZSystemInformation.GetNetworkMACAddress: string;
 type
   // Based on code at MSDN knowledge base Q118623 article at
   // http://support.microsoft.com/kb/q118623/}
@@ -877,7 +878,7 @@ begin
       // we have a MAC address: return it
       with Adapter.Adapt do
       begin
-        if not TLazyString.IsEmptyString(result) then
+        if not TLZString.IsEmptyString(result) then
           result := result + #13#10;
 
         result := result + Format('%.2x-%.2x-%.2x-%.2x-%.2x-%.2x',
@@ -890,7 +891,7 @@ begin
   end;
 end;
 
-function TSystemInformation.SimpleReport: string;
+function TLZSystemInformation.SimpleReport: string;
 var
   Report: TStringList;
 begin
@@ -917,8 +918,8 @@ begin
       Report.Add('');
       Report.Add('--- Network ---');
       Report.Add('Computer name: ' + NetworkComputerName);
-      Report.Add('IP addresses: ' + TLazyString.StringCleaner
-        (NetworkIPList.Text, True, True));
+      Report.Add('IP addresses: ' + TLZString.StringCleaner(NetworkIPList.Text,
+        True, True));
       Report.Add('');
       Report.Add('--- Session ---');
       Report.Add('Username: ' + NetworkUserName);

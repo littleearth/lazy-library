@@ -17,7 +17,7 @@ type
     sfaRunCommand = integer(SC_ACTION_RUN_COMMAND));
 
 type
-  TLazyNTServiceControl = class(TLazyComponent)
+  TLZNTServiceControl = class(TLZComponent)
   private
     FMachineName: string;
     FServiceName: string;
@@ -69,7 +69,7 @@ implementation
 uses
   Lazy.Log;
 
-constructor TLazyNTServiceControl.Create(AOwner: TComponent);
+constructor TLZNTServiceControl.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FNTServiceStatus := svUnknown;
@@ -77,7 +77,7 @@ begin
   FStartDependencies := False;
 end;
 
-procedure TLazyNTServiceControl.UpdateServiceStatus;
+procedure TLZNTServiceControl.UpdateServiceStatus;
 var
   schm: SC_Handle; // service control manager handle
   schs: SC_Handle; // service handle
@@ -128,24 +128,24 @@ begin
   end;
 end;
 
-procedure TLazyNTServiceControl.SetServiceName(AValue: string);
+procedure TLZNTServiceControl.SetServiceName(AValue: string);
 begin
   FServiceName := AValue;
   UpdateServiceStatus;
 end;
 
-procedure TLazyNTServiceControl.SetMachineName(AValue: string);
+procedure TLZNTServiceControl.SetMachineName(AValue: string);
 begin
   FMachineName := AValue;
 end;
 
-function TLazyNTServiceControl.GetServiceStatus: TNTServiceStatus;
+function TLZNTServiceControl.GetServiceStatus: TNTServiceStatus;
 begin
   UpdateServiceStatus;
   Result := FNTServiceStatus;
 end;
 
-function TLazyNTServiceControl.GetServiceStatusString: string;
+function TLZNTServiceControl.GetServiceStatusString: string;
 var
   s: string;
 begin
@@ -170,7 +170,7 @@ begin
   Result := s;
 end;
 
-function TLazyNTServiceControl.Pause: boolean;
+function TLZNTServiceControl.Pause: boolean;
 var
   schm: SC_Handle; // service control manager handle
   schs: SC_Handle; // service handle
@@ -235,7 +235,7 @@ begin
   Result := SERVICE_PAUSED = ss.dwCurrentState;
 end;
 
-function TLazyNTServiceControl.Resume: boolean;
+function TLZNTServiceControl.Resume: boolean;
 var
   schm: SC_Handle; // service control manager handle
   schs: SC_Handle; // service handle
@@ -300,7 +300,7 @@ begin
   Result := SERVICE_RUNNING = ss.dwCurrentState;
 end;
 
-function TLazyNTServiceControl.Start: boolean;
+function TLZNTServiceControl.Start: boolean;
 var
   Dependencies: TStringList;
   Idx: integer;
@@ -331,7 +331,7 @@ begin
   end;
 end;
 
-function TLazyNTServiceControl.GetServiceDependencies(AServer: String;
+function TLZNTServiceControl.GetServiceDependencies(AServer: String;
   AServiceName: string; ADependencies: TStrings): boolean;
 var
   schm, schs: SC_Handle;
@@ -382,7 +382,7 @@ begin
   CloseServiceHandle(schm);
 end;
 
-function TLazyNTServiceControl.StopService(AServer: string;
+function TLZNTServiceControl.StopService(AServer: string;
   AServiceName: string): boolean;
 var
   schm, schs: SC_Handle;
@@ -452,7 +452,7 @@ begin
   Result := SERVICE_STOPPED = ss.dwCurrentState;
 end;
 
-function TLazyNTServiceControl.StartService(AServer: string;
+function TLZNTServiceControl.StartService(AServer: string;
   AServiceName: string): boolean;
 var
   schm, schs: SC_Handle;
@@ -520,7 +520,7 @@ begin
   Result := GetServiceStatus = svRunning;
 end;
 
-function TLazyNTServiceControl.SetServiceFailureActions
+function TLZNTServiceControl.SetServiceFailureActions
   (Action1: TNTServiceFailureAction = sfaNone; Action1Delay: Cardinal = 0;
   Action2: TNTServiceFailureAction = sfaNone; Action2Delay: Cardinal = 0;
   Action3: TNTServiceFailureAction = sfaNone; Action3Delay: Cardinal = 0;
@@ -585,7 +585,7 @@ begin
 end;
 
 // Return TRUE if successful
-function TLazyNTServiceControl.Stop: boolean;
+function TLZNTServiceControl.Stop: boolean;
 var
   Dependencies: TStringList;
   Idx: integer;
@@ -616,7 +616,7 @@ begin
   end;
 end;
 
-function TLazyNTServiceControl.GetServiceList(AServiceList: TStrings): boolean;
+function TLZNTServiceControl.GetServiceList(AServiceList: TStrings): boolean;
 var
   hSCM: THandle;
   pEnumStatus: LPENUM_SERVICE_STATUSW;
@@ -665,12 +665,12 @@ begin
   end;
 end;
 
-function TLazyNTServiceControl.GetDependencies(AList: TStrings): boolean;
+function TLZNTServiceControl.GetDependencies(AList: TStrings): boolean;
 begin
   Result := GetServiceDependencies(FMachineName, FServiceName, AList);
 end;
 
-function TLazyNTServiceControl.IsInstalled: boolean;
+function TLZNTServiceControl.IsInstalled: boolean;
 var
   hSCM: THandle;
   schs: THandle;
@@ -689,7 +689,7 @@ begin
   end;
 end;
 
-function TLazyNTServiceControl.IsRunning: boolean;
+function TLZNTServiceControl.IsRunning: boolean;
 begin
   case GetServiceStatus of
     svStopped:
@@ -711,7 +711,7 @@ begin
   end;
 end;
 
-function TLazyNTServiceControl.Install(ADisplayName: string;
+function TLZNTServiceControl.Install(ADisplayName: string;
   AFileName: TFileName; AServiceStartName: string = '';
   AServicePassword: string = ''; AInteractiveService: boolean = False): boolean;
 var
@@ -765,7 +765,7 @@ begin
   end;
 end;
 
-function TLazyNTServiceControl.Uninstall: boolean;
+function TLZNTServiceControl.Uninstall: boolean;
 var
   SCMHandle: longword;
   ServiceHandle: longword;

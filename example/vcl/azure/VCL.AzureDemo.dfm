@@ -83,12 +83,10 @@ object frmAzureDemo: TfrmAzureDemo
       AlignWithMargins = True
       Left = 4
       Top = 4
-      Width = 150
-      Height = 32
+      Width = 56
+      Height = 15
       Align = alClient
       Caption = 'Tennant ID'
-      ExplicitWidth = 56
-      ExplicitHeight = 15
     end
     object editTennantID: TEdit
       AlignWithMargins = True
@@ -104,12 +102,10 @@ object frmAzureDemo: TfrmAzureDemo
       AlignWithMargins = True
       Left = 4
       Top = 42
-      Width = 150
-      Height = 33
+      Width = 45
+      Height = 15
       Align = alClient
       Caption = 'Client ID'
-      ExplicitWidth = 45
-      ExplicitHeight = 15
     end
     object editClientID: TEdit
       AlignWithMargins = True
@@ -125,12 +121,10 @@ object frmAzureDemo: TfrmAzureDemo
       AlignWithMargins = True
       Left = 4
       Top = 81
-      Width = 150
-      Height = 32
+      Width = 66
+      Height = 15
       Align = alClient
       Caption = 'Client Secret'
-      ExplicitWidth = 66
-      ExplicitHeight = 15
     end
     object editClientSecret: TEdit
       AlignWithMargins = True
@@ -224,11 +218,10 @@ object frmAzureDemo: TfrmAzureDemo
     object Label4: TLabel
       Left = 1
       Top = 1
-      Width = 782
+      Width = 20
       Height = 15
       Align = alTop
       Caption = 'Log'
-      ExplicitWidth = 20
     end
     object memoLog: TMemo
       Left = 1

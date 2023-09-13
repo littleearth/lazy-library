@@ -1,4 +1,4 @@
-unit duo.accounts;
+unit DUO.Accounts;
 
 interface
 
@@ -9,9 +9,9 @@ uses
 
 type
 
-  TOnDuoAccountsEvent = procedure(ASender: TObject; AAccounts: TDUOAccounts;
+  TOnDuoAccountsEvent = procedure(ASender: TObject; AAccounts: TLZDUOAccounts;
     AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean) of object;
-  TOnDuoAccountsProc = reference to procedure(AAccounts: TDUOAccounts;
+  TOnDuoAccountsProc = reference to procedure(AAccounts: TLZDUOAccounts;
     AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean);
 
   TOnDuoBillingEvent = procedure(ASender: TObject; AAcountID: string;
@@ -24,7 +24,7 @@ type
   TOnDuoTelephonyCreditsProc = reference to procedure(AAcountID: string;
     ACredits: integer; AMessage: string; ASuccess: boolean);
 
-  TDUOAccountsApi = class(TDuoAPIBase)
+  TLZDUOAccountsApi = class(TLZDuoAPIBase)
   private
     FOnGetAccounts: TOnDuoAccountsEvent;
     FOnGetBilling: TOnDuoBillingEvent;
@@ -59,15 +59,15 @@ uses
 
 { TDUOAccounts }
 
-procedure TDUOAccountsApi.GetAccounts(AIncludeBillingEdition,
+procedure TLZDUOAccountsApi.GetAccounts(AIncludeBillingEdition,
   AIncludeTeleponyCredits: boolean; AOnDuoAccountsProc: TOnDuoAccountsProc);
 var
-  LAccounts: TDUOAccounts;
+  LAccounts: TLZDUOAccounts;
   LResult, LOwnsObjects: boolean;
   LMessage: string;
 begin
   LOwnsObjects := true;
-  LAccounts := TDUOAccounts.Create;
+  LAccounts := TLZDUOAccounts.Create;
   try
 
     LResult := ExecuteRequest(LMessage, BaseResource + 'account/list', rmPOST,
@@ -78,7 +78,7 @@ begin
         var AMessage: string)
       var
         LResult, LStatusMsg: string;
-        LAccount: TDUOAccount;
+        LAccount: TLZDUOAccount;
       begin
         if ASuccess then
         begin
@@ -149,17 +149,17 @@ begin
 
 end;
 
-function TDUOAccountsApi.GetAdminBaseResource: string;
+function TLZDUOAccountsApi.GetAdminBaseResource: string;
 begin
   Result := '/admin/v1/';
 end;
 
-function TDUOAccountsApi.GetBaseResource: string;
+function TLZDUOAccountsApi.GetBaseResource: string;
 begin
   Result := '/accounts/v1/';
 end;
 
-procedure TDUOAccountsApi.GetBilling(AAccountID, AAPIHostname: string;
+procedure TLZDUOAccountsApi.GetBilling(AAccountID, AAPIHostname: string;
 AOnDuoBillingProc: TOnDuoBillingProc);
 var
   LEdition: string;
@@ -224,7 +224,7 @@ begin
 
 end;
 
-procedure TDUOAccountsApi.GetTelephonyCredits(AAccountID, AAPIHostname: string;
+procedure TLZDUOAccountsApi.GetTelephonyCredits(AAccountID, AAPIHostname: string;
 AOnDuoTelephonyCreditsProc: TOnDuoTelephonyCreditsProc);
 var
   LCredits: integer;
@@ -289,17 +289,17 @@ begin
   end;
 end;
 
-procedure TDUOAccountsApi.SetOnGetAccounts(const Value: TOnDuoAccountsEvent);
+procedure TLZDUOAccountsApi.SetOnGetAccounts(const Value: TOnDuoAccountsEvent);
 begin
   FOnGetAccounts := Value;
 end;
 
-procedure TDUOAccountsApi.SetOnGetBilling(const Value: TOnDuoBillingEvent);
+procedure TLZDUOAccountsApi.SetOnGetBilling(const Value: TOnDuoBillingEvent);
 begin
   FOnGetBilling := Value;
 end;
 
-procedure TDUOAccountsApi.SetOnGetTelphonyCredits
+procedure TLZDUOAccountsApi.SetOnGetTelphonyCredits
   (const Value: TOnDuoTelephonyCreditsEvent);
 begin
   FOnGetTelphonyCredits := Value;

@@ -5,24 +5,27 @@ interface
 uses
   Lazy.Types, System.SysUtils, System.Types, System.UITypes, System.Classes,
   System.Variants, REST.Client, REST.Types, REST.Json, System.Json,
-  Azure.Core, Lazy.RESTClient;
+  Azure.Core, Lazy.RESTClient, Lazy.REST.Types;
 
 type
-  TAzureManagementOAuth2Connection = class(TAzureOAuth2Connection)
+  TLZAzureManagementOAuth2Connection = class(TLZAzureOAuth2Connection)
   protected
     procedure SetDefaults; override;
   end;
 
-  TAzureManagement = class(TLazyRESTClientOAuth2)
+  TLZAzureManagement = class(TLZRESTClientOAuth2)
   protected
-    function GetOAuth2ConnectionClass: TLazyOAuth2ConnectionClass; override;
+    function GetOAuth2ConnectionClass: TLZOAuth2ConnectionClass; override;
+    function GetConnection: TLZAzureManagementOAuth2Connection; reintroduce;
+  public
+    property Connection: TLZAzureManagementOAuth2Connection read GetConnection;
   end;
 
 implementation
 
 { TAzureManagementConnection }
 
-procedure TAzureManagementOAuth2Connection.SetDefaults;
+procedure TLZAzureManagementOAuth2Connection.SetDefaults;
 begin
   inherited;
   RedirectURL := 'http://localhost';
@@ -36,9 +39,14 @@ end;
 
 { TAzureManagement }
 
-function TAzureManagement.GetOAuth2ConnectionClass: TLazyOAuth2ConnectionClass;
+function TLZAzureManagement.GetConnection: TLZAzureManagementOAuth2Connection;
 begin
-  Result := TAzureManagementOAuth2Connection;
+  Result := inherited GetConnection as TLZAzureManagementOAuth2Connection;
+end;
+
+function TLZAzureManagement.GetOAuth2ConnectionClass: TLZOAuth2ConnectionClass;
+begin
+  Result := TLZAzureManagementOAuth2Connection;
 end;
 
 end.

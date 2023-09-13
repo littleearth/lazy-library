@@ -9,13 +9,13 @@ uses
 
 type
 
-  TOnDuoUsersEvent = procedure(ASender: TObject; AUsers: TDUOUsers;
+  TOnDuoUsersEvent = procedure(ASender: TObject; AUsers: TLZDUOUsers;
     AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean) of object;
 
-  TOnDuoUsersProc = reference to procedure(AUsers: TDUOUsers; AMessage: string;
+  TOnDuoUsersProc = reference to procedure(AUsers: TLZDUOUsers; AMessage: string;
     ASuccess: boolean; var AOwnsObjects: boolean);
 
-  TDUOAdminApi = class(TDuoAPIBase)
+  TLZDUOAdminApi = class(TLZDuoAPIBase)
   private
     FOnGetUsers: TOnDuoUsersEvent;
     FAccountID: string;
@@ -42,17 +42,17 @@ uses
 
 { TDUOAdmin }
 
-procedure TDUOAdminApi.GetAllUsers(AOnDuoUsersProc: TOnDuoUsersProc = nil);
+procedure TLZDUOAdminApi.GetAllUsers(AOnDuoUsersProc: TOnDuoUsersProc = nil);
 begin
   GetUsers(-1, -1, '', '', false, true, AOnDuoUsersProc);
 end;
 
-function TDUOAdminApi.GetBaseResource: string;
+function TLZDUOAdminApi.GetBaseResource: string;
 begin
   Result := '/admin/v1/';
 end;
 
-procedure TDUOAdminApi.GetLogo(AFileName: TFilename; var AMessage: string;
+procedure TLZDUOAdminApi.GetLogo(AFileName: TFilename; var AMessage: string;
   var ASuccess: boolean);
 begin
   ASuccess := ExecuteRequest(AMessage, BaseResource + 'logo', rmGET,
@@ -93,11 +93,11 @@ begin
     end);
 end;
 
-procedure TDUOAdminApi.GetUsers(ALimit, AOffset: integer;
+procedure TLZDUOAdminApi.GetUsers(ALimit, AOffset: integer;
 AUsername, AEmail: string; AUserID, AGetAllUsers: boolean;
 AOnDuoUsersProc: TOnDuoUsersProc);
 var
-  LUsers: TDUOUsers;
+  LUsers: TLZDUOUsers;
   LResult, LOwnsObjects, LComplete: boolean;
   LMessage: string;
   LLastUserCount, LLimit, LOffset: integer;
@@ -113,7 +113,7 @@ begin
   end;
   LLastUserCount := 0;
   LComplete := not AGetAllUsers;
-  LUsers := TDUOUsers.Create;
+  LUsers := TLZDUOUsers.Create;
   try
     Repeat
       LResult := ExecuteRequest(LMessage, BaseResource + 'users', rmGET,
@@ -221,12 +221,12 @@ begin
 
 end;
 
-procedure TDUOAdminApi.SetAccountID(const Value: string);
+procedure TLZDUOAdminApi.SetAccountID(const Value: string);
 begin
   FAccountID := Value;
 end;
 
-procedure TDUOAdminApi.SetOnGetUsers(const Value: TOnDuoUsersEvent);
+procedure TLZDUOAdminApi.SetOnGetUsers(const Value: TOnDuoUsersEvent);
 begin
   FOnGetUsers := Value;
 end;

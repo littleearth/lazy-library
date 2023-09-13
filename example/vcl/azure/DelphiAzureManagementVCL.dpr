@@ -10,7 +10,7 @@ uses
 
 begin
   ReportMemoryLeaksOnShutdown := True;
-  SetLazyLogClass(TLazyLogBasic);
+  SetLazyLogClass(TLZLogBasic);
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmAzureDemo, frmAzureDemo);

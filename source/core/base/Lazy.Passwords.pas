@@ -6,7 +6,7 @@ uses
   Lazy.Types, System.Classes;
 
 type
-  TPasswords = class(TLazyObject)
+  TLZPasswords = class(TLZObject)
   private
   public
     class function Generate(ALength: integer; AUpperCase: boolean = true;
@@ -24,9 +24,9 @@ uses
 const
   DefaultAllowedSpecialCharacters = '!@#$-.+';
 
-{ TLazyPasswords }
+  { TLZPasswords }
 
-class function TPasswords.Generate(ALength: integer;
+class function TLZPasswords.Generate(ALength: integer;
   AUpperCase, ALowerCase, ADigits: boolean;
   AAllowedSpecialCharacters: string): string;
 var
@@ -37,7 +37,7 @@ begin
   Result := '';
 
   LAllowedSpecialCharacters := AAllowedSpecialCharacters;
-  if TLazyString.IsEmptyString(LAllowedSpecialCharacters) then
+  if TLZString.IsEmptyString(LAllowedSpecialCharacters) then
     LAllowedSpecialCharacters := DefaultAllowedSpecialCharacters;
 
   LNumericCharacters := '';

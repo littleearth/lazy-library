@@ -1,4 +1,4 @@
-object LazyAuthorizeBrowserForm: TLazyAuthorizeBrowserForm
+object LZAuthorizeBrowserForm: TLZAuthorizeBrowserForm
   Left = 0
   Top = 0
   BorderIcons = [biSystemMenu, biMaximize]

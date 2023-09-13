@@ -23,7 +23,7 @@ type
     procedure FormActivate(Sender: TObject);
     procedure TimerSystemInformationTimer(Sender: TObject);
   private
-    FSystemInformation: TSystemInformation;
+    FSystemInformation: TLZSystemInformation;
   public
     { Public declarations }
   end;
@@ -43,7 +43,7 @@ end;
 
 procedure TfrmSystemInformation.FormCreate(Sender: TObject);
 begin
-  FSystemInformation := TSystemInformation.Create(Self);
+  FSystemInformation := TLZSystemInformation.Create(Self);
 end;
 
 procedure TfrmSystemInformation.TimerSystemInformationTimer(Sender: TObject);

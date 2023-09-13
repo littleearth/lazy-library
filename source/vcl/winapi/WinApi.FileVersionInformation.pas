@@ -23,7 +23,7 @@ interface
 
 uses WinApi.Windows, WinApi.ShellAPI, WinApi.CommCtrl,
   System.SysUtils, System.Classes, System.Variants,
-  VCL.Graphics, VCL.Forms,
+  VCL.Graphics, VCL.Forms, Lazy.Types,
   Lazy.Utils;
 
 type
@@ -35,12 +35,10 @@ type
     CharSet: Word; // character set (code page)
   end;
 
-  PTransRec = ^TTransRec; // pointer to TTransRec
-
+  PTransRec = ^TTransRec;
   TTransRecArray = array of TTransRec; // translation table
 
-type
-  TFileVersionInformation = class(TObject)
+  TLZFileVersionInformation = class(TLZObject)
   private
     FExceptionOnError: Boolean;
     FFileName: TFileName;
@@ -105,14 +103,14 @@ type
 
 implementation
 
-constructor TFileVersionInformation.Create;
+constructor TLZFileVersionInformation.Create;
 begin
   inherited;
   ClearValues;
   FExceptionOnError := False;
 end;
 
-procedure TFileVersionInformation.ClearValues;
+procedure TLZFileVersionInformation.ClearValues;
 begin
   FFileDescription := '';
   FLanguageCodepage := '';
@@ -130,7 +128,7 @@ begin
     FreeAndNil(FIcon);
 end;
 
-destructor TFileVersionInformation.Destroy;
+destructor TLZFileVersionInformation.Destroy;
 begin
   try
     ClearValues;
@@ -139,7 +137,7 @@ begin
   end;
 end;
 
-function TFileVersionInformation.GetTranslationTable(const Buffer: Pointer)
+function TLZFileVersionInformation.GetTranslationTable(const Buffer: Pointer)
   : TTransRecArray;
 var
   TransRec: PTransRec; // pointer to a translation record
@@ -160,7 +158,7 @@ begin
   end;
 end;
 
-function TFileVersionInformation.GetApplicationIcon
+function TLZFileVersionInformation.GetApplicationIcon
   (AFileName: TFileName): TIcon;
 
 const
@@ -201,7 +199,7 @@ begin
   Result.Handle := ImageList_GetIcon(aImgList, aIndex, ILD_NORMAL);
 end;
 
-procedure TFileVersionInformation.SetFilename(const AFileName: TFileName);
+procedure TLZFileVersionInformation.SetFilename(const AFileName: TFileName);
 type
   PLandCodepage = ^TLandCodepage;
 

@@ -9,7 +9,7 @@ const
   CRYPTINI_DEFAULT_KEY = '9ZehKeUpvGy3';
 
 type
-  TCryptINI = Class(TMemIniFile)
+  TLZCryptINI = Class(TMemIniFile)
   private
     FBusy: Boolean;
     FCryptFileName: TFileName;
@@ -36,7 +36,7 @@ type
 
 implementation
 
-constructor TCryptINI.Create(const AFileName: TFileName; AKey: string;
+constructor TLZCryptINI.Create(const AFileName: TFileName; AKey: string;
   ASaveOnDestroy: Boolean);
 begin
   inherited Create('');
@@ -46,7 +46,7 @@ begin
   LoadFile;
 end;
 
-destructor TCryptINI.Destroy;
+destructor TLZCryptINI.Destroy;
 begin
   try
     if FSaveOnDestroy then
@@ -58,7 +58,7 @@ begin
   end;
 end;
 
-function TCryptINI.CheckDirectoryExists(ADirectory: string;
+function TLZCryptINI.CheckDirectoryExists(ADirectory: string;
   ACreate: Boolean): Boolean;
 begin
   try
@@ -74,7 +74,7 @@ begin
   end;
 end;
 
-procedure TCryptINI.UpdateFile;
+procedure TLZCryptINI.UpdateFile;
 begin
   if Trim(FCryptFileName) <> '' then
   begin
@@ -82,7 +82,7 @@ begin
   end;
 end;
 
-procedure TCryptINI.WriteStrings(ASection: string; AStrings: TStrings);
+procedure TLZCryptINI.WriteStrings(ASection: string; AStrings: TStrings);
 var
   LIdx: integer;
 begin
@@ -93,12 +93,12 @@ begin
   end;
 end;
 
-procedure TCryptINI.LoadFile;
+procedure TLZCryptINI.LoadFile;
 begin
   LoadFile(FCryptFileName);
 end;
 
-procedure TCryptINI.ReadStrings(ASection: string; AStrings: TStrings);
+procedure TLZCryptINI.ReadStrings(ASection: string; AStrings: TStrings);
 var
   LLines: TStringList;
   LIdx: integer;
@@ -116,7 +116,7 @@ begin
   end;
 end;
 
-function TCryptINI.SuperCipher(const S, Key: string): string;
+function TLZCryptINI.SuperCipher(const S, Key: string): string;
 var
   i, Z: integer;
   C: char;
@@ -140,7 +140,7 @@ begin
     end;
 end;
 
-procedure TCryptINI.LoadFile(AFileName: TFileName);
+procedure TLZCryptINI.LoadFile(AFileName: TFileName);
 var
   FileData: TStringList;
   LTextFile: TextFile;
@@ -178,7 +178,7 @@ begin
   end;
 end;
 
-procedure TCryptINI.SaveFile(AFileName: TFileName);
+procedure TLZCryptINI.SaveFile(AFileName: TFileName);
 var
   LFileData: TStringList;
   LTextFile: TextFile;

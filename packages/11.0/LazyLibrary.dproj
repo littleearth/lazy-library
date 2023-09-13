@@ -150,6 +150,14 @@
         <DCCReference Include="..\..\source\core\base\Lazy.Utils.Base.pas"/>
         <DCCReference Include="..\..\source\core\base\Lazy.NATO.pas"/>
         <DCCReference Include="..\..\source\core\base\Lazy.Passwords.pas"/>
+        <DCCReference Include="..\..\source\core\rest\duo\duo.accounts.pas"/>
+        <DCCReference Include="..\..\source\core\rest\duo\duo.admin.pas"/>
+        <DCCReference Include="..\..\source\core\rest\duo\duo.api.pas"/>
+        <DCCReference Include="..\..\source\core\rest\duo\duo.auth.pas"/>
+        <DCCReference Include="..\..\source\core\rest\duo\duo.models.pas"/>
+        <DCCReference Include="..\..\source\core\rest\Lazy.REST.Types.pas"/>
+        <DCCReference Include="..\..\source\core\network\Lazy.SNMP.Client.pas"/>
+        <DCCReference Include="..\..\source\core\network\Lazy.NetworkTools.pas"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

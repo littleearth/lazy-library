@@ -70,10 +70,10 @@ type
       APasscode: string = '');
     procedure Check;
     procedure PreAuth;
-    procedure OnPreAuth(ASender: TObject; ADevices: TDUODevices;
+    procedure OnPreAuth(ASender: TObject; ADevices: TLZDUODevices;
       AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean);
     procedure OnLogin(ASender: TObject; AMessage: string;
-      AResponse: TDuoLoginResponse);
+      AResponse: TDUOLoginResponse);
     procedure OnCheck(ASender: TObject; AMessage: string; ASuccess: boolean);
     procedure Ping;
     procedure OnPing(ASender: TObject; AMessage: string; ASuccess: boolean);
@@ -98,10 +98,10 @@ begin
   memoLog.Lines.Clear;
   LoadSettings;
   FLogoFileName := '';
-  editPushInfo.Text := 'computer=' + TDuoNetworkTools.GetHostname + '&ips=' +
-    TDuoNetworkTools.GetIPAddresses;
-  editRequestHostname.Text := TDuoNetworkTools.GetHostname;
-  editRequestIPAddress.Text := TDuoNetworkTools.GetIPAddress;
+  editPushInfo.Text := 'computer=' + TLZDUONetworkTools.GetHostname + '&ips=' +
+    TLZDUONetworkTools.GetIPAddresses;
+  editRequestHostname.Text := TLZDUONetworkTools.GetHostname;
+  editRequestIPAddress.Text := TLZDUONetworkTools.GetIPAddress;
 end;
 
 procedure TfrmAuthDemo.FormDestroy(Sender: TObject);
@@ -109,7 +109,7 @@ begin
   SaveSettings;
 end;
 
-procedure TfrmAuthDemo.OnPreAuth(ASender: TObject; ADevices: TDUODevices;
+procedure TfrmAuthDemo.OnPreAuth(ASender: TObject; ADevices: TLZDUODevices;
   AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean);
 var
   LDevice, LFactor, LPasscode: string;
@@ -135,7 +135,7 @@ begin
 end;
 
 procedure TfrmAuthDemo.OnLogin(ASender: TObject; AMessage: string;
-  AResponse: TDuoLoginResponse);
+  AResponse: TDUOLoginResponse);
 begin
   case AResponse of
     loginFail:
@@ -181,9 +181,9 @@ end;
 
 procedure TfrmAuthDemo.PreAuth;
 var
-  LDUOAuth: TDUOAuthAPI;
+  LDUOAuth: TLZDUOAuthAPI;
 begin
-  LDUOAuth := TDUOAuthAPI.Create(nil);
+  LDUOAuth := TLZDUOAuthAPI.Create(nil);
   try
 
     LDUOAuth.IntegrationKey := editIntegrationKey.Text;
@@ -200,11 +200,11 @@ end;
 procedure TfrmAuthDemo.LoadSettings;
 var
   LFileName: TFileName;
-  LSettings: TCryptINI;
+  LSettings: TLZCryptINI;
 begin
   LFileName := IncludeTrailingPathDelimiter(TPath.GetDocumentsPath) +
     'duo_authdemo.ini';
-  LSettings := TCryptINI.Create(LFileName);
+  LSettings := TLZCryptINI.Create(LFileName);
   try
     editIntegrationKey.Text := LSettings.ReadString('duo',
       'integrationkey', '');
@@ -221,11 +221,11 @@ end;
 procedure TfrmAuthDemo.SaveSettings;
 var
   LFileName: TFileName;
-  LSettings: TCryptINI;
+  LSettings: TLZCryptINI;
 begin
   LFileName := IncludeTrailingPathDelimiter(TPath.GetDocumentsPath) +
     'duo_authdemo.ini';
-  LSettings := TCryptINI.Create(LFileName);
+  LSettings := TLZCryptINI.Create(LFileName);
   try
     LSettings.WriteString('duo', 'integrationkey', editIntegrationKey.Text);
     LSettings.WriteString('duo', 'secretkey', editSecretKey.Text);
@@ -240,9 +240,9 @@ end;
 
 procedure TfrmAuthDemo.Login(ADevice, AFactor, APasscode: string);
 var
-  LDUOAuth: TDUOAuthAPI;
+  LDUOAuth: TLZDUOAuthAPI;
 begin
-  LDUOAuth := TDUOAuthAPI.Create(nil);
+  LDUOAuth := TLZDUOAuthAPI.Create(nil);
   try
     LDUOAuth.IntegrationKey := editIntegrationKey.Text;
     LDUOAuth.SecretKey := editSecretKey.Text;
@@ -268,9 +268,9 @@ end;
 
 procedure TfrmAuthDemo.Ping;
 var
-  LDUOAuth: TDUOAuthAPI;
+  LDUOAuth: TLZDUOAuthAPI;
 begin
-  LDUOAuth := TDUOAuthAPI.Create(nil);
+  LDUOAuth := TLZDUOAuthAPI.Create(nil);
   try
     LDUOAuth.IntegrationKey := editIntegrationKey.Text;
     LDUOAuth.SecretKey := editSecretKey.Text;
@@ -284,11 +284,11 @@ end;
 
 procedure TfrmAuthDemo.Logo;
 var
-  LDUOAuth: TDUOAuthAPI;
+  LDUOAuth: TLZDUOAuthAPI;
   LMessage: string;
   LSuccess: boolean;
 begin
-  LDUOAuth := TDUOAuthAPI.Create(nil);
+  LDUOAuth := TLZDUOAuthAPI.Create(nil);
   try
     LDUOAuth.IntegrationKey := editIntegrationKey.Text;
     LDUOAuth.SecretKey := editSecretKey.Text;
@@ -322,9 +322,9 @@ end;
 
 procedure TfrmAuthDemo.Check;
 var
-  LDUOAuth: TDUOAuthAPI;
+  LDUOAuth: TLZDUOAuthAPI;
 begin
-  LDUOAuth := TDUOAuthAPI.Create(nil);
+  LDUOAuth := TLZDUOAuthAPI.Create(nil);
   try
     LDUOAuth.IntegrationKey := editIntegrationKey.Text;
     LDUOAuth.SecretKey := editSecretKey.Text;

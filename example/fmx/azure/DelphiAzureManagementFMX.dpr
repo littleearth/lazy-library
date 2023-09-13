@@ -11,7 +11,7 @@ uses
 
 begin
   ReportMemoryLeaksOnShutdown := TRue;
-  SetLazyLogClass(TLazyLogBasic);
+  SetLazyLogClass(TLZLogBasic);
   Application.Initialize;
   Application.CreateForm(TfrmAzureDemo, frmAzureDemo);
   Application.Run;

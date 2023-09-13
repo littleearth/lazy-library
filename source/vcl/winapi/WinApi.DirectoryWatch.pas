@@ -64,7 +64,7 @@ unit WinApi.DirectoryWatch;
 interface
 
 uses
-  Windows, SysUtils, Classes, Messages, SyncObjs, DateUtils;
+  Windows, SysUtils, Classes, Messages, SyncObjs, DateUtils, LAzy.Types;
 
 const
   FILE_NOTIFY_CHANGE_FILE_NAME = $00000001;
@@ -95,7 +95,7 @@ type
   TOnError = procedure(const Sender: TObject; const ErrorCode: Integer;
     const ErrorMessage: string) of Object;
 
-  TDirectoryWatch = class
+  TLZDirectoryWatch = class(TLZObject)
   private
     FWatchOptions: TWatchOptions;
     FWatchActions: TWatchActions;
@@ -361,7 +361,7 @@ end;
 
 { TFnugryDirWatch }
 
-procedure TDirectoryWatch.AllocWatchThread;
+procedure TLZDirectoryWatch.AllocWatchThread;
 begin
   if FWatchThread = nil then
   begin
@@ -371,7 +371,7 @@ begin
   end;
 end;
 
-procedure TDirectoryWatch.ReleaseWatchThread;
+procedure TLZDirectoryWatch.ReleaseWatchThread;
 var
   AResult: Cardinal;
   ThreadHandle: THandle;
@@ -395,18 +395,18 @@ begin
 
 end;
 
-procedure TDirectoryWatch.RestartWatchThread;
+procedure TLZDirectoryWatch.RestartWatchThread;
 begin
   Stop;
   Start;
 end;
 
-function TDirectoryWatch.Running: Boolean;
+function TLZDirectoryWatch.Running: Boolean;
 begin
   Result := FWatchThread <> nil;
 end;
 
-procedure TDirectoryWatch.DeallocateHWnd(Wnd: HWND);
+procedure TLZDirectoryWatch.DeallocateHWnd(Wnd: HWND);
 var
   Instance: Pointer;
 begin
@@ -423,7 +423,7 @@ begin
   DestroyWindow(Wnd);
 end;
 
-destructor TDirectoryWatch.Destroy;
+destructor TLZDirectoryWatch.Destroy;
 begin
   Stop;
   DeallocateHWnd(FWndHandle);
@@ -431,7 +431,7 @@ begin
   inherited Destroy;
 end;
 
-constructor TDirectoryWatch.Create;
+constructor TLZDirectoryWatch.Create;
 begin
   FWndHandle := AllocateHWnd(WatchWndProc);
   FWatchSubTree := True;
@@ -443,7 +443,7 @@ begin
     woLastAccess, woCreation, woSecurity];
 end;
 
-procedure TDirectoryWatch.SetWatchActions(const Value: TWatchActions);
+procedure TLZDirectoryWatch.SetWatchActions(const Value: TWatchActions);
 begin
   if FWatchActions <> Value then
   begin
@@ -456,7 +456,7 @@ begin
   end;
 end;
 
-procedure TDirectoryWatch.SetWatchOptions(const Value: TWatchOptions);
+procedure TLZDirectoryWatch.SetWatchOptions(const Value: TWatchOptions);
 begin
   if FWatchOptions <> Value then
   begin
@@ -469,7 +469,7 @@ begin
   end;
 end;
 
-procedure TDirectoryWatch.WatchWndProc(var Msg: TMessage);
+procedure TLZDirectoryWatch.WatchWndProc(var Msg: TMessage);
 var
   ErrorCode: Cardinal;
   ErrorMessage: string;
@@ -519,7 +519,7 @@ begin
   end;
 end;
 
-function TDirectoryWatch.MakeFilter: Integer;
+function TLZDirectoryWatch.MakeFilter: Integer;
 const
   FilterFlags: array [TWatchOption] of Integer = (FILE_NOTIFY_CHANGE_FILE_NAME,
     FILE_NOTIFY_CHANGE_DIR_NAME, FILE_NOTIFY_CHANGE_ATTRIBUTES,
@@ -535,7 +535,7 @@ begin
     Result := Result or FilterFlags[Flag];
 end;
 
-procedure TDirectoryWatch.SetWatchSubTree(const Value: Boolean);
+procedure TLZDirectoryWatch.SetWatchSubTree(const Value: Boolean);
 begin
   if Value <> FWatchSubTree then
   begin
@@ -548,7 +548,7 @@ begin
   end;
 end;
 
-procedure TDirectoryWatch.Start;
+procedure TLZDirectoryWatch.Start;
 begin
   if FDirectory = '' then
     raise Exception.Create('Please specify a directory to watch');
@@ -560,7 +560,7 @@ begin
   end;
 end;
 
-procedure TDirectoryWatch.Stop;
+procedure TLZDirectoryWatch.Stop;
 begin
   if Running then
   begin
@@ -569,7 +569,7 @@ begin
   end;
 end;
 
-procedure TDirectoryWatch.SetDirectory(const Value: string);
+procedure TLZDirectoryWatch.SetDirectory(const Value: string);
 begin
   if StrIComp(PChar(Trim(Value)), PChar(FDirectory)) <> 0 then
   begin
@@ -582,13 +582,14 @@ begin
   end;
 end;
 
-procedure TDirectoryWatch.Change;
+procedure TLZDirectoryWatch.Change;
 begin
   if Assigned(FOnChange) then
     FOnChange(Self);
 end;
 
-procedure TDirectoryWatch.Notify(const Action: Integer; const FileName: string);
+procedure TLZDirectoryWatch.Notify(const Action: Integer;
+  const FileName: string);
 begin
   if Assigned(FOnNotify) then
     if TWatchAction(Action - 1) in FWatchActions then

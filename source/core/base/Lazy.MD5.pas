@@ -5,11 +5,11 @@ interface
 uses Classes, Windows, SysUtils, Lazy.Utils, Lazy.Types;
 
 type
-  TMD5Mode = (md5Generate, md5Compare);
+  TLZMD5Mode = (md5Generate, md5Compare);
 
-  TMD5 = class(TLazyObject)
+  TLZMD5 = class(TLZObject)
   protected
-    function GetMD5Mode(AVersionCompareMode: string): TMD5Mode;
+    function GetMD5Mode(AVersionCompareMode: string): TLZMD5Mode;
     function GetMD5FileName(AFileName: TFileName): TFileName;
   public
     function LoadMD5(AFileName: TFileName): string;
@@ -23,14 +23,14 @@ implementation
 uses
   IdHashMessageDigest, idHash, System.Math, System.DateUtils, Lazy.Token;
 
-function TMD5.GetMD5Mode(AVersionCompareMode: string): TMD5Mode;
+function TLZMD5.GetMD5Mode(AVersionCompareMode: string): TLZMD5Mode;
 begin
   Result := md5Generate;
   if SameText(AVersionCompareMode, 'COMPARE') then
     Result := md5Compare;
 end;
 
-function TMD5.LoadMD5(AFileName: TFileName): string;
+function TLZMD5.LoadMD5(AFileName: TFileName): string;
 var
   LFile: TStringList;
 begin
@@ -47,13 +47,13 @@ begin
   end;
 end;
 
-function TMD5.SaveMD5(AFileName: TFileName; AMD5: string): Boolean;
+function TLZMD5.SaveMD5(AFileName: TFileName; AMD5: string): Boolean;
 var
   LFile: TStringList;
 begin
   if FileExists(AFileName) then
     DeleteFile(AFileName);
-  if not TLazyString.IsEmptyString(AMD5) then
+  if not TLZString.IsEmptyString(AMD5) then
   begin
     LFile := TStringList.Create;
     try
@@ -66,12 +66,12 @@ begin
   Result := FileExists(AFileName);
 end;
 
-function TMD5.GetMD5FileName(AFileName: TFileName): TFileName;
+function TLZMD5.GetMD5FileName(AFileName: TFileName): TFileName;
 begin
   Result := ChangeFileExt(AFileName, '.md5');
 end;
 
-function TMD5.GenerateMD5(AFileName: TFileName): string;
+function TLZMD5.GenerateMD5(AFileName: TFileName): string;
 var
   LIdMD5: TIdHashMessageDigest5;
   LFileStream: TFileStream;
@@ -86,7 +86,7 @@ begin
   end;
 end;
 
-function TMD5.CompareMD5(AFileName: TFileName): Boolean;
+function TLZMD5.CompareMD5(AFileName: TFileName): Boolean;
 var
   LMD5FileName: TFileName;
   LMD51, LMD52: string;
@@ -94,7 +94,7 @@ begin
   Result := False;
   LMD5FileName := GetMD5FileName(AFileName);
   LMD51 := LoadMD5(LMD5FileName);
-  if not TLazyString.IsEmptyString(LMD51) then
+  if not TLZString.IsEmptyString(LMD51) then
   begin
     LMD52 := GenerateMD5(AFileName);
     Result := SameText(LMD51, LMD52);

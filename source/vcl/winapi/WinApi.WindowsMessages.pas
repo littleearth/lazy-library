@@ -16,7 +16,7 @@ type
     : BOOL; stdcall;
 
 type
-  TWindowsMessages = class(TLAzyObject)
+  TLZWindowsMessages = class(TLZObject)
   private
     FMsgHandlerHWND: HWND;
     FRegisterSuspendResumeNotificationHandle: HWND;
@@ -57,7 +57,7 @@ uses
 
 { TPowerMonitor }
 
-constructor TWindowsMessages.Create;
+constructor TLZWindowsMessages.Create;
 var
   LModule: HMODULE;
 begin
@@ -76,7 +76,7 @@ begin
   end;
 end;
 
-destructor TWindowsMessages.Destroy;
+destructor TLZWindowsMessages.Destroy;
 begin
   try
     DeallocateHWnd(FMsgHandlerHWND);
@@ -93,7 +93,7 @@ begin
   end;
 end;
 
-function TWindowsMessages.EnableSuspendResumeNotifications
+function TLZWindowsMessages.EnableSuspendResumeNotifications
   (Value: boolean): boolean;
 begin
   if Value and (FRegisterSuspendResumeNotificationHandle = 0) then
@@ -116,88 +116,90 @@ begin
   end;
 end;
 
-procedure TWindowsMessages.SetOnEndSession(const Value: TOnWindowsMessageEvent);
+procedure TLZWindowsMessages.SetOnEndSession(const Value
+  : TOnWindowsMessageEvent);
 begin
   FOnEndSession := Value;
 end;
 
-procedure TWindowsMessages.SetOnPowerBroadcast(const Value
+procedure TLZWindowsMessages.SetOnPowerBroadcast(const Value
   : TOnWindowsMessageEvent);
 begin
   FOnPowerBroadcast := Value;
 end;
 
-procedure TWindowsMessages.SetOnSettingsChange(const Value
+procedure TLZWindowsMessages.SetOnSettingsChange(const Value
   : TOnWindowsMessageEvent);
 begin
   FOnSettingsChange := Value;
 end;
 
-procedure TWindowsMessages.SetOnTimeChange(const Value: TOnWindowsMessageEvent);
+procedure TLZWindowsMessages.SetOnTimeChange(const Value
+  : TOnWindowsMessageEvent);
 begin
   FOnTimeChange := Value;
 end;
 
-procedure TWindowsMessages.WMPowerBroadcast(var Msg: TMessage);
+procedure TLZWindowsMessages.WMPowerBroadcast(var Msg: TMessage);
 begin
   case Msg.WParam of
     PBT_APMBATTERYLOW:
-      Log( 'Battery power is low.');
+      Log('Battery power is low.');
 
     PBT_APMOEMEVENT:
-      Log( 'OEM-defined event occurred.');
+      Log('OEM-defined event occurred.');
 
     PBT_APMPOWERSTATUSCHANGE:
-      Log( 'Power status has changed.');
+      Log('Power status has changed.');
 
     PBT_APMQUERYSUSPEND, PBT_APMQUERYSTANDBY:
-      Log( 'Request for permission to suspend / standby.');
+      Log('Request for permission to suspend / standby.');
 
     PBT_APMQUERYSUSPENDFAILED:
-      Log( 'Suspension request denied.');
+      Log('Suspension request denied.');
 
     PBT_APMQUERYSTANDBYFAILED:
-      Log( 'Standby request denied.');
+      Log('Standby request denied.');
 
     PBT_APMSUSPEND:
-      Log( 'Operation suspend.');
+      Log('Operation suspend.');
     PBT_APMSTANDBY:
-      Log( 'Operation standby.');
+      Log('Operation standby.');
 
     PBT_APMRESUMEAUTOMATIC, PBT_APMRESUMECRITICAL, PBT_APMRESUMESUSPEND,
       PBT_APMRESUMESTANDBY:
-      Log( 'System resumed.');
+      Log('System resumed.');
   end;
-  Log( Format('WM_POWERBROADCAST wParam: %d', [Msg.WParam]));
+  Log(Format('WM_POWERBROADCAST wParam: %d', [Msg.WParam]));
   if assigned(FOnPowerBroadcast) then
     FOnPowerBroadcast(Self, Msg);
 end;
 
-procedure TWindowsMessages.WMTimeChange(var Msg: TMessage);
+procedure TLZWindowsMessages.WMTimeChange(var Msg: TMessage);
 begin
-  Log( 'System date/time change event');
-  Log( Format('WM_TIMECHANGE wParam: %d', [Msg.WParam]));
+  Log('System date/time change event');
+  Log(Format('WM_TIMECHANGE wParam: %d', [Msg.WParam]));
   if assigned(FOnTimeChange) then
     FOnTimeChange(Self, Msg);
 end;
 
-procedure TWindowsMessages.WMEndSession(var Msg: TMessage);
+procedure TLZWindowsMessages.WMEndSession(var Msg: TMessage);
 begin
-  Log( 'End Session Request');
-  Log( Format('WM_ENDSESSION wParam: %d', [Msg.WParam]));
+  Log('End Session Request');
+  Log(Format('WM_ENDSESSION wParam: %d', [Msg.WParam]));
   if assigned(FOnEndSession) then
     FOnEndSession(Self, Msg);
 end;
 
-procedure TWindowsMessages.WMSettingsChange(var Msg: TMessage);
+procedure TLZWindowsMessages.WMSettingsChange(var Msg: TMessage);
 begin
-  Log( 'System-wide setting or policy settings have changed.');
-  Log( Format('WM_SETTINGCHANGE wParam: %d', [Msg.WParam]));
+  Log('System-wide setting or policy settings have changed.');
+  Log(Format('WM_SETTINGCHANGE wParam: %d', [Msg.WParam]));
   if assigned(FOnSettingsChange) then
     FOnSettingsChange(Self, Msg);
 end;
 
-procedure TWindowsMessages.WndMethod(var Msg: TMessage);
+procedure TLZWindowsMessages.WndMethod(var Msg: TMessage);
 begin
   case Msg.Msg of
     WM_POWERBROADCAST:

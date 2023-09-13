@@ -17,16 +17,16 @@ uses
   Lazy.ThreadedFileStream, Lazy.Utils;
 
 type
-  TLazyLogFileStream = class(TLazyLog)
+  TLZLogFileStream = class(TLZLog)
   private
     FLogFileLocker: TCriticalSection;
-    FLog: TThreadedFileStream;
+    FLog: TLZThreadedFileStream;
     FFileName: TFileName;
     procedure SetFileName(const Value: TFileName);
   protected
     procedure StartLog;
     procedure StopLog;
-    procedure LogMessage(ALogLevel: TLazyLogLevel; AMessage: string);
+    procedure LogMessage(ALogLevel: TLZLogLevel; AMessage: string);
     function GetDefaultFileName: TFileName; virtual;
   public
     procedure AfterConstruction; override;
@@ -46,9 +46,9 @@ type
 
 implementation
 
-{ TLazyLogBasic }
+{ TLZLogBasic }
 
-procedure TLazyLogFileStream.AfterConstruction;
+procedure TLZLogFileStream.AfterConstruction;
 begin
   inherited;
   FFileName := GetDefaultFileName;
@@ -56,7 +56,7 @@ begin
   FLogFileLocker := TCriticalSection.Create;
 end;
 
-procedure TLazyLogFileStream.BeforeDestruction;
+procedure TLZLogFileStream.BeforeDestruction;
 begin
   try
     if Assigned(FLogFileLocker) then
@@ -69,31 +69,31 @@ begin
   end;
 end;
 
-procedure TLazyLogFileStream.Debug(ASender: TObject;
+procedure TLZLogFileStream.Debug(ASender: TObject;
   AProcedure, AMessage: string);
 begin
   LogMessage(logDebug, Format('[%s] %s', [AProcedure, AMessage]));
 end;
 
-procedure TLazyLogFileStream.Error(ASender: TObject; AException: Exception;
+procedure TLZLogFileStream.Error(ASender: TObject; AException: Exception;
   AMessage: string);
 begin
   LogMessage(logError, Format('%s %s', [AException.Message, AMessage]));
 end;
 
-procedure TLazyLogFileStream.Error(ASender: TObject; AMessage: string;
+procedure TLZLogFileStream.Error(ASender: TObject; AMessage: string;
   AErrorCode: integer);
 begin
   LogMessage(logError, Format('(%d) %s', [AErrorCode, AMessage]));
 end;
 
-procedure TLazyLogFileStream.Log(ASender: TObject; AMessage: string);
+procedure TLZLogFileStream.Log(ASender: TObject; AMessage: string);
 begin
   LogMessage(logInformation, AMessage);
 
 end;
 
-procedure TLazyLogFileStream.LogMessage(ALogLevel: TLazyLogLevel;
+procedure TLZLogFileStream.LogMessage(ALogLevel: TLZLogLevel;
   AMessage: string);
 var
   LMessage: string;
@@ -116,7 +116,7 @@ begin
   end;
 end;
 
-procedure TLazyLogFileStream.SetFileName(const Value: TFileName);
+procedure TLZLogFileStream.SetFileName(const Value: TFileName);
 begin
   if not SameText(Value, FFileName) then
   begin
@@ -125,14 +125,14 @@ begin
   FFileName := Value;
 end;
 
-procedure TLazyLogFileStream.StartLog;
+procedure TLZLogFileStream.StartLog;
 begin
   if not Assigned(FLog) then
-    FLog := TThreadedFileStream.Create(FFileName);
+    FLog := TLZThreadedFileStream.Create(FFileName);
   ClearLogFile;
 end;
 
-procedure TLazyLogFileStream.StopLog;
+procedure TLZLogFileStream.StopLog;
 begin
   if Assigned(FLog) then
   begin
@@ -146,23 +146,23 @@ begin
   end;
 end;
 
-procedure TLazyLogFileStream.Warning(ASender: TObject; AMessage: string);
+procedure TLZLogFileStream.Warning(ASender: TObject; AMessage: string);
 begin
   LogMessage(logWarning, AMessage);
 end;
 
-procedure TLazyLogFileStream.FlushLogFile;
+procedure TLZLogFileStream.FlushLogFile;
 begin
   if Assigned(FLog) then
     FLog.Flush;
 end;
 
-function TLazyLogFileStream.GetDefaultFileName: TFileName;
+function TLZLogFileStream.GetDefaultFileName: TFileName;
 begin
   Result := ChangeFileExt(ParamStr(0), '.log');
 end;
 
-procedure TLazyLogFileStream.ClearLogFile;
+procedure TLZLogFileStream.ClearLogFile;
 begin
   if Assigned(FLog) then
     FLog.Clear;
@@ -170,7 +170,7 @@ end;
 
 initialization
 
-SetLazyLogClass(TLazyLogFileStream);
+SetLazyLogClass(TLZLogFileStream);
 
 finalization
 

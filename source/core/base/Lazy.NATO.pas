@@ -6,7 +6,7 @@ uses
   Lazy.Types, System.Classes;
 
 type
-  TNATO = class(TLazyObject)
+  TLZNATO = class(TLZObject)
   private
     function GetNatoChar(AChar: char): string;
     function GetNATOString(AValue: string): string;
@@ -33,11 +33,11 @@ const
   NATONumeric: array [48 .. 57] of string = ('Zero', 'One', 'Two', 'Three',
     'Four', 'Five', 'Six', 'Seven', 'Eight', 'Nine');
 
-class function TNATO.AsNATO(AValue: string): string;
+class function TLZNATO.AsNATO(AValue: string): string;
 var
-  LNATO: TNATO;
+  LNATO: TLZNATO;
 begin
-  LNATO := TNATO.Create;
+  LNATO := TLZNATO.Create;
   try
     Result := LNATO.GetNATOString(AValue);
   finally
@@ -45,7 +45,7 @@ begin
   end;
 end;
 
-function TNATO.GetNatoChar(AChar: char): string;
+function TLZNATO.GetNatoChar(AChar: char): string;
 var
   Index: integer;
 begin
@@ -68,7 +68,7 @@ begin
 
 end;
 
-function TNATO.GetNATOString(AValue: string): string;
+function TLZNATO.GetNATOString(AValue: string): string;
 var
   Idx: integer;
   NATO: string;
@@ -77,7 +77,7 @@ begin
   for Idx := 1 to Length(AValue) do
   begin
 
-    if not TLAzyString.IsEmptyString(Result) then
+    if not TLZString.IsEmptyString(Result) then
       Result := Result + ' ';
 
     NATO := GetNatoChar(AValue[Idx]);

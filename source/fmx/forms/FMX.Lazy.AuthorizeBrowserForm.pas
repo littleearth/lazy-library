@@ -7,19 +7,19 @@ uses
   System.Variants,
   FMX.Types, FMX.Controls, FMX.Forms, FMX.Graphics, FMX.Dialogs, FMX.WebBrowser,
   Winapi.Windows,
-  Lazy.Types;
+  Lazy.Types, Lazy.REST.Types;
 
 type
-  TLazyAuthorizeBrowserForm = class(TForm)
+  TLZAuthorizeBrowserForm = class(TForm)
     WebBrowser: TWebBrowser;
     procedure WebBrowserDidFinishLoad(ASender: TObject);
   private
-    FConnection: TLazyOAuth2Connection;
-    FToken: TLazyOAuth2Token;
+    FConnection: TLZOAuth2Connection;
+    FToken: TLZOAuth2Token;
     FMessage: string;
   public
     function GetAuthToken(var AMessage: string; AURL: string;
-      AConnection: TLazyOAuth2Connection; AToken: TLazyOAuth2Token): Boolean;
+      AConnection: TLZOAuth2Connection; AToken: TLZOAuth2Token): Boolean;
   end;
 
 implementation
@@ -31,9 +31,9 @@ uses
 
 { TAuthorizeForm }
 
-function TLazyAuthorizeBrowserForm.GetAuthToken(var AMessage: string;
-  AURL: string; AConnection: TLazyOAuth2Connection;
-  AToken: TLazyOAuth2Token): Boolean;
+function TLZAuthorizeBrowserForm.GetAuthToken(var AMessage: string;
+  AURL: string; AConnection: TLZOAuth2Connection;
+  AToken: TLZOAuth2Token): Boolean;
 begin
   Result := False;
   FMessage := '';
@@ -49,13 +49,13 @@ begin
   else
   begin
     AMessage := FMessage;
-    if TlazyString.IsEmptyString(AMessage) then
+    if TLZString.IsEmptyString(AMessage) then
       AMessage := 'Request failed or cancelled';
 
   end;
 end;
 
-procedure TLazyAuthorizeBrowserForm.WebBrowserDidFinishLoad(ASender: TObject);
+procedure TLZAuthorizeBrowserForm.WebBrowserDidFinishLoad(ASender: TObject);
 var
   LURI: TURI;
   LParam: TNameValuePair;

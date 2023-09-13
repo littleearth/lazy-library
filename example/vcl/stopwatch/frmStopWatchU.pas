@@ -48,7 +48,7 @@ type
     procedure ActionStayOnTopUpdate(Sender: TObject);
     procedure ActionStayOnTopExecute(Sender: TObject);
   private
-    FStopWatch: TLazyStopWatch;
+    FStopWatch: TLZStopWatch;
     procedure UpdateElapsedEntries;
     procedure UpdateStatus;
   public
@@ -145,7 +145,7 @@ end;
 
 procedure TfrmStopWatch.FormCreate(Sender: TObject);
 begin
-  FStopWatch := TLazyStopWatch.Create;
+  FStopWatch := TLZStopWatch.Create;
   FStopWatch.ElapsedFormat := 'hh:nn:ss';
   UpdateStatus;
 end;
@@ -166,7 +166,7 @@ begin
   begin
     lblRuntimeDuration.Caption := Format('Run time: %s',
       [FStopWatch.RuntimeElapsed]);
-    lblStarted.Caption := TLazyDateTime.DateTimeToString(FStopWatch.StartTime);
+    lblStarted.Caption := TLZDateTime.DateTimeToString(FStopWatch.StartTime);
     lblEntryCount.Caption := Format('Entry count: %d', [FStopWatch.Count]);
     if FStopWatch.IsPaused then
     begin
@@ -212,7 +212,7 @@ begin
       begin
         LListitem.SubItems.Add('Active');
       end;
-      LListitem.SubItems.Add(TLazyDateTime.DurationFromMilliseconds(FStopWatch.ElapsedEntry
+      LListitem.SubItems.Add(TLZDateTime.DurationFromMilliseconds(FStopWatch.ElapsedEntry
         [LIdx].ElapsedMilliseconds, false, FStopWatch.ElapsedFormat));
     end;
   finally

@@ -5,13 +5,13 @@ interface
 uses Classes, Windows, SysUtils, Lazy.Utils, Lazy.Types;
 
 type
-  TCompareMode = (vcString, vcInteger, vcFloat, vcDate, vcTime, vcDateTime,
+  TLZCompareMode = (vcString, vcInteger, vcFloat, vcDate, vcTime, vcDateTime,
     vcVersionString, vcVersionFile, vcMD5String, vcMD5File, vcGetMD5,
     vcGetVersionFile, vcGetVersionProduct);
 
-  TCompareBase = class(TLazyObject)
+  TLZCompareBase = class(TLZObject)
   protected
-    function GetCompareMode(AVersionCompareMode: string): TCompareMode;
+    function GetCompareMode(AVersionCompareMode: string): TLZCompareMode;
   public
     function CompareVersion(AVersion1: string; AVersion2: string): integer;
     function CompareInteger(AValue1, AValue2: string): integer;
@@ -27,7 +27,8 @@ implementation
 uses
   IdHashMessageDigest, idHash, System.Math, System.DateUtils;
 
-function TCompareBase.GetCompareMode(AVersionCompareMode: string): TCompareMode;
+function TLZCompareBase.GetCompareMode(AVersionCompareMode: string)
+  : TLZCompareMode;
 begin
   Result := vcString;
   if SameText(AVersionCompareMode, 'INTEGER') then
@@ -56,7 +57,7 @@ begin
     Result := vcGetVersionProduct
 end;
 
-function TCompareBase.CompareVersion(AVersion1, AVersion2: string): integer;
+function TLZCompareBase.CompareVersion(AVersion1, AVersion2: string): integer;
 var
   LVersionDetails: TApplicationVersionDetails;
   LVersion1, LVersion2: string;
@@ -106,25 +107,25 @@ begin
   end;
 end;
 
-function TCompareBase.CompareDate(AValue1, AValue2: string): integer;
+function TLZCompareBase.CompareDate(AValue1, AValue2: string): integer;
 var
   LValue1, LValue2: TDate;
 begin
-  LValue1 := TLazyDateTime.StringToDate(AValue1);
-  LValue2 := TLazyDateTime.StringToDate(AValue2);
+  LValue1 := TLZDateTime.StringToDate(AValue1);
+  LValue2 := TLZDateTime.StringToDate(AValue2);
   Result := System.DateUtils.CompareDate(LValue1, LValue2);
 end;
 
-function TCompareBase.CompareDateTime(AValue1, AValue2: string): integer;
+function TLZCompareBase.CompareDateTime(AValue1, AValue2: string): integer;
 var
   LValue1, LValue2: TDateTime;
 begin
-  LValue1 := TLazyDateTime.StringToDateTime(AValue1);
-  LValue2 := TLazyDateTime.StringToDateTime(AValue2);
+  LValue1 := TLZDateTime.StringToDateTime(AValue1);
+  LValue2 := TLZDateTime.StringToDateTime(AValue2);
   Result := System.DateUtils.CompareDateTime(LValue1, LValue2);
 end;
 
-function TCompareBase.CompareFloat(AValue1, AValue2: string): integer;
+function TLZCompareBase.CompareFloat(AValue1, AValue2: string): integer;
 var
   LValue1, LValue2: Double;
 begin
@@ -133,7 +134,7 @@ begin
   Result := CompareValue(LValue1, LValue2);
 end;
 
-function TCompareBase.CompareInteger(AValue1, AValue2: string): integer;
+function TLZCompareBase.CompareInteger(AValue1, AValue2: string): integer;
 var
   LValue1, LValue2: integer;
 begin
@@ -142,16 +143,16 @@ begin
   Result := CompareValue(LValue1, LValue2);
 end;
 
-function TCompareBase.CompareTime(AValue1, AValue2: string): integer;
+function TLZCompareBase.CompareTime(AValue1, AValue2: string): integer;
 var
   LValue1, LValue2: TTime;
 begin
-  LValue1 := TLazyDateTime.StringToTime(AValue1);
-  LValue2 := TLazyDateTime.StringToTime(AValue2);
+  LValue1 := TLZDateTime.StringToTime(AValue1);
+  LValue2 := TLZDateTime.StringToTime(AValue2);
   Result := System.DateUtils.CompareTime(LValue1, LValue2);
 end;
 
-function TCompareBase.GenerateMD5(AFilename: TFileName): string;
+function TLZCompareBase.GenerateMD5(AFilename: TFileName): string;
 var
   LIdMD5: TIdHashMessageDigest5;
   LFileStream: TFileStream;

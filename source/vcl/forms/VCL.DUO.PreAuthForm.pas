@@ -39,7 +39,7 @@ type
     procedure editPasscodeKeyPress(Sender: TObject; var Key: Char);
     procedure FormCreate(Sender: TObject);
   private
-    FDUODevices: TDUODevices;
+    FDUODevices: TLZDUODevices;
     FDevice: string;
     FFactor: string;
     FPasscode: string;
@@ -49,7 +49,7 @@ type
     procedure Reset;
     function ValidateForm(var AMessage: string): Boolean;
   public
-    function Execute(ADUODevices: TDUODevices; var ADevice: string;
+    function Execute(ADUODevices: TLZDUODevices; var ADevice: string;
       var AFactor: string; var APasscode: string;
       ALogoFileName: TFileName = ''): Boolean;
   end;
@@ -95,7 +95,7 @@ begin
     ActionOk.Execute;
 end;
 
-function TFormDuoPreAuth.Execute(ADUODevices: TDUODevices;
+function TFormDuoPreAuth.Execute(ADUODevices: TLZDUODevices;
   var ADevice, AFactor, APasscode: string; ALogoFileName: TFileName): Boolean;
 begin
   Result := False;
@@ -137,7 +137,7 @@ end;
 
 procedure TFormDuoPreAuth.UpdateDevices;
 var
-  LDUODevice: TDUODevice;
+  LDUODevice: TLZDUODevice;
 begin
   Reset;
   for LDUODevice in FDUODevices.Items do
@@ -165,7 +165,7 @@ end;
 
 procedure TFormDuoPreAuth.UpdateFactors;
 var
-  LDUODevice: TDUODevice;
+  LDUODevice: TLZDUODevice;
 begin
   LDUODevice := nil;
   comboDeviceFactor.Items.Clear;
@@ -193,7 +193,7 @@ end;
 function TFormDuoPreAuth.ValidateForm(var AMessage: string): Boolean;
 var
   LNumber: string;
-  LDUODevice: TDUODevice;
+  LDUODevice: TLZDUODevice;
 begin
   Result := True;
   FDevice := 'auto';

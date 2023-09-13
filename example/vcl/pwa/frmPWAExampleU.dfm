@@ -2,8 +2,8 @@ object frmPWAExample: TfrmPWAExample
   Left = 0
   Top = 0
   Caption = 'PWA Example'
-  ClientHeight = 424
-  ClientWidth = 618
+  ClientHeight = 406
+  ClientWidth = 608
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,7 +17,7 @@ object frmPWAExample: TfrmPWAExample
   object GridPanel1: TGridPanel
     Left = 0
     Top = 0
-    Width = 618
+    Width = 608
     Height = 105
     Align = alTop
     ColumnCollection = <
@@ -69,35 +69,30 @@ object frmPWAExample: TfrmPWAExample
         Value = 33.333333333333310000
       end>
     TabOrder = 0
+    ExplicitWidth = 618
     object Label1: TLabel
       Left = 1
       Top = 1
-      Width = 142
-      Height = 34
+      Width = 48
+      Height = 15
       Align = alClient
       Caption = 'Endpoint'
-      ExplicitWidth = 48
-      ExplicitHeight = 15
     end
     object Label3: TLabel
       Left = 1
       Top = 35
-      Width = 142
-      Height = 35
+      Width = 53
+      Height = 15
       Align = alClient
       Caption = 'Username'
-      ExplicitWidth = 53
-      ExplicitHeight = 15
     end
     object Label5: TLabel
       Left = 1
       Top = 70
-      Width = 142
-      Height = 34
+      Width = 50
+      Height = 15
       Align = alClient
       Caption = 'Password'
-      ExplicitWidth = 50
-      ExplicitHeight = 15
     end
     object editEndPoint: TEdit
       Left = 143
@@ -132,17 +127,19 @@ object frmPWAExample: TfrmPWAExample
   object memoLog: TMemo
     Left = 0
     Top = 146
-    Width = 618
-    Height = 278
+    Width = 608
+    Height = 260
     Align = alClient
     ScrollBars = ssBoth
     TabOrder = 2
     WordWrap = False
+    ExplicitWidth = 618
+    ExplicitHeight = 278
   end
   object GridPanel2: TGridPanel
     Left = 0
     Top = 105
-    Width = 618
+    Width = 608
     Height = 41
     Align = alTop
     ColumnCollection = <
@@ -184,6 +181,7 @@ object frmPWAExample: TfrmPWAExample
         Value = 100.000000000000000000
       end>
     TabOrder = 1
+    ExplicitWidth = 618
     object BitBtn1: TBitBtn
       AlignWithMargins = True
       Left = 4

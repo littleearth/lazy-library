@@ -44,7 +44,7 @@ type
     procedure LoadSettings;
     procedure SaveSettings;
     procedure Log(Amessage: string);
-    procedure OnGetUsers(ASender: TObject; AUsers: TDUOUsers; Amessage: string;
+    procedure OnGetUsers(ASender: TObject; AUsers: TLZDUOUsers; Amessage: string;
       ASuccess: boolean; var AOwnsObjects: boolean);
   public
     { Public declarations }
@@ -80,11 +80,11 @@ end;
 procedure TfrmAdminDemo.LoadSettings;
 var
   LFileName: TFileName;
-  LSettings: TCryptINI;
+  LSettings: TLZCryptINI;
 begin
   LFileName := IncludeTrailingPathDelimiter(TPath.GetDocumentsPath) +
     'duo_Admindemo.ini';
-  LSettings := TCryptINI.Create(LFileName);
+  LSettings := TLZCryptINI.Create(LFileName);
   try
     editIntegrationKey.Text := LSettings.ReadString('duo',
       'integrationkey', '');
@@ -98,11 +98,11 @@ end;
 procedure TfrmAdminDemo.SaveSettings;
 var
   LFileName: TFileName;
-  LSettings: TCryptINI;
+  LSettings: TLZCryptINI;
 begin
   LFileName := IncludeTrailingPathDelimiter(TPath.GetDocumentsPath) +
     'duo_admindemo.ini';
-  LSettings := TCryptINI.Create(LFileName);
+  LSettings := TLZCryptINI.Create(LFileName);
   try
     LSettings.WriteString('duo', 'integrationkey', editIntegrationKey.Text);
     LSettings.WriteString('duo', 'secretkey', editSecretKey.Text);
@@ -113,10 +113,10 @@ begin
   end;
 end;
 
-procedure TfrmAdminDemo.OnGetUsers(ASender: TObject; AUsers: TDUOUsers;
+procedure TfrmAdminDemo.OnGetUsers(ASender: TObject; AUsers: TLZDUOUsers;
   Amessage: string; ASuccess: boolean; var AOwnsObjects: boolean);
 var
-  LUser: TDUOUser;
+  LUser: TLZDUOUser;
 begin
   if not ASuccess then
   begin
@@ -136,9 +136,9 @@ end;
 
 procedure TfrmAdminDemo.ActionGetAllUsersExecute(Sender: TObject);
 var
-  LDUOAdmin: TDUOAdminApi;
+  LDUOAdmin: TLZDUOAdminApi;
 begin
-  LDUOAdmin := TDUOAdminApi.Create(nil);
+  LDUOAdmin := TLZDUOAdminApi.Create(nil);
   try
     LDUOAdmin.IntegrationKey := editIntegrationKey.Text;
     LDUOAdmin.SecretKey := editSecretKey.Text;
@@ -153,16 +153,16 @@ end;
 procedure TfrmAdminDemo.ActionListUpdate(Action: TBasicAction;
   var Handled: Boolean);
 begin
-  memoLog.Lines.Text := TLazyLogBasic.Text;
+  memoLog.Lines.Text := TLZLogBasic.Text;
 end;
 
 procedure TfrmAdminDemo.ActionLogoExecute(Sender: TObject);
 var
-  LDUOAdmin: TDUOAdminApi;
+  LDUOAdmin: TLZDUOAdminApi;
   LMessage: string;
   LSuccess: boolean;
 begin
-  LDUOAdmin := TDUOAdminApi.Create(nil);
+  LDUOAdmin := TLZDUOAdminApi.Create(nil);
   try
     LDUOAdmin.IntegrationKey := editIntegrationKey.Text;
     LDUOAdmin.SecretKey := editSecretKey.Text;

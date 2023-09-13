@@ -13,16 +13,15 @@ unit Lazy.Types;
 interface
 
 uses
-  Windows, Messages,
   System.SyncObjs, System.SysUtils, System.Variants, System.Classes,
   REST.Types, REST.Client;
 
 type
   ELazyException = class(Exception);
-  TLazyLogLevel = (logError, logWarning, logInformation, logDebug);
+  TLZLogLevel = (logError, logWarning, logInformation, logDebug);
 
-  TLazyTimeRounding = (trNearest, trUp, trDown);
-  TLazyTimeFormat = (tfDefault, tf12Hour, tf24Hour);
+  TLZTimeRounding = (trNearest, trUp, trDown);
+  TLZTimeFormat = (tfDefault, tf12Hour, tf24Hour);
 
   TDateTimeFunc = reference to function: TDateTime;
 
@@ -30,77 +29,51 @@ type
   TRESTResponse = REST.Client.TRESTResponse;
   TRESTRequestMethod = REST.Types.TRESTRequestMethod;
 
-  TLazyObject = class(TObject)
+  TOnLog = procedure(ASender: TObject; AMessage: string) of object;
+  TOnWarning = procedure(ASender: TObject; AMessage: string) of object;
+  TOnDebug = procedure(ASender: TObject; AProcedure, AMessage: string)
+    of object;
+  TOnProgress = procedure(ASender: TObject; AProgress: integer;
+    AMessage: string; var ACancel: boolean) of object;
+  TOnError = procedure(ASender: TObject; AMessage: string; AErrorCode: integer)
+    of object;
+  TOnProgressRef = reference to procedure(ASender: TObject; AProgress: integer;
+    AMessage: string; var ACancel: boolean);
+
+  TLZObject = class(TObject)
   protected
-    procedure Log(AMessage: string);
-    procedure Debug(AProcedure: string; AMessage: string);
-    procedure Warning(AMessage: string);
-    procedure Error(AMessage: string; AErrorCode: integer = 0); overload;
-    procedure Error(AException: Exception; AMessage: string = ''); overload;
+    procedure Log(AMessage: string); virtual;
+    procedure Debug(AProcedure: string; AMessage: string); virtual;
+    procedure Warning(AMessage: string); virtual;
+    procedure Error(AMessage: string; AErrorCode: integer = 0);
+      overload; virtual;
+    procedure Error(AException: Exception; AMessage: string = '');
+      overload; virtual;
   end;
 
-  TLazyComponent = class(TComponent)
+  TLZPersistent = class(TPersistent)
   protected
-    procedure Log(AMessage: string);
-    procedure Debug(AProcedure: string; AMessage: string);
-    procedure Warning(AMessage: string);
-    procedure Error(AMessage: string; AErrorCode: integer = 0); overload;
-    procedure Error(AException: Exception; AMessage: string = ''); overload;
+    procedure Log(AMessage: string); virtual;
+    procedure Debug(AProcedure: string; AMessage: string); virtual;
+    procedure Warning(AMessage: string); virtual;
+    procedure Error(AMessage: string; AErrorCode: integer = 0);
+      overload; virtual;
+    procedure Error(AException: Exception; AMessage: string = '');
+      overload; virtual;
   end;
 
-  TLazyOAuth2Connection = class(TLazyObject)
-  private
-    FScope: string;
-    FClientId: string;
-    FClientSecret: string;
-    FTokenEndPoint: string;
-    FRESTEndPoint: string;
-    FRedirectURL: string;
-    FAuthorizeEndPoint: string;
-    procedure SetAuthorizeEndPoint(const Value: string);
-    procedure SetClientId(const Value: string);
-    procedure SetClientSecret(const Value: string);
-    procedure SetRedirectURL(const Value: string);
-    procedure SetRESTEndPoint(const Value: string);
-    procedure SetScope(const Value: string);
-    procedure SetTokenEndPoint(const Value: string);
+  TLZComponent = class(TComponent)
   protected
-    procedure SetDefaults; virtual;
-  public
-    constructor Create; reintroduce;
-    function ProcessURLVariables(AURL: string): string; virtual;
-    property ClientId: string read FClientId write SetClientId;
-    property ClientSecret: string read FClientSecret write SetClientSecret;
-    property RedirectURL: string read FRedirectURL write SetRedirectURL;
-    property AuthorizeEndPoint: string read FAuthorizeEndPoint
-      write SetAuthorizeEndPoint;
-    property TokenEndPoint: string read FTokenEndPoint write SetTokenEndPoint;
-    property RESTEndPoint: string read FRESTEndPoint write SetRESTEndPoint;
-    property Scope: string read FScope write SetScope;
+    procedure Log(AMessage: string); virtual;
+    procedure Debug(AProcedure: string; AMessage: string); virtual;
+    procedure Warning(AMessage: string); virtual;
+    procedure Error(AMessage: string; AErrorCode: integer = 0);
+      overload; virtual;
+    procedure Error(AException: Exception; AMessage: string = '');
+      overload; virtual;
   end;
 
-  TLazyOAuth2ConnectionClass = class of TLazyOAuth2Connection;
-
-  TLazyOAuth2Token = class(TLazyObject)
-  private
-    FRefreshToken: string;
-    FAuthCode: string;
-    FAuthToken: string;
-    FExpiresIn: TDateTime;
-    procedure SetAuthCode(const Value: string);
-    procedure SetAuthToken(const Value: string);
-    procedure SetExpiresIn(const Value: TDateTime);
-    procedure SetRefreshToken(const Value: string);
-  public
-    procedure Reset;
-    property AuthCode: string read FAuthCode write SetAuthCode;
-    property AuthToken: string read FAuthToken write SetAuthToken;
-    property RefreshToken: string read FRefreshToken write SetRefreshToken;
-    property ExpiresIn: TDateTime read FExpiresIn write SetExpiresIn;
-  end;
-
-type
-  TApplicationVersionDetails = class(TLazyComponent)
+  TApplicationVersionDetails = class(TLZComponent)
   private
     FMajorVersion: integer;
     FMinorVersion: integer;
@@ -126,145 +99,59 @@ implementation
 uses
   Lazy.Log;
 
-{ TLazyObject }
+{ TLZObject }
 
-procedure TLazyObject.Debug(AProcedure, AMessage: string);
+procedure TLZObject.Debug(AProcedure, AMessage: string);
 begin
   LazyLog.Debug(Self, AProcedure, AMessage);
 end;
 
-procedure TLazyObject.Error(AException: Exception; AMessage: string);
+procedure TLZObject.Error(AException: Exception; AMessage: string);
 begin
   LazyLog.Error(Self, AException, AMessage);
 end;
 
-procedure TLazyObject.Error(AMessage: string; AErrorCode: integer);
+procedure TLZObject.Error(AMessage: string; AErrorCode: integer);
 begin
   LazyLog.Error(Self, AMessage, AErrorCode);
 end;
 
-procedure TLazyObject.Log(AMessage: string);
+procedure TLZObject.Log(AMessage: string);
 begin
   LazyLog.Log(Self, AMessage);
 end;
 
-procedure TLazyObject.Warning(AMessage: string);
+procedure TLZObject.Warning(AMessage: string);
 begin
   LazyLog.Warning(Self, AMessage);
 end;
 
-{ TLazyComponent }
+{ TLZComponent }
 
-procedure TLazyComponent.Debug(AProcedure, AMessage: string);
+procedure TLZComponent.Debug(AProcedure, AMessage: string);
 begin
   LazyLog.Debug(Self, AProcedure, AMessage);
 end;
 
-procedure TLazyComponent.Error(AException: Exception; AMessage: string);
+procedure TLZComponent.Error(AException: Exception; AMessage: string);
 begin
   LazyLog.Error(Self, AException, AMessage);
 end;
 
-procedure TLazyComponent.Error(AMessage: string; AErrorCode: integer);
+procedure TLZComponent.Error(AMessage: string; AErrorCode: integer);
 begin
   LazyLog.Error(Self, AMessage, AErrorCode);
 end;
 
-procedure TLazyComponent.Log(AMessage: string);
+procedure TLZComponent.Log(AMessage: string);
 begin
   LazyLog.Log(Self, AMessage);
 end;
 
-procedure TLazyComponent.Warning(AMessage: string);
+procedure TLZComponent.Warning(AMessage: string);
 begin
   LazyLog.Warning(Self, AMessage);
 end;
-
-{ TLazyOAuth2Connection }
-
-constructor TLazyOAuth2Connection.Create;
-begin
-  inherited;
-  SetDefaults;
-end;
-
-function TLazyOAuth2Connection.ProcessURLVariables(AURL: string): string;
-begin
-  Result := AURL;
-  Result := StringReplace(Result, '%clientid%', ClientId,
-    [rfReplaceAll, rfIgnoreCase]);
-end;
-
-procedure TLazyOAuth2Connection.SetAuthorizeEndPoint(const Value: string);
-begin
-  FAuthorizeEndPoint := Value;
-end;
-
-procedure TLazyOAuth2Connection.SetClientId(const Value: string);
-begin
-  FClientId := Value;
-end;
-
-procedure TLazyOAuth2Connection.SetClientSecret(const Value: string);
-begin
-  FClientSecret := Value;
-end;
-
-procedure TLazyOAuth2Connection.SetDefaults;
-begin
-
-end;
-
-procedure TLazyOAuth2Connection.SetRedirectURL(const Value: string);
-begin
-  FRedirectURL := Value;
-end;
-
-procedure TLazyOAuth2Connection.SetRESTEndPoint(const Value: string);
-begin
-  FRESTEndPoint := Value;
-end;
-
-procedure TLazyOAuth2Connection.SetScope(const Value: string);
-begin
-  FScope := Value;
-end;
-
-procedure TLazyOAuth2Connection.SetTokenEndPoint(const Value: string);
-begin
-  FTokenEndPoint := Value;
-end;
-
-{ TLazyOAuth2Token }
-
-procedure TLazyOAuth2Token.Reset;
-begin
-  FAuthCode := '';
-  FRefreshToken := '';
-  FAuthToken := '';
-  FExpiresIn := 0;
-end;
-
-procedure TLazyOAuth2Token.SetAuthCode(const Value: string);
-begin
-  FAuthCode := Value;
-end;
-
-procedure TLazyOAuth2Token.SetAuthToken(const Value: string);
-begin
-  FAuthToken := Value;
-end;
-
-procedure TLazyOAuth2Token.SetExpiresIn(const Value: TDateTime);
-begin
-  FExpiresIn := Value;
-end;
-
-procedure TLazyOAuth2Token.SetRefreshToken(const Value: string);
-begin
-  FRefreshToken := Value;
-end;
-
 { TApplicationVersionDetails }
 
 procedure TApplicationVersionDetails.Reset;
@@ -362,6 +249,33 @@ begin
   finally
     FreeAndNil(CompareVersionDetails)
   end;
+end;
+
+{ TLZPersistent }
+
+procedure TLZPersistent.Debug(AProcedure, AMessage: string);
+begin
+  LazyLog.Debug(Self, AProcedure, AMessage);
+end;
+
+procedure TLZPersistent.Error(AException: Exception; AMessage: string);
+begin
+  LazyLog.Error(Self, AException, AMessage);
+end;
+
+procedure TLZPersistent.Error(AMessage: string; AErrorCode: integer);
+begin
+  LazyLog.Error(Self, AMessage, AErrorCode);
+end;
+
+procedure TLZPersistent.Log(AMessage: string);
+begin
+  LazyLog.Log(Self, AMessage);
+end;
+
+procedure TLZPersistent.Warning(AMessage: string);
+begin
+  LazyLog.Warning(Self, AMessage);
 end;
 
 end.

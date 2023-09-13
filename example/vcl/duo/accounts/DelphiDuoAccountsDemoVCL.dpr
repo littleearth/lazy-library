@@ -9,7 +9,7 @@ uses
 {$R *.res}
 
 begin
-  SetLazyLogClass(TLazyLogBasic);
+  SetLazyLogClass(TLZLogBasic);
   ReportMemoryLeaksOnShutdown := True;
   Application.Title := 'Delphi DUO Accounts Demo';
   Application.Initialize;

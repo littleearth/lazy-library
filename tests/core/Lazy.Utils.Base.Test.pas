@@ -8,7 +8,7 @@ uses
 type
 
   [TestFixture]
-  TLazyUtilsBaseTests = class(TLazyTestBase)
+  TLZUtilsBaseTests = class(TLZTestBase)
   public
     // 'A', 'P', 'D', 'M', 'Y', 'H', 'N', 'S', 'Z'
     [TestCase('Only hours A', '0,   HH, 00:00:00.000')]
@@ -179,7 +179,7 @@ begin
 
   // Act
   try
-    LActual := TlazyDateTimeBase.StringToTime(AInput, False, False, 10,
+    LActual := TLZDateTimeBase.StringToTime(AInput, False, False, 10,
       trNearest);
   except
     on E: Exception do
@@ -206,7 +206,7 @@ begin
 
   // Act
   try
-    LActual := TlazyDateTimeBase.StringToDateTime(AInput);
+    LActual := TLZDateTimeBase.StringToDateTime(AInput);
   except
     on E: Exception do
       Assert.Fail('StringToDateTime raised exception: ' + E.Message);
@@ -223,7 +223,7 @@ begin
 end;
 {$ENDREGION}
 
-procedure TLazyUtilsBaseTests.DateTimeStrEval_ValidInput(AInputValue,
+procedure TLZUtilsBaseTests.DateTimeStrEval_ValidInput(AInputValue,
   AInputFormat, AExpectedAsStr: string);
 var
   LExpected, LActual: TDateTime;
@@ -235,7 +235,7 @@ begin
   LExpected := RecodeDate(LExpected, 1, 1, 1);
 
   // Act
-  LActual := TlazyDateTimeBase.DateTimeStrEval(AInputFormat, AInputValue);
+  LActual := TLZDateTimeBase.DateTimeStrEval(AInputFormat, AInputValue);
 
   // Assert
   Assert.IsTrue(SameDateTime(LExpected, LActual),
@@ -243,25 +243,25 @@ begin
     ' which is not equal to expected ' + DateTimeToStr(LExpected));
 end;
 
-procedure TLazyUtilsBaseTests.StringToTime_ValidInputDate(AInput: string;
+procedure TLZUtilsBaseTests.StringToTime_ValidInputDate(AInput: string;
   AExpectedAsStr: string);
 begin
   TestStringToTime(AInput, AExpectedAsStr);
 end;
 
-procedure TLazyUtilsBaseTests.StringToDateTime_ValidInputDate(AInput: string;
+procedure TLZUtilsBaseTests.StringToDateTime_ValidInputDate(AInput: string;
   AExpectedAsStr: string);
 begin
   TestStringToDateTime(AInput, AExpectedAsStr);
 end;
 
-procedure TLazyUtilsBaseTests.StringToTime_ValidShortcutInput_Now
+procedure TLZUtilsBaseTests.StringToTime_ValidShortcutInput_Now
   (AInput: string);
 begin
   TestStringToTime(AInput, TimeToStr(NowMock));
 end;
 
-procedure TLazyUtilsBaseTests.StringToTime_ValidShortcutInput_NowPlusSeconds
+procedure TLZUtilsBaseTests.StringToTime_ValidShortcutInput_NowPlusSeconds
   (AInput, AToAdd: string);
 begin
   AToAdd := TrimLeft(AToAdd);
@@ -269,7 +269,7 @@ begin
   TestStringToTime(AInput, TimeToStr(IncSecond(NowMock, StrToInt(AToAdd))));
 end;
 
-procedure TLazyUtilsBaseTests.StringToTime_ValidShortcutInput_NowPlusMinutes
+procedure TLZUtilsBaseTests.StringToTime_ValidShortcutInput_NowPlusMinutes
   (AInput, AToAdd: string);
 begin
   AToAdd := TrimLeft(AToAdd);
@@ -277,7 +277,7 @@ begin
   TestStringToTime(AInput, TimeToStr(IncMinute(NowMock, StrToInt(AToAdd))));
 end;
 
-procedure TLazyUtilsBaseTests.StringToTime_ValidShortcutInput_NowPlusHours
+procedure TLZUtilsBaseTests.StringToTime_ValidShortcutInput_NowPlusHours
   (AInput, AToAdd: string);
 begin
   AToAdd := TrimLeft(AToAdd);
@@ -285,7 +285,7 @@ begin
   TestStringToTime(AInput, TimeToStr(IncHour(NowMock, StrToInt(AToAdd))));
 end;
 
-procedure TLazyUtilsBaseTests.StringToTime_ValidShortcutInput_NowMinusSeconds
+procedure TLZUtilsBaseTests.StringToTime_ValidShortcutInput_NowMinusSeconds
   (AInput, AToSubtract: string);
 begin
   AToSubtract := TrimLeft(AToSubtract);
@@ -294,7 +294,7 @@ begin
     StrToInt(AToSubtract) * -1)));
 end;
 
-procedure TLazyUtilsBaseTests.StringToTime_ValidShortcutInput_NowMinusMinutes
+procedure TLZUtilsBaseTests.StringToTime_ValidShortcutInput_NowMinusMinutes
   (AInput, AToSubtract: string);
 begin
   AToSubtract := TrimLeft(AToSubtract);
@@ -303,7 +303,7 @@ begin
     StrToInt(AToSubtract) * -1)));
 end;
 
-procedure TLazyUtilsBaseTests.StringToTime_ValidShortcutInput_NowMinusHours
+procedure TLZUtilsBaseTests.StringToTime_ValidShortcutInput_NowMinusHours
   (AInput, AToSubtract: string);
 begin
   AToSubtract := TrimLeft(AToSubtract);
@@ -311,7 +311,7 @@ begin
     StrToInt(AToSubtract) * -1)));
 end;
 
-procedure TLazyUtilsBaseTests.Exploratory;
+procedure TLZUtilsBaseTests.Exploratory;
 var
   LTimePre, LNowPre, LTimePost, LNowPost: TTime;
   LTimePreDbl, LNowPreDbl, LTimePostDbl, LNowPostDbl: double;
@@ -335,6 +335,6 @@ end;
 
 initialization
 
-TlazyDateTimeBase.SetNowMock(NowMock);
+TLZDateTimeBase.SetNowMock(NowMock);
 
 end.

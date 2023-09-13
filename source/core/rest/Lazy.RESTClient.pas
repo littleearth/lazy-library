@@ -3,25 +3,24 @@ unit Lazy.RESTClient;
 interface
 
 uses
-  Lazy.Types, System.SysUtils, System.Types, System.Classes,
+  Lazy.Types, Lazy.REST.Types, System.SysUtils, System.Types, System.Classes,
   System.Variants, REST.Client, REST.Types, REST.Json, System.Json;
 
 type
-  TLazyRESTResponse = reference to procedure(ASender: TObject;
-    ASuccess: boolean; AMessage: string; ARESTResponse: TRESTResponse;
-    ACustomData: string);
+  TLZRESTResponse = reference to procedure(ASender: TObject; ASuccess: boolean;
+    AMessage: string; ARESTResponse: TRESTResponse; ACustomData: string);
 
-  TLazyProcessRESTResponse = reference to procedure(ARESTRequest: TRESTRequest;
+  TLZProcessRESTResponse = reference to procedure(ARESTRequest: TRESTRequest;
     ARESTResponse: TRESTResponse; ASuccess: boolean; AMessage: string;
     AJSON: string; ACustomData: string);
-  TLazyBeforeRESTRequest = reference to procedure(ARESTRequest: TRESTRequest;
+  TLZBeforeRESTRequest = reference to procedure(ARESTRequest: TRESTRequest;
     ACustomData: string);
-  TLazyAfterRESTRequest = reference to procedure(ARESTRequest: TRESTRequest;
+  TLZAfterRESTRequest = reference to procedure(ARESTRequest: TRESTRequest;
     ACustomData: string);
 
-  TLazyAsyncState = (lasDefault, lasTrue, lasFalse);
+  TLZAsyncState = (lasDefault, lasTrue, lasFalse);
 
-  TLazyRESTClientBase = class(TLazyObject)
+  TLZRESTClientBase = class(TLZObject)
   private
     FDefaultAsync: boolean;
     procedure SetDefaultAsync(const Value: boolean);
@@ -36,40 +35,40 @@ type
     procedure BeforeDestroyRestClient(ARESTClient: TRESTClient;
       ARESTRequest: TRESTRequest; ARESTResponse: TRESTResponse); virtual;
     procedure Execute(ABaseURL: string; AResource: string; ABody: string;
-      ALazyProcessRESTResponse: TLazyProcessRESTResponse;
-      ALazyBeforeRESTRequest: TLazyBeforeRESTRequest = nil;
-      ALazyAfterRESTRequest: TLazyAfterRESTRequest = nil;
+      ALazyProcessRESTResponse: TLZProcessRESTResponse;
+      ALazyBeforeRESTRequest: TLZBeforeRESTRequest = nil;
+      ALazyAfterRESTRequest: TLZAfterRESTRequest = nil;
       AMethod: TRESTRequestMethod = TRESTRequestMethod.rmGET;
-      ACustomData: string = ''; AASync: TLazyAsyncState = lasDefault); overload;
+      ACustomData: string = ''; AASync: TLZAsyncState = lasDefault); overload;
   public
     constructor Create; reintroduce;
     destructor Destroy; override;
     property DefaultAsync: boolean read FDefaultAsync write SetDefaultAsync;
   end;
 
-  TLazyRESTClient = class(TLazyRESTClientBase)
+  TLZRESTClient = class(TLZRESTClientBase)
   protected
     procedure Execute(AResource, ABody: string;
-      ALazyRESTResponse: TLazyRESTResponse; AMethod: TRESTRequestMethod;
-      ACustomData: string; AASync: TLazyAsyncState); overload;
+      ALazyRESTResponse: TLZRESTResponse; AMethod: TRESTRequestMethod;
+      ACustomData: string; AASync: TLZAsyncState); overload;
     procedure BeforeRESTRequest(ARESTRequest: TRESTRequest;
       ACustomData: string); virtual;
     procedure AfterRESTRequest(ARESTRequest: TRESTRequest;
       ACustomData: string); virtual;
   public
-    procedure Get(AResource: string; ALazyRESTResponse: TLazyRESTResponse;
-      ACustomData: string = ''; AASync: TLazyAsyncState = lasDefault);
+    procedure Get(AResource: string; ALazyRESTResponse: TLZRESTResponse;
+      ACustomData: string = ''; AASync: TLZAsyncState = lasDefault);
     procedure Post(AResource: string; ABody: string;
-      ALazyRESTResponse: TLazyRESTResponse; ACustomData: string = '';
-      AASync: TLazyAsyncState = lasDefault);
+      ALazyRESTResponse: TLZRESTResponse; ACustomData: string = '';
+      AASync: TLZAsyncState = lasDefault);
     procedure Put(AResource: string; ABody: string;
-      ALazyRESTResponse: TLazyRESTResponse; ACustomData: string = '';
-      AASync: TLazyAsyncState = lasDefault);
-    procedure Delete(AResource: string; ALazyRESTResponse: TLazyRESTResponse;
-      ACustomData: string = ''; AASync: TLazyAsyncState = lasDefault);
+      ALazyRESTResponse: TLZRESTResponse; ACustomData: string = '';
+      AASync: TLZAsyncState = lasDefault);
+    procedure Delete(AResource: string; ALazyRESTResponse: TLZRESTResponse;
+      ACustomData: string = ''; AASync: TLZAsyncState = lasDefault);
   end;
 
-  TLazyRESTClientBasicAuth = class(TLazyRESTClient)
+  TLZRESTClientBasicAuth = class(TLZRESTClient)
   private
     FPassword: string;
     FUsername: string;
@@ -86,17 +85,17 @@ type
   end;
 
   TOnLazyBrowserLoginRequest = procedure(ASender: TObject; AURL: string;
-    AConnection: TLazyOAuth2Connection; AToken: TLazyOAuth2Token) of object;
+    AConnection: TLZOAuth2Connection; AToken: TLZOAuth2Token) of object;
 
   TOnLazyOAuth2TokenRequestComplete = procedure(ASender: TObject;
-    ASuccess: boolean; AMessage: string; AToken: TLazyOAuth2Token) of object;
+    ASuccess: boolean; AMessage: string; AToken: TLZOAuth2Token) of object;
 
-  TLazyRESTClientOAuth2 = class(TLazyRESTClient)
+  TLZRESTClientOAuth2 = class(TLZRESTClient)
   private
     FOnLazyBrowserLoginRequest: TOnLazyBrowserLoginRequest;
     FOnLazyOAuth2TokenRequestComplete: TOnLazyOAuth2TokenRequestComplete;
-    FConnection: TLazyOAuth2Connection;
-    FToken: TLazyOAuth2Token;
+    FConnection: TLZOAuth2Connection;
+    FToken: TLZOAuth2Token;
     function GetAuthenticated: boolean;
     procedure SetOnLazyBrowserLoginRequest(const Value
       : TOnLazyBrowserLoginRequest);
@@ -107,16 +106,16 @@ type
     procedure DestroyObjects; override;
     function ProcessURLVariables(AURL: string): string; override;
     function GetBaseURL: string; override;
-    function GetOAuth2ConnectionClass: TLazyOAuth2ConnectionClass; virtual;
+    function GetOAuth2ConnectionClass: TLZOAuth2ConnectionClass; virtual;
     procedure BeforeRESTRequest(ARESTRequest: TRESTRequest;
       ACustomData: string); override;
+    function GetConnection: TLZOAuth2Connection; virtual;
   public
-    procedure Authenticate(AASync: TLazyAsyncState = lasDefault);
+    procedure Authenticate(AASync: TLZAsyncState = lasDefault);
     procedure ClearAuthentication;
-    procedure RequestToken(AASync: TLazyAsyncState = lasDefault);
+    procedure RequestToken(AASync: TLZAsyncState = lasDefault);
     property IsAuthenticated: boolean read GetAuthenticated;
-    property Token: TLazyOAuth2Token read FToken;
-    property Connection: TLazyOAuth2Connection read FConnection;
+    property Token: TLZOAuth2Token read FToken;
     property OnBrowserLoginRequest: TOnLazyBrowserLoginRequest
       read FOnLazyBrowserLoginRequest write SetOnLazyBrowserLoginRequest;
     property OnOAuth2TokenRequestComplete: TOnLazyOAuth2TokenRequestComplete
@@ -129,21 +128,21 @@ implementation
 uses Lazy.Utils, System.NetEncoding, System.Net.URLClient, System.DateUtils,
   REST.Authenticator.Basic;
 
-{ TLazyRESTClient }
+{ TLZRESTClient }
 
-procedure TLazyRESTClientBase.AfterCreateRestClient(ARESTClient: TRESTClient;
+procedure TLZRESTClientBase.AfterCreateRestClient(ARESTClient: TRESTClient;
   ARESTRequest: TRESTRequest; ARESTResponse: TRESTResponse);
 begin
 
 end;
 
-procedure TLazyRESTClientBase.BeforeDestroyRestClient(ARESTClient: TRESTClient;
+procedure TLZRESTClientBase.BeforeDestroyRestClient(ARESTClient: TRESTClient;
   ARESTRequest: TRESTRequest; ARESTResponse: TRESTResponse);
 begin
 
 end;
 
-constructor TLazyRESTClientBase.Create;
+constructor TLZRESTClientBase.Create;
 begin
   inherited;
   FDefaultAsync := True;
@@ -151,12 +150,12 @@ begin
   CreateObjects;
 end;
 
-procedure TLazyRESTClientBase.CreateObjects;
+procedure TLZRESTClientBase.CreateObjects;
 begin
 
 end;
 
-destructor TLazyRESTClientBase.Destroy;
+destructor TLZRESTClientBase.Destroy;
 begin
   try
     DestroyObjects;
@@ -165,16 +164,16 @@ begin
   end;
 end;
 
-procedure TLazyRESTClientBase.DestroyObjects;
+procedure TLZRESTClientBase.DestroyObjects;
 begin
 
 end;
 
-procedure TLazyRESTClientBase.Execute(ABaseURL, AResource, ABody: string;
-  ALazyProcessRESTResponse: TLazyProcessRESTResponse;
-  ALazyBeforeRESTRequest: TLazyBeforeRESTRequest;
-  ALazyAfterRESTRequest: TLazyAfterRESTRequest; AMethod: TRESTRequestMethod;
-  ACustomData: string; AASync: TLazyAsyncState);
+procedure TLZRESTClientBase.Execute(ABaseURL, AResource, ABody: string;
+  ALazyProcessRESTResponse: TLZProcessRESTResponse;
+  ALazyBeforeRESTRequest: TLZBeforeRESTRequest;
+  ALazyAfterRESTRequest: TLZAfterRESTRequest; AMethod: TRESTRequestMethod;
+  ACustomData: string; AASync: TLZAsyncState);
 var
   LRESTClient: TRESTClient;
   LRESTRequest: TRESTRequest;
@@ -210,7 +209,7 @@ begin
   if Assigned(ALazyBeforeRESTRequest) then
     ALazyBeforeRESTRequest(LRESTRequest, ACustomData);
 
-  if not TlazyString.IsEmptyString(ABody) then
+  if not TLZString.IsEmptyString(ABody) then
   begin
     Debug('Execute', 'Body: ' + ABody);
     LRESTRequest.AddBody(ABody, CONTENTTYPE_APPLICATION_JSON);
@@ -305,29 +304,29 @@ begin
 
 end;
 
-function TLazyRESTClientBase.GetBaseURL: string;
+function TLZRESTClientBase.GetBaseURL: string;
 begin
 
 end;
 
-function TLazyRESTClientBase.ProcessURLVariables(AURL: string): string;
+function TLZRESTClientBase.ProcessURLVariables(AURL: string): string;
 begin
   Result := AURL;
 end;
 
-procedure TLazyRESTClientBase.SetDefaultAsync(const Value: boolean);
+procedure TLZRESTClientBase.SetDefaultAsync(const Value: boolean);
 begin
   FDefaultAsync := Value;
 end;
 
-procedure TLazyRESTClientBase.SetDefaults;
+procedure TLZRESTClientBase.SetDefaults;
 begin
 
 end;
 
-procedure TLazyRESTClient.Execute(AResource, ABody: string;
-  ALazyRESTResponse: TLazyRESTResponse; AMethod: TRESTRequestMethod;
-  ACustomData: string; AASync: TLazyAsyncState);
+procedure TLZRESTClient.Execute(AResource, ABody: string;
+  ALazyRESTResponse: TLZRESTResponse; AMethod: TRESTRequestMethod;
+  ACustomData: string; AASync: TLZAsyncState);
 begin
   Execute(GetBaseURL, AResource, ABody,
     procedure(ARESTRequest: TRESTRequest; ARESTResponse: TRESTResponse;
@@ -346,55 +345,50 @@ begin
     end, AMethod, ACustomData, AASync);
 end;
 
-procedure TLazyRESTClient.Get(AResource: string;
-ALazyRESTResponse: TLazyRESTResponse; ACustomData: string;
-AASync: TLazyAsyncState);
+procedure TLZRESTClient.Get(AResource: string;
+ALazyRESTResponse: TLZRESTResponse; ACustomData: string; AASync: TLZAsyncState);
 begin
   Execute(AResource, '', ALazyRESTResponse, TRESTRequestMethod.rmGET,
     ACustomData, AASync);
 end;
 
-procedure TLazyRESTClient.Post(AResource, ABody: string;
-ALazyRESTResponse: TLazyRESTResponse; ACustomData: string;
-AASync: TLazyAsyncState);
+procedure TLZRESTClient.Post(AResource, ABody: string;
+ALazyRESTResponse: TLZRESTResponse; ACustomData: string; AASync: TLZAsyncState);
 begin
   Execute(AResource, ABody, ALazyRESTResponse, TRESTRequestMethod.rmPOST,
     ACustomData, AASync);
 end;
 
-procedure TLazyRESTClient.Put(AResource, ABody: string;
-ALazyRESTResponse: TLazyRESTResponse; ACustomData: string;
-AASync: TLazyAsyncState);
+procedure TLZRESTClient.Put(AResource, ABody: string;
+ALazyRESTResponse: TLZRESTResponse; ACustomData: string; AASync: TLZAsyncState);
 begin
   Execute(AResource, ABody, ALazyRESTResponse, TRESTRequestMethod.rmPUT,
     ACustomData, AASync);
 end;
 
-procedure TLazyRESTClient.AfterRESTRequest(ARESTRequest: TRESTRequest;
+procedure TLZRESTClient.AfterRESTRequest(ARESTRequest: TRESTRequest;
 ACustomData: string);
 begin
 
 end;
 
-procedure TLazyRESTClient.BeforeRESTRequest(ARESTRequest: TRESTRequest;
+procedure TLZRESTClient.BeforeRESTRequest(ARESTRequest: TRESTRequest;
 ACustomData: string);
 begin
 
 end;
 
-procedure TLazyRESTClient.Delete(AResource: string;
-ALazyRESTResponse: TLazyRESTResponse; ACustomData: string;
-AASync: TLazyAsyncState);
+procedure TLZRESTClient.Delete(AResource: string;
+ALazyRESTResponse: TLZRESTResponse; ACustomData: string; AASync: TLZAsyncState);
 begin
   Execute(AResource, '', ALazyRESTResponse, TRESTRequestMethod.rmDELETE,
     ACustomData, AASync);
 end;
 
-{ TLazyRESTClientBasicAuth }
+{ TLZRESTClientBasicAuth }
 
-procedure TLazyRESTClientBasicAuth.AfterCreateRestClient
-  (ARESTClient: TRESTClient; ARESTRequest: TRESTRequest;
-ARESTResponse: TRESTResponse);
+procedure TLZRESTClientBasicAuth.AfterCreateRestClient(ARESTClient: TRESTClient;
+ARESTRequest: TRESTRequest; ARESTResponse: TRESTResponse);
 var
   LBasicAuth: THTTPBasicAuthenticator;
 begin
@@ -402,7 +396,7 @@ begin
   ARESTClient.Authenticator := LBasicAuth;
 end;
 
-procedure TLazyRESTClientBasicAuth.BeforeDestroyRestClient
+procedure TLZRESTClientBasicAuth.BeforeDestroyRestClient
   (ARESTClient: TRESTClient; ARESTRequest: TRESTRequest;
 ARESTResponse: TRESTResponse);
 begin
@@ -413,33 +407,33 @@ begin
   end;
 end;
 
-procedure TLazyRESTClientBasicAuth.SetPassword(const Value: string);
+procedure TLZRESTClientBasicAuth.SetPassword(const Value: string);
 begin
   FPassword := Value;
 end;
 
-procedure TLazyRESTClientBasicAuth.SetUsername(const Value: string);
+procedure TLZRESTClientBasicAuth.SetUsername(const Value: string);
 begin
   FUsername := Value;
 end;
 
-{ TLazyRESTClientOAuth2 }
+{ TLZRESTClientOAuth2 }
 
-procedure TLazyRESTClientOAuth2.Authenticate(AASync: TLazyAsyncState);
+procedure TLZRESTClientOAuth2.Authenticate(AASync: TLZAsyncState);
 var
   LURL: string;
 begin
-  if TlazyString.IsEmptyString(Token.AuthToken) or
-    TlazyString.IsEmptyString(Token.RefreshToken) then
+  if TLZString.IsEmptyString(Token.AuthToken) or
+    TLZString.IsEmptyString(Token.RefreshToken) then
   begin
-    LURL := Connection.AuthorizeEndPoint + '?client_id=' + Connection.ClientId +
+    LURL := GetConnection.AuthorizeEndPoint + '?client_id=' + GetConnection.ClientId +
       '&response_type=code' + '&redirect_uri=' + TNetEncoding.URL.Encode
-      (Connection.RedirectURL) + '&response_mode=query' + '&state=1' +
+      (GetConnection.RedirectURL) + '&response_mode=query' + '&state=1' +
       '&scope=openid';
     LURL := ProcessURLVariables(LURL);
     if Assigned(FOnLazyBrowserLoginRequest) then
     begin
-      FOnLazyBrowserLoginRequest(Self, LURL, Connection, Token);
+      FOnLazyBrowserLoginRequest(Self, LURL, GetConnection, Token);
     end
     else
     begin
@@ -455,11 +449,11 @@ begin
 
 end;
 
-procedure TLazyRESTClientOAuth2.BeforeRESTRequest(ARESTRequest: TRESTRequest;
+procedure TLZRESTClientOAuth2.BeforeRESTRequest(ARESTRequest: TRESTRequest;
 ACustomData: string);
 begin
   inherited;
-  if not TlazyString.IsEmptyString(Token.AuthToken) then
+  if not TLZString.IsEmptyString(Token.AuthToken) then
   begin
     ARESTRequest.Params.AddItem('Authorization', 'Bearer ' + Token.AuthToken,
       TRESTRequestParameterKind.pkHTTPHEADER, [poDoNotEncode]);
@@ -468,19 +462,19 @@ begin
     TRESTRequestParameterKind.pkHTTPHEADER);
 end;
 
-procedure TLazyRESTClientOAuth2.ClearAuthentication;
+procedure TLZRESTClientOAuth2.ClearAuthentication;
 begin
   Token.Reset;
 end;
 
-procedure TLazyRESTClientOAuth2.CreateObjects;
+procedure TLZRESTClientOAuth2.CreateObjects;
 begin
   inherited;
   FConnection := GetOAuth2ConnectionClass.Create;
-  FToken := TLazyOAuth2Token.Create;
+  FToken := TLZOAuth2Token.Create;
 end;
 
-procedure TLazyRESTClientOAuth2.DestroyObjects;
+procedure TLZRESTClientOAuth2.DestroyObjects;
 begin
   try
     FreeAndNil(FConnection);
@@ -490,35 +484,39 @@ begin
   end;
 end;
 
-function TLazyRESTClientOAuth2.GetAuthenticated: boolean;
+function TLZRESTClientOAuth2.GetAuthenticated: boolean;
 begin
-  Result := (not TlazyString.IsEmptyString(Token.AuthToken)) and
+  Result := (not TLZString.IsEmptyString(Token.AuthToken)) and
     (Token.ExpiresIn >= Now);
 end;
 
-function TLazyRESTClientOAuth2.GetBaseURL: string;
+function TLZRESTClientOAuth2.GetBaseURL: string;
 begin
   Result := FConnection.RESTEndPoint;
 end;
 
-function TLazyRESTClientOAuth2.GetOAuth2ConnectionClass
-  : TLazyOAuth2ConnectionClass;
+function TLZRESTClientOAuth2.GetConnection: TLZOAuth2Connection;
 begin
-  Result := TLazyOAuth2Connection;
+  Result := FConnection;
 end;
 
-function TLazyRESTClientOAuth2.ProcessURLVariables(AURL: string): string;
+function TLZRESTClientOAuth2.GetOAuth2ConnectionClass: TLZOAuth2ConnectionClass;
+begin
+  Result := TLZOAuth2Connection;
+end;
+
+function TLZRESTClientOAuth2.ProcessURLVariables(AURL: string): string;
 begin
   Result := inherited;
   Result := FConnection.ProcessURLVariables(Result);
   Debug('ProcessURLVariables', AURL + ' => ' + Result);
 end;
 
-procedure TLazyRESTClientOAuth2.RequestToken(AASync: TLazyAsyncState);
+procedure TLZRESTClientOAuth2.RequestToken(AASync: TLZAsyncState);
 var
-  LProcess: TLazyProcessRESTResponse;
-  LBefore: TLazyBeforeRESTRequest;
-  LAfter: TLazyAfterRESTRequest;
+  LProcess: TLZProcessRESTResponse;
+  LBefore: TLZBeforeRESTRequest;
+  LAfter: TLZAfterRESTRequest;
 begin
   LProcess :=
       procedure(ARESTRequest: TRESTRequest; ARESTResponse: TRESTResponse;
@@ -547,45 +545,45 @@ begin
 
   LBefore := procedure(ARESTRequest: TRESTRequest; ACustomData: string)
     begin
-      if TlazyString.IsEmptyString(Token.AuthToken) or
-        TlazyString.IsEmptyString(Token.RefreshToken) then
+      if TLZString.IsEmptyString(Token.AuthToken) or
+        TLZString.IsEmptyString(Token.RefreshToken) then
       begin
 
-        ARESTRequest.Params.AddItem('client_id', Connection.ClientId,
+        ARESTRequest.Params.AddItem('client_id', GetConnection.ClientId,
           TRESTRequestParameterKind.pkQUERY);
 
         ARESTRequest.Params.AddItem('grant_type', 'authorization_code',
           TRESTRequestParameterKind.pkREQUESTBODY);
-        ARESTRequest.Params.AddItem('client_id', Connection.ClientId,
+        ARESTRequest.Params.AddItem('client_id', GetConnection.ClientId,
           TRESTRequestParameterKind.pkREQUESTBODY);
         ARESTRequest.Params.AddItem('code', Token.AuthCode,
           TRESTRequestParameterKind.pkREQUESTBODY);
-        ARESTRequest.Params.AddItem('client_secret', Connection.ClientSecret,
+        ARESTRequest.Params.AddItem('client_secret', GetConnection.ClientSecret,
           TRESTRequestParameterKind.pkREQUESTBODY);
-        ARESTRequest.Params.AddItem('scope', Connection.Scope,
+        ARESTRequest.Params.AddItem('scope', GetConnection.Scope,
           TRESTRequestParameterKind.pkREQUESTBODY);
-        ARESTRequest.Params.AddItem('redirect_uri', Connection.RedirectURL,
+        ARESTRequest.Params.AddItem('redirect_uri', GetConnection.RedirectURL,
           TRESTRequestParameterKind.pkREQUESTBODY);
       end
       else
       begin
 
         // Use refresh token
-        ARESTRequest.Params.AddItem('client_id', Connection.ClientId,
+        ARESTRequest.Params.AddItem('client_id', GetConnection.ClientId,
           TRESTRequestParameterKind.pkQUERY);
         ARESTRequest.Params.AddItem('code', Token.AuthCode,
           TRESTRequestParameterKind.pkREQUESTBODY);
         ARESTRequest.Params.AddItem('grant_type', 'refresh_token',
           TRESTRequestParameterKind.pkREQUESTBODY);
-        ARESTRequest.Params.AddItem('client_id', Connection.ClientId,
+        ARESTRequest.Params.AddItem('client_id', GetConnection.ClientId,
           TRESTRequestParameterKind.pkREQUESTBODY);
-        ARESTRequest.Params.AddItem('client_secret', Connection.ClientSecret,
+        ARESTRequest.Params.AddItem('client_secret', GetConnection.ClientSecret,
           TRESTRequestParameterKind.pkREQUESTBODY);
         ARESTRequest.Params.AddItem('refresh_token', Token.RefreshToken,
           TRESTRequestParameterKind.pkREQUESTBODY);
-        ARESTRequest.Params.AddItem('scope', Connection.Scope,
+        ARESTRequest.Params.AddItem('scope', GetConnection.Scope,
           TRESTRequestParameterKind.pkREQUESTBODY);
-        ARESTRequest.Params.AddItem('redirect_uri', Connection.RedirectURL,
+        ARESTRequest.Params.AddItem('redirect_uri', GetConnection.RedirectURL,
           TRESTRequestParameterKind.pkREQUESTBODY);
       end;
     end;
@@ -594,18 +592,18 @@ begin
     begin
     end;
 
-  inherited Execute(Connection.TokenEndPoint, '', '', LProcess, LBefore, LAfter,
+  inherited Execute(GetConnection.TokenEndPoint, '', '', LProcess, LBefore, LAfter,
     TRESTRequestMethod.rmPOST, '', AASync);
 
 end;
 
-procedure TLazyRESTClientOAuth2.SetOnLazyBrowserLoginRequest
+procedure TLZRESTClientOAuth2.SetOnLazyBrowserLoginRequest
   (const Value: TOnLazyBrowserLoginRequest);
 begin
   FOnLazyBrowserLoginRequest := Value;
 end;
 
-procedure TLazyRESTClientOAuth2.SetOnLazyOAuth2TokenRequestComplete
+procedure TLZRESTClientOAuth2.SetOnLazyOAuth2TokenRequestComplete
   (const Value: TOnLazyOAuth2TokenRequestComplete);
 begin
   FOnLazyOAuth2TokenRequestComplete := Value;
