@@ -4,44 +4,22 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, REST.Types, REST.client,
-  REST.Authenticator.Basic, System.JSON, System.Generics.Collections;
+  REST.Authenticator.Basic, System.JSON, System.Generics.Collections,
+  Lazy.Types, Lazy.Log;
 
 const
   DUO_Line_Seperator = #10;
 
 type
 
-  TDuoLogLevel = (logDebug, logInfo, logError);
-  TDuoLogMessage = procedure(ASender: TObject; AMessage: string;
-    ALogLevel: TDuoLogLevel) of object;
   TOnDuoNotifyEvent = procedure(ASender: TObject; AMessage: string;
     ASuccess: boolean) of object;
   TOnDuoNotifyProc = reference to procedure(AMessage: string;
     ASuccess: boolean);
 
-  TDuoBase = class(TObject)
-  private
-    FOnLog: TDuoLogMessage;
-    procedure SetOnLog(const Value: TDuoLogMessage);
-  public
-    procedure Log(AMessage: string);
-    procedure Debug(AProcedure: string; AMessage: string);
-    procedure Error(AMessage: string); overload;
-    procedure Error(E: Exception; AMessage: string = ''); overload;
-    property OnLog: TDuoLogMessage read FOnLog write SetOnLog;
-  end;
+  TDuoBase = class(TLazyObject);
 
-  TDuoBaseComponent = class(TComponent)
-  private
-    FOnLog: TDuoLogMessage;
-    procedure SetOnLog(const Value: TDuoLogMessage);
-  public
-    procedure Log(AMessage: string);
-    procedure Debug(AProcedure: string; AMessage: string);
-    procedure Error(AMessage: string); overload;
-    procedure Error(E: Exception; AMessage: string = ''); overload;
-    property OnLog: TDuoLogMessage read FOnLog write SetOnLog;
-  end;
+  TDuoBaseComponent = class(TLazyComponent);
 
   TDuoModel = class(TDuoBase)
   public
@@ -290,38 +268,6 @@ begin
   Debug('EncludeURL', Format('%s = %s', [AValue, Result]));
 end;
 
-{ TDuoBase }
-
-procedure TDuoBase.Debug(AProcedure, AMessage: string);
-begin
-  if Assigned(FOnLog) then
-    FOnLog(Self, Format('[%s] %s', [AProcedure, AMessage]), logDebug);
-end;
-
-procedure TDuoBase.Error(AMessage: string);
-begin
-  if Assigned(FOnLog) then
-    FOnLog(Self, Format('%s', [AMessage]), logError);
-end;
-
-procedure TDuoBase.Error(E: Exception; AMessage: string);
-begin
-  if Assigned(FOnLog) then
-    FOnLog(Self, Format('Exception: %s , Message: %s', [E.Message, AMessage]),
-      logError);
-end;
-
-procedure TDuoBase.Log(AMessage: string);
-begin
-  if Assigned(FOnLog) then
-    FOnLog(Self, Format('%s', [AMessage]), logInfo);
-end;
-
-procedure TDuoBase.SetOnLog(const Value: TDuoLogMessage);
-begin
-  FOnLog := Value;
-end;
-
 { TDuoNetworkTools }
 
 class function TDuoNetworkTools.GetHostname: string;
@@ -470,38 +416,6 @@ begin
     AValue := AMethCreate.Invoke(instanceType.MetaclassType, []);
     Result := AValue.AsType<T>;
   end;
-end;
-
-{ TDuoBaseComponent }
-
-procedure TDuoBaseComponent.Debug(AProcedure, AMessage: string);
-begin
-  if Assigned(FOnLog) then
-    FOnLog(Self, Format('[%s] %s', [AProcedure, AMessage]), logDebug);
-end;
-
-procedure TDuoBaseComponent.Error(AMessage: string);
-begin
-  if Assigned(FOnLog) then
-    FOnLog(Self, Format('%s', [AMessage]), logError);
-end;
-
-procedure TDuoBaseComponent.Error(E: Exception; AMessage: string);
-begin
-  if Assigned(FOnLog) then
-    FOnLog(Self, Format('Exception: %s , Message: %s', [E.Message, AMessage]),
-      logError);
-end;
-
-procedure TDuoBaseComponent.Log(AMessage: string);
-begin
-  if Assigned(FOnLog) then
-    FOnLog(Self, Format('%s', [AMessage]), logInfo);
-end;
-
-procedure TDuoBaseComponent.SetOnLog(const Value: TDuoLogMessage);
-begin
-  FOnLog := Value;
 end;
 
 end.

@@ -34,7 +34,7 @@ type
 implementation
 
 uses
-  XSBuiltIns, System.DateUtils, SysUtils, IdGlobalProtocols;
+  XSBuiltIns, System.DateUtils, SysUtils, IdGlobal, IdGlobalProtocols;
 
 class function TIso8601.DateFromIso8601(const Value: string): TDate;
 begin
@@ -105,12 +105,14 @@ end;
 
 class function TUtc.FromUtc(const Value: TDateTime): TDateTime;
 begin
-  Result := Value - TimeZoneBias;
+  // Result := Value - TimeZoneBias;
+  Result := UTCTimeToLocalTime(Value);
 end;
 
 class function TUtc.ToUtc(const Value: TDateTime): TDateTime;
 begin
-  Result := Value + TimeZoneBias;
+  // Result := Value + TimeZoneBias;
+  Result := LocalTimeToUTCTime(Value);
 end;
 
 class function TUtc.UtcNow: TDateTime;

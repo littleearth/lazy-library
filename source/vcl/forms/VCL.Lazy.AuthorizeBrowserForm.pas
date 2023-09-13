@@ -24,7 +24,7 @@ type
 implementation
 
 uses
-  System.NetEncoding, System.Net.URLClient, Lazy.Utils;
+  System.NetEncoding, System.Net.URLClient, VCL.Lazy.Utils;
 
 {$R *.dfm}
 
@@ -46,7 +46,7 @@ begin
   else
   begin
     AMessage := FMessage;
-    if IsEmptyString(AMessage) then
+    if TLazyString.IsEmptyString(AMessage) then
       AMessage := 'Request failed or cancelled';
 
   end;

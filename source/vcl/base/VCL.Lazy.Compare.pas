@@ -2,12 +2,11 @@ unit VCL.Lazy.Compare;
 
 interface
 
-uses Classes, Windows, SysUtils, Lazy.Utils, Lazy.Types, Lazy.Compare;
+uses Classes, Windows, SysUtils, VCL.Lazy.Utils, Lazy.Types, Lazy.Compare;
 
 type
   TCompare = class(TCompareBase)
   public
-    function CompareVersion(AVersion1: string; AVersion2: string): integer;
     function GetFileVersion(AFilename: TFileName): string;
     function GetFileProductVersion(AFilename: TFileName): string;
   end;
@@ -55,56 +54,6 @@ begin
   end;
 end;
 
-function TCompare.CompareVersion(AVersion1, AVersion2: string): integer;
-var
-  LVersionDetails: TApplicationVersionDetails;
-  LVersion1, LVersion2: string;
-  LVersion1Current, LVersion2Current: boolean;
-begin
-  Result := -9999;
-  LVersion1 := AVersion1;
-  LVersion2 := AVersion2;
-  Log('Version1: ' + LVersion1 + ', Version2: ' + LVersion2);
-  LVersionDetails := TApplicationVersionDetails.Create(nil);
-  try
-
-    LVersionDetails.Version := LVersion1;
-    LVersion1 := LVersionDetails.AsString;
-
-    LVersionDetails.Reset;
-    LVersionDetails.Version := LVersion2;
-    LVersion2 := LVersionDetails.AsString;
-
-    LVersionDetails.Reset;
-    LVersionDetails.Version := LVersion2;
-    LVersion2Current := LVersionDetails.IsCurrent(LVersion1);
-
-    LVersionDetails.Reset;
-    LVersionDetails.Version := LVersion1;
-    LVersion1Current := LVersionDetails.IsCurrent(LVersion2);
-
-    Log('Version1: ' + LVersion1 + ', Version2: ' + LVersion2);
-
-    if LVersion1Current and LVersion2Current then
-    begin
-      Result := 0;
-    end
-    else
-    begin
-      if LVersion1Current and (not LVersion2Current) then
-      begin
-        Result := -1;
-      end;
-      if LVersion2Current and (not LVersion1Current) then
-      begin
-        Result := 1;
-      end;
-    end;
-  finally
-    FreeAndNil(LVersionDetails);
-  end;
-end;
-
 { TCompareConsole }
 
 function TCompareConsole.CheckCommandParameter(var AMessage: string;
@@ -116,7 +65,7 @@ begin
   AMessage := '';
   if Result then
   begin
-    if GetApplicationParameters('/MODE', LValue) then
+    if TLazySystem.GetApplicationParameters('/MODE', LValue) then
     begin
       AMode := GetCompareMode(LValue);
     end
@@ -128,7 +77,7 @@ begin
   end;
   if Result then
   begin
-    if not GetApplicationParameters('/VALUE1', AValue1) then
+    if not TLazySystem.GetApplicationParameters('/VALUE1', AValue1) then
     begin
       Result := False;
       AMessage := GetUsage;
@@ -136,7 +85,7 @@ begin
   end;
   if Result then
   begin
-    if not GetApplicationParameters('/VALUE2', AValue2) then
+    if not TLazySystem.GetApplicationParameters('/VALUE2', AValue2) then
     begin
       case AMode of
         vcGetMD5, vcGetVersionProduct, vcGetVersionFile:
@@ -171,7 +120,7 @@ begin
       vcVersionFile:
         begin
           LValue1 := GetFileVersion(LValue1);
-          if IsValidFileName(LValue2) and FileExists(LValue2) then
+          if TLazyFile.IsValidFileName(LValue2) and FileExists(LValue2) then
           begin
             LValue2 := GetFileVersion(LValue2);
           end;
@@ -182,7 +131,7 @@ begin
       vcMD5File:
         begin
           LValue1 := GenerateMD5(LValue1);
-          if IsValidFileName(LValue2) and FileExists(LValue2) then
+          if TLazyFile.IsValidFileName(LValue2) and FileExists(LValue2) then
           begin
             LValue2 := GenerateMD5(LValue2);
           end;

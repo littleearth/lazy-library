@@ -53,7 +53,7 @@ var
 begin
   if FileExists(AFileName) then
     DeleteFile(AFileName);
-  if not IsEmptyString(AMD5) then
+  if not TLazyString.IsEmptyString(AMD5) then
   begin
     LFile := TStringList.Create;
     try
@@ -94,7 +94,7 @@ begin
   Result := False;
   LMD5FileName := GetMD5FileName(AFileName);
   LMD51 := LoadMD5(LMD5FileName);
-  if not IsEmptyString(LMD51) then
+  if not TLazyString.IsEmptyString(LMD51) then
   begin
     LMD52 := GenerateMD5(AFileName);
     Result := SameText(LMD51, LMD52);

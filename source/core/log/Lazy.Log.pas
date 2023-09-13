@@ -3,14 +3,14 @@
   Author: Tristan Marlow
   Purpose: Simple log object; create descendant objects to incorporate into
   other logging systems or expand logging
-  
+
   - See Lazy.Log.Basic and Lazy.Log.FileStream for examples
 
   ----------------------------------------------------------------------------
   Copyright (c) 2023 Tristan David Marlow
   Copyright (c) 2023 Little Earth Solutions
 
-  
+
   ----------------------------------------------------------------------------; }
 unit Lazy.Log;
 
@@ -26,11 +26,10 @@ type
     procedure SeTLazyLogLevel(const Value: TLazyLogLevel);
   protected
     procedure OutputToDebugger(const AMessage: String);
-    function GetLogLevelText(ALogLevel: TLazyLogLevel): string;
     function IsLogLevel(ALogLevel: TLazyLogLevel): boolean;
   public
     constructor Create;
-    class function GetLogTypeString(ALogType: TLazyLogLevel): string;
+    class function GetLogLevelText(ALogLevel: TLazyLogLevel): string;
     procedure Log(ASender: TObject; AMessage: string); virtual;
     procedure Debug(ASender: TObject; AProcedure: string;
       AMessage: string); virtual;
@@ -91,7 +90,7 @@ begin
 {$ENDIF}
 end;
 
-function TLazyLog.GetLogLevelText(ALogLevel: TLazyLogLevel): string;
+class function TLazyLog.GetLogLevelText(ALogLevel: TLazyLogLevel): string;
 begin
   case ALogLevel of
     logDebug:
@@ -104,19 +103,6 @@ begin
     begin
       Result := 'ERROR';
     end;
-  end;
-end;
-
-class function TLazyLog.GetLogTypeString(ALogType: TLazyLogLevel): string;
-begin
-  Result := 'INFORMATION';
-  case ALogType of
-    logError:
-      Result := 'ERROR';
-    logWarning:
-      Result := 'WARNING';
-    logDebug:
-      Result := 'DEBUG';
   end;
 end;
 

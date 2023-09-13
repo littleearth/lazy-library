@@ -210,7 +210,7 @@ begin
   if Assigned(ALazyBeforeRESTRequest) then
     ALazyBeforeRESTRequest(LRESTRequest, ACustomData);
 
-  if not IsEmptyString(ABody) then
+  if not TlazyString.IsEmptyString(ABody) then
   begin
     Debug('Execute', 'Body: ' + ABody);
     LRESTRequest.AddBody(ABody, CONTENTTYPE_APPLICATION_JSON);
@@ -429,7 +429,8 @@ procedure TLazyRESTClientOAuth2.Authenticate(AASync: TLazyAsyncState);
 var
   LURL: string;
 begin
-  if IsEmptyString(Token.AuthToken) or IsEmptyString(Token.RefreshToken) then
+  if TlazyString.IsEmptyString(Token.AuthToken) or
+    TlazyString.IsEmptyString(Token.RefreshToken) then
   begin
     LURL := Connection.AuthorizeEndPoint + '?client_id=' + Connection.ClientId +
       '&response_type=code' + '&redirect_uri=' + TNetEncoding.URL.Encode
@@ -458,7 +459,7 @@ procedure TLazyRESTClientOAuth2.BeforeRESTRequest(ARESTRequest: TRESTRequest;
 ACustomData: string);
 begin
   inherited;
-  if not IsEmptyString(Token.AuthToken) then
+  if not TlazyString.IsEmptyString(Token.AuthToken) then
   begin
     ARESTRequest.Params.AddItem('Authorization', 'Bearer ' + Token.AuthToken,
       TRESTRequestParameterKind.pkHTTPHEADER, [poDoNotEncode]);
@@ -491,7 +492,8 @@ end;
 
 function TLazyRESTClientOAuth2.GetAuthenticated: boolean;
 begin
-  Result := (not IsEmptyString(Token.AuthToken)) and (Token.ExpiresIn >= Now);
+  Result := (not TlazyString.IsEmptyString(Token.AuthToken)) and
+    (Token.ExpiresIn >= Now);
 end;
 
 function TLazyRESTClientOAuth2.GetBaseURL: string;
@@ -545,8 +547,8 @@ begin
 
   LBefore := procedure(ARESTRequest: TRESTRequest; ACustomData: string)
     begin
-      if IsEmptyString(Token.AuthToken) or IsEmptyString(Token.RefreshToken)
-      then
+      if TlazyString.IsEmptyString(Token.AuthToken) or
+        TlazyString.IsEmptyString(Token.RefreshToken) then
       begin
 
         ARESTRequest.Params.AddItem('client_id', Connection.ClientId,

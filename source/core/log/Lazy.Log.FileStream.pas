@@ -107,7 +107,7 @@ begin
       if Assigned(FLog) then
       begin
         LMessage := Format('%s;%s;%s', [FormatDateTime('yyyy-mm-dd hh:nn:ss',
-          Now), GetLogTypeString(ALogLevel), AMessage]) + #13#10;
+          Now), GetLogLevelText(ALogLevel), AMessage]) + #13#10;
         FLog.AppendStr(LMessage);
       end;
     finally

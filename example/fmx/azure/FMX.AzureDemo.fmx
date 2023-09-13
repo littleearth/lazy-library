@@ -1,0 +1,527 @@
+object frmAzureDemo: TfrmAzureDemo
+  Left = 0
+  Top = 0
+  Caption = 'Azure REST Management Demo'
+  ClientHeight = 672
+  ClientWidth = 640
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object LabelRaw: TLabel
+    Align = Top
+    Position.Y = 223.000000000000000000
+    Size.Width = 640.000000000000000000
+    Size.Height = 17.000000000000000000
+    Size.PlatformDefault = False
+    Text = 'Raw Response'
+    TabOrder = 0
+  end
+  object GridPanelLayout1: TGridPanelLayout
+    Align = Bottom
+    Position.Y = 622.000000000000000000
+    Size.Width = 640.000000000000000000
+    Size.Height = 50.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 6
+    ColumnCollection = <
+      item
+        Value = 50.000000000000000000
+      end
+      item
+        Value = 50.000000000000000000
+      end>
+    ControlCollection = <>
+    RowCollection = <
+      item
+        Value = 100.000000000000000000
+      end>
+  end
+  object GridPanelLayout2: TGridPanelLayout
+    Align = Top
+    Position.Y = 82.000000000000000000
+    Size.Width = 640.000000000000000000
+    Size.Height = 141.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 7
+    ColumnCollection = <
+      item
+        Value = 50.000000000000000000
+      end
+      item
+        Value = 50.000000000000000000
+      end>
+    ControlCollection = <
+      item
+        Column = 0
+        Control = btnLogin
+        Row = 0
+      end
+      item
+        Column = 1
+        Control = LabelAuthStatus
+        Row = 0
+      end
+      item
+        Column = 0
+        Control = btnGetSubscriptions
+        Row = 2
+      end
+      item
+        Column = 1
+        Control = GridPanelLayout3
+        Row = 2
+      end
+      item
+        Column = 0
+        Control = GridPanelLayout4
+        Row = 3
+      end
+      item
+        Column = 1
+        Control = GridPanelLayout5
+        Row = 3
+      end
+      item
+        Column = 1
+        Control = GridPanelLayout6
+        Row = 1
+      end
+      item
+        Column = 0
+        Control = GridPanelLayout7
+        Row = 1
+      end>
+    RowCollection = <
+      item
+        Value = 22.684869338237480000
+      end
+      item
+        Value = 26.372245127992170000
+      end
+      item
+        Value = 25.942885533770350000
+      end
+      item
+        Value = 25.000000000000000000
+      end
+      item
+        SizeStyle = Auto
+      end>
+    object btnLogin: TButton
+      Action = ActionLogin
+      Align = Client
+      Enabled = True
+      ImageIndex = -1
+      Size.Width = 320.000000000000000000
+      Size.Height = 31.985666275024410000
+      Size.PlatformDefault = False
+      TabOrder = 2
+    end
+    object LabelAuthStatus: TLabel
+      Align = Client
+      Size.Width = 320.000000000000000000
+      Size.Height = 31.985666275024410000
+      Size.PlatformDefault = False
+      Text = 'Not Logged In'
+      TabOrder = 0
+    end
+    object btnGetSubscriptions: TButton
+      Action = ActionGetSubscriptions
+      Align = Client
+      Enabled = True
+      ImageIndex = -1
+      Size.Width = 320.000000000000000000
+      Size.Height = 36.579467773437500000
+      Size.PlatformDefault = False
+      TabOrder = 1
+    end
+    object GridPanelLayout3: TGridPanelLayout
+      Align = Client
+      Size.Width = 320.000000000000000000
+      Size.Height = 36.579467773437500000
+      Size.PlatformDefault = False
+      TabOrder = 8
+      ColumnCollection = <
+        item
+          Value = 50.000000000000000000
+        end
+        item
+          Value = 50.000000000000000000
+        end>
+      ControlCollection = <
+        item
+          Column = 0
+          Control = editSubscription
+          Row = 0
+        end
+        item
+          Column = 1
+          Control = btnGetResourceGroups
+          Row = 0
+        end>
+      RowCollection = <
+        item
+          Value = 100.000000000000000000
+        end>
+      object editSubscription: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Client
+        TabOrder = 0
+        Hint = 'Enter subscription ID'
+        Size.Width = 160.000000000000000000
+        Size.Height = 36.579467773437500000
+        Size.PlatformDefault = False
+      end
+      object btnGetResourceGroups: TButton
+        Action = ActionGetResourceGroups
+        Align = Client
+        Enabled = True
+        ImageIndex = -1
+        Size.Width = 160.000000000000000000
+        Size.Height = 36.579467773437500000
+        Size.PlatformDefault = False
+        TabOrder = 1
+      end
+    end
+    object GridPanelLayout4: TGridPanelLayout
+      Align = Client
+      Size.Width = 320.000000000000000000
+      Size.Height = 35.250000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 7
+      ColumnCollection = <
+        item
+          Value = 50.000000000000000000
+        end
+        item
+          Value = 50.000000000000000000
+        end>
+      ControlCollection = <
+        item
+          Column = 0
+          Control = editResourceGroup
+          Row = 0
+        end
+        item
+          Column = 1
+          Control = btnGetVMs
+          Row = 0
+        end>
+      RowCollection = <
+        item
+          Value = 100.000000000000000000
+        end>
+      object editResourceGroup: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Client
+        TabOrder = 0
+        Hint = 'Enter resource group'
+        Size.Width = 160.000000000000000000
+        Size.Height = 35.250000000000000000
+        Size.PlatformDefault = False
+      end
+      object btnGetVMs: TButton
+        Action = ActionGetVirtualMachines
+        Align = Client
+        Enabled = True
+        ImageIndex = -1
+        Size.Width = 160.000000000000000000
+        Size.Height = 35.250000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+      end
+    end
+    object GridPanelLayout5: TGridPanelLayout
+      Align = Client
+      Size.Width = 320.000000000000000000
+      Size.Height = 35.250000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+      ColumnCollection = <
+        item
+          Value = 50.000000000000000000
+        end
+        item
+          Value = 50.000000000000000000
+        end>
+      ControlCollection = <
+        item
+          Column = 0
+          Control = editVM
+          Row = 0
+        end
+        item
+          Column = 1
+          Control = btnGetMetrics
+          Row = 0
+        end>
+      RowCollection = <
+        item
+          Value = 100.000000000000000000
+        end>
+      object editVM: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Client
+        TabOrder = 0
+        Hint = 'Enter virtual machine name'
+        Size.Width = 160.000000000000000000
+        Size.Height = 35.250000000000000000
+        Size.PlatformDefault = False
+      end
+      object btnGetMetrics: TButton
+        Action = ActionGetMetrics
+        Align = Client
+        Enabled = True
+        ImageIndex = -1
+        Size.Width = 160.000000000000000000
+        Size.Height = 35.250000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+      end
+    end
+    object GridPanelLayout6: TGridPanelLayout
+      Align = Client
+      Size.Width = 320.000000000000000000
+      Size.Height = 37.184867858886720000
+      Size.PlatformDefault = False
+      TabOrder = 9
+      ColumnCollection = <
+        item
+          Value = 50.000996041890470000
+        end
+        item
+          Value = 49.999003958109530000
+        end>
+      ControlCollection = <
+        item
+          Column = 0
+          Control = Label2
+          Row = 0
+        end
+        item
+          Column = 1
+          Control = editRefreshToken
+          Row = 0
+        end>
+      RowCollection = <
+        item
+          Value = 100.000000000000000000
+        end>
+      object Label2: TLabel
+        Align = Client
+        Size.Width = 160.003189086914100000
+        Size.Height = 37.184867858886720000
+        Size.PlatformDefault = False
+        Text = 'Refresh'
+        TabOrder = 8
+      end
+      object editRefreshToken: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Client
+        TabOrder = 7
+        Size.Width = 159.996810913085900000
+        Size.Height = 37.184867858886720000
+        Size.PlatformDefault = False
+      end
+    end
+    object GridPanelLayout7: TGridPanelLayout
+      Align = Client
+      Size.Width = 320.000000000000000000
+      Size.Height = 37.184867858886720000
+      Size.PlatformDefault = False
+      TabOrder = 10
+      ColumnCollection = <
+        item
+          Value = 50.000000000000000000
+        end
+        item
+          Value = 50.000000000000000000
+        end>
+      ControlCollection = <
+        item
+          Column = 0
+          Control = Label1
+          Row = 0
+        end
+        item
+          Column = 1
+          Control = editAccessToken
+          Row = 0
+        end>
+      RowCollection = <
+        item
+          Value = 100.000000000000000000
+        end>
+      object Label1: TLabel
+        Align = Client
+        Size.Width = 160.000000000000000000
+        Size.Height = 37.184867858886720000
+        Size.PlatformDefault = False
+        Text = 'Access'
+        TabOrder = 9
+      end
+      object editAccessToken: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Client
+        TabOrder = 7
+        Size.Width = 160.000000000000000000
+        Size.Height = 37.184867858886720000
+        Size.PlatformDefault = False
+      end
+    end
+  end
+  object memoLog: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = Client
+    Locked = True
+    Size.Width = 640.000000000000000000
+    Size.Height = 382.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    Viewport.Width = 636.000000000000000000
+    Viewport.Height = 378.000000000000000000
+  end
+  object GridPanelLayout8: TGridPanelLayout
+    Align = Top
+    Size.Width = 640.000000000000000000
+    Size.Height = 82.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 9
+    ColumnCollection = <
+      item
+        Value = 50.000000000000000000
+      end
+      item
+        Value = 50.000000000000000000
+      end>
+    ControlCollection = <
+      item
+        Column = 0
+        Control = Label3
+        Row = 0
+      end
+      item
+        Column = 1
+        Control = editTennantId
+        Row = 0
+      end
+      item
+        Column = 0
+        Control = Label4
+        Row = 1
+      end
+      item
+        Column = 1
+        Control = editClientID
+        Row = 1
+      end
+      item
+        Column = 0
+        Control = Label5
+        Row = 2
+      end
+      item
+        Column = 1
+        Control = editClientSecret
+        Row = 2
+      end>
+    RowCollection = <
+      item
+        Value = 33.641939324346030000
+      end
+      item
+        Value = 33.358060675653970000
+      end
+      item
+        Value = 32.999999999999990000
+      end>
+    object Label3: TLabel
+      Align = Client
+      Size.Width = 320.000000000000000000
+      Size.Height = 27.586389541625980000
+      Size.PlatformDefault = False
+      Text = 'TenantId'
+      TabOrder = 13
+    end
+    object editTennantId: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Client
+      TabOrder = 2
+      Size.Width = 320.000000000000000000
+      Size.Height = 27.586389541625980000
+      Size.PlatformDefault = False
+    end
+    object Label4: TLabel
+      Align = Client
+      Size.Width = 320.000000000000000000
+      Size.Height = 27.353609085083010000
+      Size.PlatformDefault = False
+      Text = 'ClientId'
+      TabOrder = 12
+    end
+    object editClientID: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Client
+      TabOrder = 1
+      Size.Width = 320.000000000000000000
+      Size.Height = 27.353609085083010000
+      Size.PlatformDefault = False
+    end
+    object Label5: TLabel
+      Align = Client
+      Size.Width = 320.000000000000000000
+      Size.Height = 27.060001373291020000
+      Size.PlatformDefault = False
+      Text = 'Client secret'
+      TabOrder = 11
+    end
+    object editClientSecret: TEdit
+      Touch.InteractiveGestures = [LongTap, DoubleTap]
+      Align = Client
+      TabOrder = 0
+      Password = True
+      Size.Width = 320.000000000000000000
+      Size.Height = 27.060001373291020000
+      Size.PlatformDefault = False
+    end
+  end
+  object TimerLog: TTimer
+    OnTimer = TimerLogTimer
+    Left = 152
+    Top = 348
+  end
+  object ActionList: TActionList
+    Left = 96
+    Top = 256
+    object ActionGetSubscriptions: TAction
+      Text = 'Get subscriptions'
+      OnExecute = ActionGetSubscriptionsExecute
+      OnUpdate = ActionIsAuthenticatedUpdate
+    end
+    object ActionGetResourceGroups: TAction
+      Text = 'Get resource groups'
+      OnExecute = ActionGetResourceGroupsExecute
+      OnUpdate = ActionIsAuthenticatedUpdate
+    end
+    object ActionGetVirtualMachines: TAction
+      Text = 'Get virtual machines'
+      OnExecute = ActionGetVirtualMachinesExecute
+      OnUpdate = ActionIsAuthenticatedUpdate
+    end
+    object ActionGetMetrics: TAction
+      Text = 'Get metrics'
+      OnExecute = ActionGetMetricsExecute
+      OnUpdate = ActionIsAuthenticatedUpdate
+    end
+    object ActionLogin: TAction
+      Text = 'Log in'
+      OnExecute = ActionLoginExecute
+      OnUpdate = ActionLoginUpdate
+    end
+  end
+end

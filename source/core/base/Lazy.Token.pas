@@ -117,12 +117,9 @@ end;
 
 procedure TLazyToken.Split;
 var
-  Start: integer;
-  // Idx: integer;
   SourceArray: TArray<string>;
   TokenStr: string;
 begin
-  Start := Low(string);
   FTokens.Clear;
   if Length(FSource) > 0 then
   begin

@@ -3,8 +3,8 @@ object LazyAuthorizeBrowserForm: TLazyAuthorizeBrowserForm
   Top = 0
   BorderIcons = [biSystemMenu, biMaximize]
   Caption = 'Web browser'
-  ClientHeight = 778
-  ClientWidth = 590
+  ClientHeight = 777
+  ClientWidth = 586
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -17,8 +17,8 @@ object LazyAuthorizeBrowserForm: TLazyAuthorizeBrowserForm
   object WebBrowser: TWebBrowser
     Left = 0
     Top = 0
-    Width = 590
-    Height = 778
+    Width = 586
+    Height = 777
     Align = alClient
     TabOrder = 0
     SelectedEngine = EdgeIfAvailable

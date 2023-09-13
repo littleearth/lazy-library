@@ -6,7 +6,7 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants,
   System.Classes, vcl.Graphics, System.UITypes,
   vcl.Controls, vcl.Forms, vcl.Dialogs, duo.api, duo.auth, vcl.ExtCtrls,
-  System.Actions, vcl.ActnList, vcl.StdCtrls, vcl.Buttons, ImagingComponents,
+  System.Actions, vcl.ActnList, vcl.StdCtrls, vcl.Buttons,
   duo.models;
 
 type

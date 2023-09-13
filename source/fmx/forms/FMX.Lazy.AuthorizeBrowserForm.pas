@@ -49,7 +49,7 @@ begin
   else
   begin
     AMessage := FMessage;
-    if IsEmptyString(AMessage) then
+    if TlazyString.IsEmptyString(AMessage) then
       AMessage := 'Request failed or cancelled';
 
   end;

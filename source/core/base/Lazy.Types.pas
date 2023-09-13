@@ -24,6 +24,8 @@ type
   TLazyTimeRounding = (trNearest, trUp, trDown);
   TLazyTimeFormat = (tfDefault, tf12Hour, tf24Hour);
 
+  TDateTimeFunc = reference to function: TDateTime;
+
   TRESTRequest = REST.Client.TRESTRequest;
   TRESTResponse = REST.Client.TRESTResponse;
   TRESTRequestMethod = REST.Types.TRESTRequestMethod;

@@ -1,0 +1,52 @@
+package LazyLibraryVCL;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS OFF}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE RELEASE}
+{$ENDIF IMPLICITBUILDING}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  LazyLibrary,
+  vcl;
+
+contains
+  VCL.Lazy.Utils in '..\..\source\vcl\base\VCL.Lazy.Utils.pas',
+  VCL.Lazy.WTSSessionChange in '..\..\source\vcl\base\VCL.Lazy.WTSSessionChange.pas',
+  VCL.Lazy.Compare in '..\..\source\vcl\base\VCL.Lazy.Compare.pas',
+  WinApi.DeviceNotifier in '..\..\source\vcl\winapi\WinApi.DeviceNotifier.pas',
+  WinApi.DirectoryWatch in '..\..\source\vcl\winapi\WinApi.DirectoryWatch.pas',
+  WinApi.FileVersionInformation in '..\..\source\vcl\winapi\WinApi.FileVersionInformation.pas',
+  WinApi.ICMP in '..\..\source\vcl\winapi\WinApi.ICMP.pas',
+  WinApi.WindowsMessages in '..\..\source\vcl\winapi\WinApi.WindowsMessages.pas',
+  VCL.Lazy.ThreadTimer in '..\..\source\vcl\base\VCL.Lazy.ThreadTimer.pas',
+  WinApi.Services in '..\..\source\vcl\winapi\WinApi.Services.pas',
+  WinApi.SystemInformation in '..\..\source\vcl\winapi\WinApi.SystemInformation.pas',
+  VCL.Lazy.Types in '..\..\source\vcl\base\VCL.Lazy.Types.pas',
+  WinAPi.WinPerf in '..\..\source\vcl\winapi\WinAPi.WinPerf.pas',
+  WinAPI.PerformanceDataHelper in '..\..\source\vcl\winapi\WinAPI.PerformanceDataHelper.pas';
+
+end.

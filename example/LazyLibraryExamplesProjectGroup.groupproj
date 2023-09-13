@@ -1,0 +1,120 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{45C421A8-E700-42F7-89F1-7666E8C6211A}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="vcl\azure\DelphiAzureManagementVCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="fmx\azure\DelphiAzureManagementFMX.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\pwa\DelphiPWAVCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\stopwatch\DelphiStopWatchVCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\duo\accounts\DelphiDuoAccountsDemoVCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\duo\admin\DelphiDuoAdminDemoVCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\duo\auth\DelphiDuoAuthDemoVCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\systeminformation\DelphiSystemInformationVCL.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="DelphiAzureManagementVCL">
+        <MSBuild Projects="vcl\azure\DelphiAzureManagementVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiAzureManagementVCL:Clean">
+        <MSBuild Projects="vcl\azure\DelphiAzureManagementVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiAzureManagementVCL:Make">
+        <MSBuild Projects="vcl\azure\DelphiAzureManagementVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiAzureManagementFMX">
+        <MSBuild Projects="fmx\azure\DelphiAzureManagementFMX.dproj"/>
+    </Target>
+    <Target Name="DelphiAzureManagementFMX:Clean">
+        <MSBuild Projects="fmx\azure\DelphiAzureManagementFMX.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiAzureManagementFMX:Make">
+        <MSBuild Projects="fmx\azure\DelphiAzureManagementFMX.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiPWAVCL">
+        <MSBuild Projects="vcl\pwa\DelphiPWAVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiPWAVCL:Clean">
+        <MSBuild Projects="vcl\pwa\DelphiPWAVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiPWAVCL:Make">
+        <MSBuild Projects="vcl\pwa\DelphiPWAVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiStopWatchVCL">
+        <MSBuild Projects="vcl\stopwatch\DelphiStopWatchVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiStopWatchVCL:Clean">
+        <MSBuild Projects="vcl\stopwatch\DelphiStopWatchVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiStopWatchVCL:Make">
+        <MSBuild Projects="vcl\stopwatch\DelphiStopWatchVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiDuoAccountsDemoVCL">
+        <MSBuild Projects="vcl\duo\accounts\DelphiDuoAccountsDemoVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiDuoAccountsDemoVCL:Clean">
+        <MSBuild Projects="vcl\duo\accounts\DelphiDuoAccountsDemoVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiDuoAccountsDemoVCL:Make">
+        <MSBuild Projects="vcl\duo\accounts\DelphiDuoAccountsDemoVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiDuoAdminDemoVCL">
+        <MSBuild Projects="vcl\duo\admin\DelphiDuoAdminDemoVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiDuoAdminDemoVCL:Clean">
+        <MSBuild Projects="vcl\duo\admin\DelphiDuoAdminDemoVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiDuoAdminDemoVCL:Make">
+        <MSBuild Projects="vcl\duo\admin\DelphiDuoAdminDemoVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiDuoAuthDemoVCL">
+        <MSBuild Projects="vcl\duo\auth\DelphiDuoAuthDemoVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiDuoAuthDemoVCL:Clean">
+        <MSBuild Projects="vcl\duo\auth\DelphiDuoAuthDemoVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiDuoAuthDemoVCL:Make">
+        <MSBuild Projects="vcl\duo\auth\DelphiDuoAuthDemoVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiSystemInformationVCL">
+        <MSBuild Projects="vcl\systeminformation\DelphiSystemInformationVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiSystemInformationVCL:Clean">
+        <MSBuild Projects="vcl\systeminformation\DelphiSystemInformationVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiSystemInformationVCL:Make">
+        <MSBuild Projects="vcl\systeminformation\DelphiSystemInformationVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="DelphiAzureManagementVCL;DelphiAzureManagementFMX;DelphiPWAVCL;DelphiStopWatchVCL;DelphiDuoAccountsDemoVCL;DelphiDuoAdminDemoVCL;DelphiDuoAuthDemoVCL;DelphiSystemInformationVCL"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="DelphiAzureManagementVCL:Clean;DelphiAzureManagementFMX:Clean;DelphiPWAVCL:Clean;DelphiStopWatchVCL:Clean;DelphiDuoAccountsDemoVCL:Clean;DelphiDuoAdminDemoVCL:Clean;DelphiDuoAuthDemoVCL:Clean;DelphiSystemInformationVCL:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="DelphiAzureManagementVCL:Make;DelphiAzureManagementFMX:Make;DelphiPWAVCL:Make;DelphiStopWatchVCL:Make;DelphiDuoAccountsDemoVCL:Make;DelphiDuoAdminDemoVCL:Make;DelphiDuoAuthDemoVCL:Make;DelphiSystemInformationVCL:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

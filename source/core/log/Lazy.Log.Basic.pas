@@ -7,7 +7,7 @@
   Copyright (c) 2023 Tristan David Marlow
   Copyright (c) 2023 Little Earth Solutions
 
-----------------------------------------------------------------------------; }
+  ----------------------------------------------------------------------------; }
 unit Lazy.Log.Basic;
 
 interface
@@ -33,7 +33,9 @@ type
     procedure Error(ASender: TObject; AException: Exception;
       AMessage: string = ''); overload; override;
     function LogText: string;
+    class function Text: string;
   end;
+
 
 implementation
 
@@ -88,6 +90,13 @@ begin
   if Assigned(FLog) then
     Result := FLog.Text;
 
+end;
+
+class function TLazyLogBasic.Text: string;
+begin
+  Result := '';
+  if (LazyLog is TLazyLogBasic) then
+    Result := (LazyLog as TLazyLogBasic).LogText;
 end;
 
 procedure TLazyLogBasic.Warning(ASender: TObject; AMessage: string);

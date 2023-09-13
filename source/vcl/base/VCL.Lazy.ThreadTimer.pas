@@ -10,7 +10,6 @@ type
   TLazyThreadTimer = class(TThread)
   private
     FActive: boolean;
-    // FTerminateEvent: TEvent;
     FOnTimer: TNotifyEvent;
     FTimeout: integer;
     procedure SyncOnTimer;
@@ -23,13 +22,10 @@ type
 implementation
 
 { TLazyThreadTimer }
-// TLESThreadTimer
 
 constructor TLazyThreadTimer.Create(AOnTimer: TNotifyEvent;
   ATimeout: integer = 1000);
 begin
-  // FTerminateEvent := CreateEvent(nil, False, False, nil);
-  // FTerminateEvent := TEvent.Create(nil, False, False, '');
   FOnTimer := AOnTimer;
   FTimeout := ATimeout;
   inherited Create(false);
