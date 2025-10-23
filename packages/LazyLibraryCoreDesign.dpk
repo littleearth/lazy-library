@@ -9,23 +9,23 @@ package LazyLibraryCoreDesign;
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
-{$LOCALSYMBOLS OFF}
+{$LOCALSYMBOLS ON}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION ON}
-{$OVERFLOWCHECKS OFF}
-{$RANGECHECKS OFF}
-{$REFERENCEINFO OFF}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS ON}
+{$RANGECHECKS ON}
+{$REFERENCEINFO ON}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES OFF}
+{$STACKFRAMES ON}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$DEFINE RELEASE}
+{$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
-{$LIBSUFFIX 'Athens'}
+{$LIBSUFFIX AUTO}
 {$IMPLICITBUILD ON}
 
 requires
@@ -39,6 +39,6 @@ requires
   LazyLibrary;
 
 contains
-  Lazy.Core.Componentregister in '..\..\source\core\Lazy.Core.Componentregister.pas';
+  Lazy.Core.Componentregister in '..\source\core\Lazy.Core.Componentregister.pas';
 
 end.

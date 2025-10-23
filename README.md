@@ -182,11 +182,6 @@ begin
 end;
 ```
 
-## Documentation
-
-For detailed API documentation and examples, see:
-- **LAZYLIBRARY.MD**: Complete component catalog with all public/published members
-
 ## Examples
 
 Example projects are included in the `example` directory demonstrating:
