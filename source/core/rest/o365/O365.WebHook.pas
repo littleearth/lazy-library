@@ -3,7 +3,7 @@ unit O365.WebHook;
 interface
 
 uses
-  System.Classes, System.SysUtils,
+  System.Classes, System.SysUtils, Lazy.Types,
   REST.Json, REST.Client, REST.Types;
 
 type
@@ -21,7 +21,7 @@ type
   end;
 
 type
-  TLZO365WebHook = class
+  TLZO365WebHook = class(TLZObject)
   private
     FClient: TRESTClient;
     FRequest: TCustomRESTRequest;

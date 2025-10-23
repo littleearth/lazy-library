@@ -2,15 +2,19 @@ program DelphiVSSCopyVCL;
 
 uses
   Lazy.Log,
-  Lazy.Log.Basic,
   Vcl.Forms,
   System.SysUtils,
   frmVSSCopyU in 'frmVSSCopyU.pas' {frmVSSCopy};
 
 {$R *.res}
 
+procedure InitialiseLog;
 begin
-  SetLazyLogClass(TLZLogBasic);
+  LazyLog.ApplicationName := 'DelphiVSSCopyVCL';
+end;
+
+begin
+  InitialiseLog;
   Application.Initialize;
   Application.Title := 'VSS Copy Example';
   Application.MainFormOnTaskbar := True;

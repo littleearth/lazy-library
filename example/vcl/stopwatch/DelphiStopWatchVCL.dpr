@@ -2,14 +2,18 @@ program DelphiStopWatchVCL;
 
 uses
   Lazy.Log,
-  Lazy.Log.Basic,
   Vcl.Forms,
   frmStopWatchU in 'frmStopWatchU.pas' {frmStopWatch};
 
 {$R *.res}
 
+procedure InitialiseLog;
 begin
-  SetLazyLogClass(TLZLogBasic);
+  LazyLog.ApplicationName := 'DelphiStopWatchVCL';
+end;
+
+begin
+  InitialiseLog;
   ReportMemoryLeaksOnShutdown := True;
   Application.Initialize;
   Application.MainFormOnTaskbar := True;

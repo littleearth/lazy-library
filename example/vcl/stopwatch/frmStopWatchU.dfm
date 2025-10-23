@@ -172,41 +172,35 @@ object frmStopWatch: TfrmStopWatch
     object lblRuntimeDuration: TLabel
       Left = 155
       Top = 87
-      Width = 154
-      Height = 85
+      Width = 48
+      Height = 15
       Align = alClient
       Alignment = taCenter
       Caption = 'Run time'
       Layout = tlCenter
       WordWrap = True
-      ExplicitWidth = 48
-      ExplicitHeight = 15
     end
     object lblStarted: TLabel
       Left = 309
       Top = 87
-      Width = 154
-      Height = 85
+      Width = 37
+      Height = 15
       Align = alClient
       Alignment = taCenter
       Caption = 'Started'
       Layout = tlCenter
       WordWrap = True
-      ExplicitWidth = 37
-      ExplicitHeight = 15
     end
     object lblEntryCount: TLabel
       Left = 463
       Top = 87
-      Width = 154
-      Height = 85
+      Width = 61
+      Height = 15
       Align = alClient
       Alignment = taCenter
       Caption = 'Entry count'
       Layout = tlCenter
       WordWrap = True
-      ExplicitWidth = 61
-      ExplicitHeight = 15
     end
   end
   object pnlElapsedTime: TPanel

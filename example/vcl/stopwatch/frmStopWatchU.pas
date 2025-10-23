@@ -63,7 +63,7 @@ implementation
 {$R *.dfm}
 
 uses
-  Lazy.Log, Lazy.Log.Basic, VCL.Lazy.Utils;
+  Lazy.Log, VCL.Lazy.Utils.Windows;
 
 procedure TfrmStopWatch.ActionPauseExecute(Sender: TObject);
 begin

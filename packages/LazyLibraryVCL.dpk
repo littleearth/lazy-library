@@ -1,0 +1,61 @@
+package LazyLibraryVCL;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS OFF}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE RELEASE}
+{$ENDIF IMPLICITBUILDING}
+{$LIBSUFFIX 'Athens'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  LazyLibrary,
+  vcl,
+  vclwinx,
+  vcldb;
+
+contains
+  VCL.Lazy.Compare in '..\..\source\vcl\base\VCL.Lazy.Compare.pas',
+  VCL.Lazy.ThreadTimer in '..\..\source\vcl\base\VCL.Lazy.ThreadTimer.pas',
+  Vcl.Lazy.Types.Windows in '..\..\source\vcl\base\Vcl.Lazy.Types.Windows.pas',
+  VCL.Lazy.Utils.Windows in '..\..\source\vcl\base\VCL.Lazy.Utils.Windows.pas',
+  VCL.Lazy.WTSSessionChange in '..\..\source\vcl\base\VCL.Lazy.WTSSessionChange.pas',
+  NETWORKLIST_TLB in '..\..\source\vcl\typelibrary\NETWORKLIST_TLB.pas',
+  VCL.Lazy.Dialogs in '..\..\source\vcl\base\VCL.Lazy.Dialogs.pas',
+  VCL.Lazy.FindReplace in '..\..\source\vcl\forms\VCL.Lazy.FindReplace.pas',
+  VCL.Lazy.ExceptionDialog in '..\..\source\vcl\forms\VCL.Lazy.ExceptionDialog.pas',
+  VCL.Lazy.MemoForm in '..\..\source\vcl\forms\VCL.Lazy.MemoForm.pas',
+  WinApi.FileVersionInformation in '..\..\source\vcl\winapi\WinApi.FileVersionInformation.pas',
+  Winapi.MessageDlgTimed in '..\..\source\vcl\winapi\Winapi.MessageDlgTimed.pas',
+  WinApi.Networklist in '..\..\source\vcl\winapi\WinApi.Networklist.pas',
+  WinApi.RunAs in '..\..\source\vcl\winapi\WinApi.RunAs.pas',
+  WinApi.Services in '..\..\source\vcl\winapi\WinApi.Services.pas',
+  WinApi.SystemInformation in '..\..\source\vcl\winapi\WinApi.SystemInformation.pas',
+  WinApi.VSS.Copy in '..\..\source\vcl\winapi\WinApi.VSS.Copy.pas',
+  WinApi.VSS.Utils in '..\..\source\vcl\winapi\WinApi.VSS.Utils.pas',
+  WinApi.WindowsMessages in '..\..\source\vcl\winapi\WinApi.WindowsMessages.pas';
+
+end.
+

@@ -3,7 +3,7 @@ unit WinApi.Vss.Copy;
 interface
 
 uses
-  Lazy.Types, VCL.Lazy.Types, VCL.Lazy.Utils,
+  Lazy.Types, VCL.Lazy.Types.Windows, VCL.Lazy.Utils.Windows,
   WinApi.Windows, WinApi.Messages, System.SysUtils, System.Variants,
   System.Classes, WinApi.Vss.API, WinApi.Vss.Utils, System.Win.ComObj,
   WinApi.ShlObj, WinApi.KnownFolders;
@@ -55,7 +55,6 @@ var
   VolumeList: TStringList;
   SuccessCount, FailCount: integer;
 begin
-  Result := false;
   FLog.Clear;
   FCancel := false;
   Progress(0);
@@ -138,7 +137,6 @@ begin
                     If (CopyFile(PWideChar(SourcePath), PWideChar(DestPath),
                       True)) then
                     begin
-                      Result := True;
                       inc(SuccessCount);
                     end
                     else
@@ -157,8 +155,15 @@ begin
                   inc(SourceIdx);
                 end;
               end;
-              Log('Removing Snapshot: ' + GUIDToString(SnapshotGUID));
-              VolumeShadowCopy.DeleteSnapshotSet(SnapshotGUID);
+              try
+                Log('Removing Snapshot: ' + GUIDToString(SnapshotGUID));
+                VolumeShadowCopy.DeleteSnapshotSet(SnapshotGUID);
+              except
+                on E: Exception do
+                begin
+                  Error(E, 'Failed to delete snapshot.');
+                end;
+              end;
             finally
               VolumeShadowCopy.FreeSnapshotProperties(SnapShot);
             end;
@@ -166,7 +171,9 @@ begin
           except
             if VolumeShadowCopy.VssContext and VSS_VOLSNAP_ATTR_NO_WRITERS = 0
             then
+            begin
               VolumeShadowCopy.BackupComplete(false);
+            end;
           end;
           if VolumeShadowCopy.VssContext and VSS_VOLSNAP_ATTR_NO_WRITERS = 0
           then
@@ -176,17 +183,20 @@ begin
       end;
       Log(Format('%d file(s) copied.', [SuccessCount]));
 
-      if FailCount > 0 then
-      begin
-        Log(Format('Finished, with %d error(s).', [FailCount]));
-      end
-      else
-      begin
-        Log('Finished.');
-      end;
     end;
   finally
     Progress(100);
+    Result := (SuccessCount > 0) and (FailCount = 0);
+
+    if FailCount > 0 then
+    begin
+      Log(Format('Finished, with %d error(s).', [FailCount]));
+    end
+    else
+    begin
+      Log('Finished.');
+    end;
+
     FreeAndNil(VolumeShadowCopy);
     FreeAndNil(SourceFiles);
     FreeAndNil(VolumeList);

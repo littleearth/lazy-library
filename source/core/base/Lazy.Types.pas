@@ -18,6 +18,7 @@ uses
 
 type
   ELazyException = class(Exception);
+
   TLZLogLevel = (logError, logWarning, logInformation, logDebug);
 
   TLZTimeRounding = (trNearest, trUp, trDown);
@@ -25,52 +26,130 @@ type
 
   TDateTimeFunc = reference to function: TDateTime;
 
+  TLZFieldNameCase = (fncSnakeCase, fncKebabCase, fncCamelCase, fncPascalCase);
+
   TRESTRequest = REST.Client.TRESTRequest;
   TRESTResponse = REST.Client.TRESTResponse;
   TRESTRequestMethod = REST.Types.TRESTRequestMethod;
 
-  TOnLog = procedure(ASender: TObject; AMessage: string) of object;
-  TOnWarning = procedure(ASender: TObject; AMessage: string) of object;
-  TOnDebug = procedure(ASender: TObject; AProcedure, AMessage: string)
-    of object;
-  TOnProgress = procedure(ASender: TObject; AProgress: integer;
-    AMessage: string; var ACancel: boolean) of object;
-  TOnError = procedure(ASender: TObject; AMessage: string; AErrorCode: integer)
-    of object;
+  TOnLog = procedure(
+    ASender: TObject;
+    AMessage: string) of object;
+  TOnWarning = procedure(
+    ASender: TObject;
+    AMessage: string) of object;
+  TOnDebug = procedure(
+    ASender: TObject;
+    AProcedure, AMessage: string) of object;
+  TOnProgress = procedure(
+    ASender: TObject;
+    AProgress: integer;
+    AMessage: string;
+    var ACancel: boolean) of object;
+  TOnError = procedure(
+    ASender: TObject;
+    AMessage: string;
+    AErrorCode: integer) of object;
   TOnProgressRef = reference to procedure(ASender: TObject; AProgress: integer;
     AMessage: string; var ACancel: boolean);
 
   TLZObject = class(TObject)
   protected
-    procedure Log(AMessage: string); virtual;
-    procedure Debug(AProcedure: string; AMessage: string); virtual;
-    procedure Warning(AMessage: string); virtual;
-    procedure Error(AMessage: string; AErrorCode: integer = 0);
-      overload; virtual;
-    procedure Error(AException: Exception; AMessage: string = '');
-      overload; virtual;
+    procedure Log(AMessage: string); overload; virtual;
+    procedure Log(
+      AMessage: string;
+      const Args: array of const); overload; virtual;
+    procedure Debug(
+      AProcedure: string;
+      AMessage: string); overload; virtual;
+    procedure Debug(
+      AProcedure: string;
+      AMessage: string;
+      const Args: array of const); overload; virtual;
+    procedure Warning(AMessage: string); overload; virtual;
+    procedure Warning(
+      AMessage: string;
+      const Args: array of const); overload; virtual;
+    procedure Error(
+      AMessage: string;
+      AErrorCode: integer = 0); overload; virtual;
+    procedure Error(
+      AMessage: string;
+      const Args: array of const;
+      AErrorCode: integer = 0); overload; virtual;
+    procedure Error(
+      AException: Exception;
+      AMessage: string = ''); overload; virtual;
+    procedure Error(
+      AException: Exception;
+      AMessage: string;
+      const Args: array of const); overload; virtual;
   end;
 
   TLZPersistent = class(TPersistent)
   protected
-    procedure Log(AMessage: string); virtual;
-    procedure Debug(AProcedure: string; AMessage: string); virtual;
-    procedure Warning(AMessage: string); virtual;
-    procedure Error(AMessage: string; AErrorCode: integer = 0);
-      overload; virtual;
-    procedure Error(AException: Exception; AMessage: string = '');
-      overload; virtual;
+    procedure Log(AMessage: string); overload; virtual;
+    procedure Log(
+      AMessage: string;
+      const Args: array of const); overload; virtual;
+    procedure Debug(
+      AProcedure: string;
+      AMessage: string); overload; virtual;
+    procedure Debug(
+      AProcedure: string;
+      AMessage: string;
+      const Args: array of const); overload; virtual;
+    procedure Warning(AMessage: string); overload; virtual;
+    procedure Warning(
+      AMessage: string;
+      const Args: array of const); overload; virtual;
+    procedure Error(
+      AMessage: string;
+      AErrorCode: integer = 0); overload; virtual;
+    procedure Error(
+      AMessage: string;
+      const Args: array of const;
+      AErrorCode: integer = 0); overload; virtual;
+    procedure Error(
+      AException: Exception;
+      AMessage: string = ''); overload; virtual;
+    procedure Error(
+      AException: Exception;
+      AMessage: string;
+      const Args: array of const); overload; virtual;
   end;
 
   TLZComponent = class(TComponent)
   protected
-    procedure Log(AMessage: string); virtual;
-    procedure Debug(AProcedure: string; AMessage: string); virtual;
-    procedure Warning(AMessage: string); virtual;
-    procedure Error(AMessage: string; AErrorCode: integer = 0);
-      overload; virtual;
-    procedure Error(AException: Exception; AMessage: string = '');
-      overload; virtual;
+    procedure Log(AMessage: string); overload; virtual;
+    procedure Log(
+      AMessage: string;
+      const Args: array of const); overload; virtual;
+    procedure Debug(
+      AProcedure: string;
+      AMessage: string); overload; virtual;
+    procedure Debug(
+      AProcedure: string;
+      AMessage: string;
+      const Args: array of const); overload; virtual;
+    procedure Warning(AMessage: string); overload; virtual;
+    procedure Warning(
+      AMessage: string;
+      const Args: array of const); overload; virtual;
+    procedure Error(
+      AMessage: string;
+      AErrorCode: integer = 0); overload; virtual;
+    procedure Error(
+      AMessage: string;
+      const Args: array of const;
+      AErrorCode: integer = 0); overload; virtual;
+    procedure Error(
+      AException: Exception;
+      AMessage: string = ''); overload; virtual;
+    procedure Error(
+      AException: Exception;
+      AMessage: string;
+      const Args: array of const); overload; virtual;
   end;
 
   TApplicationVersionDetails = class(TLZComponent)
@@ -101,24 +180,29 @@ uses
 
 { TLZObject }
 
+procedure TLZObject.Log(AMessage: string);
+begin
+  LazyLog.Log(Self, AMessage);
+end;
+
+procedure TLZObject.Log(
+  AMessage: string;
+  const Args: array of const);
+begin
+  LazyLog.Log(Self, AMessage, Args);
+end;
+
 procedure TLZObject.Debug(AProcedure, AMessage: string);
 begin
   LazyLog.Debug(Self, AProcedure, AMessage);
 end;
 
-procedure TLZObject.Error(AException: Exception; AMessage: string);
+procedure TLZObject.Debug(
+  AProcedure: string;
+  AMessage: string;
+  const Args: array of const);
 begin
-  LazyLog.Error(Self, AException, AMessage);
-end;
-
-procedure TLZObject.Error(AMessage: string; AErrorCode: integer);
-begin
-  LazyLog.Error(Self, AMessage, AErrorCode);
-end;
-
-procedure TLZObject.Log(AMessage: string);
-begin
-  LazyLog.Log(Self, AMessage);
+  LazyLog.Debug(Self, AProcedure, AMessage, Args);
 end;
 
 procedure TLZObject.Warning(AMessage: string);
@@ -126,31 +210,110 @@ begin
   LazyLog.Warning(Self, AMessage);
 end;
 
-{ TLZComponent }
-
-procedure TLZComponent.Debug(AProcedure, AMessage: string);
+procedure TLZObject.Warning(
+  AMessage: string;
+  const Args: array of const);
 begin
-  LazyLog.Debug(Self, AProcedure, AMessage);
+  LazyLog.Warning(Self, AMessage, Args);
 end;
 
-procedure TLZComponent.Error(AException: Exception; AMessage: string);
+procedure TLZObject.Error(
+  AMessage: string;
+  AErrorCode: integer);
+begin
+  LazyLog.Error(Self, AMessage, AErrorCode);
+end;
+
+procedure TLZObject.Error(
+  AMessage: string;
+  const Args: array of const;
+  AErrorCode: integer = 0);
+begin
+  LazyLog.Error(Self, AMessage, Args, AErrorCode);
+end;
+
+procedure TLZObject.Error(
+  AException: Exception;
+  AMessage: string);
 begin
   LazyLog.Error(Self, AException, AMessage);
 end;
 
-procedure TLZComponent.Error(AMessage: string; AErrorCode: integer);
+procedure TLZObject.Error(
+  AException: Exception;
+  AMessage: string;
+  const Args: array of const);
 begin
-  LazyLog.Error(Self, AMessage, AErrorCode);
+  LazyLog.Error(Self, AException, AMessage, Args);
 end;
+
+{ TLZComponent }
 
 procedure TLZComponent.Log(AMessage: string);
 begin
   LazyLog.Log(Self, AMessage);
 end;
 
+procedure TLZComponent.Log(
+  AMessage: string;
+  const Args: array of const);
+begin
+  LazyLog.Log(Self, AMessage, Args);
+end;
+
+procedure TLZComponent.Debug(AProcedure, AMessage: string);
+begin
+  LazyLog.Debug(Self, AProcedure, AMessage);
+end;
+
+procedure TLZComponent.Debug(
+  AProcedure: string;
+  AMessage: string;
+  const Args: array of const);
+begin
+  LazyLog.Debug(Self, AProcedure, AMessage, Args);
+end;
+
 procedure TLZComponent.Warning(AMessage: string);
 begin
   LazyLog.Warning(Self, AMessage);
+end;
+
+procedure TLZComponent.Warning(
+  AMessage: string;
+  const Args: array of const);
+begin
+  LazyLog.Warning(Self, AMessage, Args);
+end;
+
+procedure TLZComponent.Error(
+  AMessage: string;
+  AErrorCode: integer);
+begin
+  LazyLog.Error(Self, AMessage, AErrorCode);
+end;
+
+procedure TLZComponent.Error(
+  AMessage: string;
+  const Args: array of const;
+  AErrorCode: integer = 0);
+begin
+  LazyLog.Error(Self, AMessage, Args, AErrorCode);
+end;
+
+procedure TLZComponent.Error(
+  AException: Exception;
+  AMessage: string);
+begin
+  LazyLog.Error(Self, AException, AMessage);
+end;
+
+procedure TLZComponent.Error(
+  AException: Exception;
+  AMessage: string;
+  const Args: array of const);
+begin
+  LazyLog.Error(Self, AException, AMessage, Args);
 end;
 { TApplicationVersionDetails }
 
@@ -253,29 +416,71 @@ end;
 
 { TLZPersistent }
 
-procedure TLZPersistent.Debug(AProcedure, AMessage: string);
-begin
-  LazyLog.Debug(Self, AProcedure, AMessage);
-end;
-
-procedure TLZPersistent.Error(AException: Exception; AMessage: string);
-begin
-  LazyLog.Error(Self, AException, AMessage);
-end;
-
-procedure TLZPersistent.Error(AMessage: string; AErrorCode: integer);
-begin
-  LazyLog.Error(Self, AMessage, AErrorCode);
-end;
-
 procedure TLZPersistent.Log(AMessage: string);
 begin
   LazyLog.Log(Self, AMessage);
 end;
 
+procedure TLZPersistent.Log(
+  AMessage: string;
+  const Args: array of const);
+begin
+  LazyLog.Log(Self, AMessage, Args);
+end;
+
+procedure TLZPersistent.Debug(AProcedure, AMessage: string);
+begin
+  LazyLog.Debug(Self, AProcedure, AMessage);
+end;
+
+procedure TLZPersistent.Debug(
+  AProcedure: string;
+  AMessage: string;
+  const Args: array of const);
+begin
+  LazyLog.Debug(Self, AProcedure, AMessage, Args);
+end;
+
 procedure TLZPersistent.Warning(AMessage: string);
 begin
   LazyLog.Warning(Self, AMessage);
+end;
+
+procedure TLZPersistent.Warning(
+  AMessage: string;
+  const Args: array of const);
+begin
+  LazyLog.Warning(Self, AMessage, Args);
+end;
+
+procedure TLZPersistent.Error(
+  AMessage: string;
+  AErrorCode: integer);
+begin
+  LazyLog.Error(Self, AMessage, AErrorCode);
+end;
+
+procedure TLZPersistent.Error(
+  AMessage: string;
+  const Args: array of const;
+  AErrorCode: integer = 0);
+begin
+  LazyLog.Error(Self, AMessage, Args, AErrorCode);
+end;
+
+procedure TLZPersistent.Error(
+  AException: Exception;
+  AMessage: string);
+begin
+  LazyLog.Error(Self, AException, AMessage);
+end;
+
+procedure TLZPersistent.Error(
+  AException: Exception;
+  AMessage: string;
+  const Args: array of const);
+begin
+  LazyLog.Error(Self, AException, AMessage, Args);
 end;
 
 end.

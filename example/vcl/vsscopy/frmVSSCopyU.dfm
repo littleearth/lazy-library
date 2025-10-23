@@ -1,7 +1,7 @@
 object frmVSSCopy: TfrmVSSCopy
   Left = 0
   Top = 0
-  Caption = 'ABit VSS Copy'
+  Caption = 'VSS Copy'
   ClientHeight = 865
   ClientWidth = 1222
   Color = clBtnFace
@@ -19,8 +19,7 @@ object frmVSSCopy: TfrmVSSCopy
     Align = alTop
     Alignment = taCenter
     Layout = tlCenter
-    ExplicitLeft = 8
-    ExplicitTop = 251
+    ExplicitWidth = 5
   end
   object BackupProgressBar: TProgressBar
     AlignWithMargins = True
@@ -104,12 +103,11 @@ object frmVSSCopy: TfrmVSSCopy
       object Label1: TLabel
         Left = 0
         Top = 0
-        Width = 605
+        Width = 54
         Height = 25
         Align = alTop
         Caption = 'Source'
         Layout = tlCenter
-        ExplicitWidth = 54
       end
       object GridPanel3: TGridPanel
         Left = 0
@@ -213,12 +211,11 @@ object frmVSSCopy: TfrmVSSCopy
       object Label2: TLabel
         Left = 0
         Top = 0
-        Width = 605
+        Width = 90
         Height = 25
         Align = alTop
         Caption = 'Destination'
         Layout = tlCenter
-        ExplicitWidth = 90
       end
       object GridPanel2: TGridPanel
         Left = 0

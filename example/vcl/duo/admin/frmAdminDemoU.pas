@@ -58,7 +58,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.IOUtils, Lazy.CryptINI, Lazy.Log.Basic, Lazy.Log;
+  System.IOUtils, Lazy.CryptINI, Lazy.Log, Vcl.Imaging.pngimage;
 
 procedure TfrmAdminDemo.Log(Amessage: string);
 begin
@@ -124,7 +124,7 @@ begin
   end
   else
   begin
-    for LUser in AUsers.Items do
+    for LUser in AUsers do
     begin
       Log('UserID: ' + LUser.UserID + ', Username:' + LUser.Username +
         'Aliases: ' + LUser.Aliases.DelimitedText + ', Email:' + LUser.Email +
@@ -153,7 +153,7 @@ end;
 procedure TfrmAdminDemo.ActionListUpdate(Action: TBasicAction;
   var Handled: Boolean);
 begin
-  memoLog.Lines.Text := TLZLogBasic.Text;
+  memoLog.Lines.Text := LazyLogCache;
 end;
 
 procedure TfrmAdminDemo.ActionLogoExecute(Sender: TObject);

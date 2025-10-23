@@ -298,27 +298,19 @@ object frmAzureDemo: TfrmAzureDemo
         end>
       ControlCollection = <
         item
-          Column = 0
-          Control = Label2
+          Column = 1
+          Control = editRefreshToken
           Row = 0
         end
         item
-          Column = 1
-          Control = editRefreshToken
+          Column = 0
+          Control = Button1
           Row = 0
         end>
       RowCollection = <
         item
           Value = 100.000000000000000000
         end>
-      object Label2: TLabel
-        Align = Client
-        Size.Width = 160.003189086914100000
-        Size.Height = 37.184867858886720000
-        Size.PlatformDefault = False
-        Text = 'Refresh'
-        TabOrder = 8
-      end
       object editRefreshToken: TEdit
         Touch.InteractiveGestures = [LongTap, DoubleTap]
         Align = Client
@@ -326,6 +318,16 @@ object frmAzureDemo: TfrmAzureDemo
         Size.Width = 159.996810913085900000
         Size.Height = 37.184867858886720000
         Size.PlatformDefault = False
+      end
+      object Button1: TButton
+        Action = ActionRefreshToken
+        Align = Client
+        Enabled = True
+        ImageIndex = -1
+        Size.Width = 160.003189086914100000
+        Size.Height = 37.184867858886720000
+        Size.PlatformDefault = False
+        TabOrder = 2
       end
     end
     object GridPanelLayout7: TGridPanelLayout
@@ -522,6 +524,11 @@ object frmAzureDemo: TfrmAzureDemo
       Text = 'Log in'
       OnExecute = ActionLoginExecute
       OnUpdate = ActionLoginUpdate
+    end
+    object ActionRefreshToken: TAction
+      Text = 'Refresh token'
+      OnExecute = ActionRefreshTokenExecute
+      OnUpdate = ActionRefreshTokenUpdate
     end
   end
 end

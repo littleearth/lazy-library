@@ -5,8 +5,7 @@ interface
 uses
   Lazy.Types, Lazy.Utils,
   System.SysUtils, System.Variants,
-  System.Classes, IdBaseComponent, IdComponent, IdUDPBase, IdUDPClient, IdSNMP,
-  System.Generics.Collections;
+  System.Classes, IdSNMP;
 
 type
   TLZSNMPClient = class(TLZObject)
@@ -23,13 +22,19 @@ type
   public
     constructor Create; reintroduce; virtual;
     destructor Destroy; override;
-    function GetMIBValue(AMIB: string; ADefaultValue: string = ''): string;
-    function GetMIBValues(AMIB: string; AStrings: TStrings;
-      AIncludeMIB: Boolean = false; AOnProgress: TOnProgressRef = nil)
-      : Boolean; overload;
-    function GetMIBValues(AMIB: string; ADefaultValue: string = '';
-      AIndex: integer = -1; AOnProgress: TOnProgressRef = nil): string;
-      overload;
+    function GetMIBValue(
+      AMIB: string;
+      ADefaultValue: string = ''): string;
+    function GetMIBValues(
+      AMIB: string;
+      AStrings: TStrings;
+      AIncludeMIB: Boolean = false;
+      AOnProgress: TOnProgressRef = nil): Boolean; overload;
+    function GetMIBValues(
+      AMIB: string;
+      ADefaultValue: string = '';
+      AIndex: integer = -1;
+      AOnProgress: TOnProgressRef = nil): string; overload;
     property Hostname: string read FHostname write SetHostname;
     property Community: string read FCommunity write SetCommunity;
     property ReceiveTimeout: integer read FReceiveTimeout
@@ -44,11 +49,13 @@ implementation
 // TSNMPQuery
 
 uses
-  IdGlobal, IdTCPConnection, System.Math;
+  IdGlobal, System.Math;
 
 { TSNMPQueryBase }
 
-function TLZSNMPClient.GetMIBValue(AMIB: string; ADefaultValue: string): string;
+function TLZSNMPClient.GetMIBValue(
+  AMIB: string;
+  ADefaultValue: string): string;
 var
   IdSNMP: TIdSNMP;
   Success: Boolean;
@@ -100,8 +107,10 @@ begin
   end;
 end;
 
-function TLZSNMPClient.GetMIBValues(AMIB, ADefaultValue: string;
-  AIndex: integer; AOnProgress: TOnProgressRef): string;
+function TLZSNMPClient.GetMIBValues(
+  AMIB, ADefaultValue: string;
+  AIndex: integer;
+  AOnProgress: TOnProgressRef): string;
 var
   LValues: TStringList;
 begin
@@ -125,8 +134,11 @@ begin
   end;
 end;
 
-function TLZSNMPClient.GetMIBValues(AMIB: string; AStrings: TStrings;
-  AIncludeMIB: Boolean; AOnProgress: TOnProgressRef): Boolean;
+function TLZSNMPClient.GetMIBValues(
+  AMIB: string;
+  AStrings: TStrings;
+  AIncludeMIB: Boolean;
+  AOnProgress: TOnProgressRef): Boolean;
 var
   IdSNMP: TIdSNMP;
   LOID, LBaseOID: string;
@@ -188,7 +200,8 @@ begin
 
           for LValueIdx := 0 to PRed(IdSNMP.Reply.ValueCount) do
           begin
-            LValue := TLZString.StringCleaner(IdSNMP.Reply.Value[LValueIdx], true, true);
+            LValue := TLZString.StringCleaner(IdSNMP.Reply.Value[LValueIdx],
+              true, true);
           end;
 
           if AIncludeMIB then

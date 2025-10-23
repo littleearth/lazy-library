@@ -15,6 +15,11 @@ type
     property TenantID: string read FTenantID write SetTenantID;
   end;
 
+  TLZAzureOAuth2Token = class(TLZOAuth2Token)
+  protected
+    procedure SetDefaults; override;
+  end;
+
 implementation
 
 uses
@@ -32,6 +37,14 @@ end;
 procedure TLZAzureOAuth2Connection.SetTenantID(const Value: string);
 begin
   FTenantID := Value;
+end;
+
+{ TLZAzureOAuth2Token }
+
+procedure TLZAzureOAuth2Token.SetDefaults;
+begin
+  inherited;
+  GrantType := gtAuthorizationCode;
 end;
 
 end.

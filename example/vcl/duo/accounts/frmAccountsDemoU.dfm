@@ -22,8 +22,8 @@ object frmAccountsDemo: TfrmAccountsDemo
     Align = alClient
     Caption = 'Panel1'
     TabOrder = 1
-    ExplicitWidth = 614
-    ExplicitHeight = 158
+    ExplicitWidth = 612
+    ExplicitHeight = 156
     object imgLogo: TImage
       Left = 518
       Top = 1
@@ -48,8 +48,6 @@ object frmAccountsDemo: TfrmAccountsDemo
       ScrollBars = ssBoth
       TabOrder = 0
       WordWrap = False
-      ExplicitWidth = 501
-      ExplicitHeight = 150
     end
   end
   object Panel2: TPanel
@@ -59,7 +57,7 @@ object frmAccountsDemo: TfrmAccountsDemo
     Height = 265
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 614
+    ExplicitWidth = 612
     object GridPanel1: TGridPanel
       Left = 1
       Top = 204
@@ -113,7 +111,7 @@ object frmAccountsDemo: TfrmAccountsDemo
           Value = 100.000000000000000000
         end>
       TabOrder = 1
-      ExplicitWidth = 612
+      ExplicitWidth = 610
       object BitBtn1: TBitBtn
         AlignWithMargins = True
         Left = 4
@@ -124,7 +122,6 @@ object frmAccountsDemo: TfrmAccountsDemo
         Align = alClient
         Caption = 'Get accounts'
         TabOrder = 0
-        ExplicitWidth = 116
       end
       object BitBtn2: TBitBtn
         AlignWithMargins = True
@@ -136,8 +133,6 @@ object frmAccountsDemo: TfrmAccountsDemo
         Align = alClient
         Caption = 'Get billing'
         TabOrder = 1
-        ExplicitLeft = 126
-        ExplicitWidth = 116
       end
       object BitBtn3: TBitBtn
         AlignWithMargins = True
@@ -149,8 +144,6 @@ object frmAccountsDemo: TfrmAccountsDemo
         Align = alClient
         Caption = 'Get telephone credits'
         TabOrder = 2
-        ExplicitLeft = 248
-        ExplicitWidth = 116
       end
       object BitBtn4: TBitBtn
         AlignWithMargins = True
@@ -162,8 +155,6 @@ object frmAccountsDemo: TfrmAccountsDemo
         Align = alClient
         Caption = 'Get logo'
         TabOrder = 3
-        ExplicitLeft = 370
-        ExplicitWidth = 116
       end
       object BitBtn5: TBitBtn
         AlignWithMargins = True
@@ -175,8 +166,6 @@ object frmAccountsDemo: TfrmAccountsDemo
         Align = alClient
         Caption = 'Get all users'
         TabOrder = 4
-        ExplicitLeft = 492
-        ExplicitWidth = 116
       end
     end
     object GridPanel2: TGridPanel
@@ -235,7 +224,7 @@ object frmAccountsDemo: TfrmAccountsDemo
           Value = 33.333333333333310000
         end>
       TabOrder = 0
-      ExplicitWidth = 612
+      ExplicitWidth = 610
       object Panel3: TPanel
         AlignWithMargins = True
         Left = 4
@@ -245,7 +234,6 @@ object frmAccountsDemo: TfrmAccountsDemo
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 0
-        ExplicitWidth = 146
         object Label1: TLabel
           Left = 0
           Top = 0
@@ -262,7 +250,6 @@ object frmAccountsDemo: TfrmAccountsDemo
           Height = 23
           Align = alTop
           TabOrder = 0
-          ExplicitWidth = 146
         end
       end
       object Panel4: TPanel
@@ -274,8 +261,6 @@ object frmAccountsDemo: TfrmAccountsDemo
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 1
-        ExplicitLeft = 156
-        ExplicitWidth = 147
         object Label2: TLabel
           Left = 0
           Top = 0
@@ -293,7 +278,6 @@ object frmAccountsDemo: TfrmAccountsDemo
           Align = alTop
           PasswordChar = '*'
           TabOrder = 0
-          ExplicitWidth = 147
         end
       end
       object Panel5: TPanel
@@ -305,8 +289,6 @@ object frmAccountsDemo: TfrmAccountsDemo
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 2
-        ExplicitLeft = 309
-        ExplicitWidth = 146
         object Label3: TLabel
           Left = 0
           Top = 0
@@ -323,7 +305,6 @@ object frmAccountsDemo: TfrmAccountsDemo
           Height = 23
           Align = alTop
           TabOrder = 0
-          ExplicitWidth = 146
         end
       end
       object Panel6: TPanel
@@ -335,8 +316,6 @@ object frmAccountsDemo: TfrmAccountsDemo
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 3
-        ExplicitLeft = 461
-        ExplicitWidth = 147
         object Label4: TLabel
           Left = 0
           Top = 0
@@ -353,7 +332,6 @@ object frmAccountsDemo: TfrmAccountsDemo
           Height = 23
           Align = alTop
           TabOrder = 0
-          ExplicitWidth = 147
         end
       end
       object Panel7: TPanel
@@ -365,7 +343,6 @@ object frmAccountsDemo: TfrmAccountsDemo
         Align = alClient
         BevelOuter = bvNone
         TabOrder = 4
-        ExplicitWidth = 146
         object Label5: TLabel
           Left = 0
           Top = 0
@@ -382,7 +359,6 @@ object frmAccountsDemo: TfrmAccountsDemo
           Height = 23
           Align = alTop
           TabOrder = 0
-          ExplicitWidth = 146
         end
       end
     end

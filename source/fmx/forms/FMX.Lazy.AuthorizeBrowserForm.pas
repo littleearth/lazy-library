@@ -18,8 +18,12 @@ type
     FToken: TLZOAuth2Token;
     FMessage: string;
   public
-    function GetAuthToken(var AMessage: string; AURL: string;
-      AConnection: TLZOAuth2Connection; AToken: TLZOAuth2Token): Boolean;
+    function GetAuthToken(
+      var AMessage: string;
+      AURL: string;
+      AConnection: TLZOAuth2Connection;
+      AToken: TLZOAuth2Token;
+      AUserDataFolder: string = ''): boolean;
   end;
 
 implementation
@@ -27,19 +31,29 @@ implementation
 {$R *.fmx}
 
 uses
+{$IFDEF MSWINDOWS}
+  FMX.WebBrowser.Win,
+{$ENDIF}
   System.NetEncoding, System.Net.URLClient, Lazy.Utils;
 
 { TAuthorizeForm }
 
-function TLZAuthorizeBrowserForm.GetAuthToken(var AMessage: string;
-  AURL: string; AConnection: TLZOAuth2Connection;
-  AToken: TLZOAuth2Token): Boolean;
+function TLZAuthorizeBrowserForm.GetAuthToken(
+  var AMessage: string;
+  AURL: string;
+  AConnection: TLZOAuth2Connection;
+  AToken: TLZOAuth2Token;
+  AUserDataFolder: string): boolean;
 begin
-  Result := False;
+  Result := false;
   FMessage := '';
   FConnection := AConnection;
   FToken := AToken;
 
+{$IFDEF MSWINDOWS}
+  WebBrowser.WindowsEngine := TWindowsEngine.EdgeOnly;
+
+{$ENDIF}
   WebBrowser.URL := AURL;
 
   if ShowModal = mrOk then
@@ -72,7 +86,7 @@ begin
       begin
         WebBrowser.Stop;
 
-        FToken.AuthCode := LParam.Value;
+        FToken.AuthToken := LParam.Value;
         ModalResult := mrOk;
         Hide;
         Exit;

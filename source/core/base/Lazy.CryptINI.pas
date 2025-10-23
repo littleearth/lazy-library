@@ -3,7 +3,7 @@ unit Lazy.CryptINI;
 interface
 
 uses
-  Windows, SysUtils, Variants, Classes, inifiles;
+  SysUtils, Variants, Classes, inifiles;
 
 const
   CRYPTINI_DEFAULT_KEY = '9ZehKeUpvGy3';
@@ -15,28 +15,36 @@ type
     FCryptFileName: TFileName;
     FKey: string;
     FSaveOnDestroy: Boolean;
-    function CheckDirectoryExists(ADirectory: string; ACreate: Boolean)
-      : Boolean;
+    function CheckDirectoryExists(
+      ADirectory: string;
+      ACreate: Boolean): Boolean;
   protected
     function SuperCipher(const S, Key: string): string;
     procedure LoadFile(AFileName: TFileName); overload;
     procedure SaveFile(AFileName: TFileName);
   public
-    constructor Create(const AFileName: TFileName;
-      AKey: string = CRYPTINI_DEFAULT_KEY; ASaveOnDestroy: Boolean = False);
-      reintroduce;
+    constructor Create(
+      const AFileName: TFileName;
+      AKey: string = CRYPTINI_DEFAULT_KEY;
+      ASaveOnDestroy: Boolean = False); reintroduce;
     destructor Destroy; override;
     procedure UpdateFile; override;
     procedure LoadFile; overload;
-    procedure WriteStrings(ASection: string; AStrings: TStrings);
-    procedure ReadStrings(ASection: string; AStrings: TStrings);
+    procedure WriteStrings(
+      ASection: string;
+      AStrings: TStrings);
+    procedure ReadStrings(
+      ASection: string;
+      AStrings: TStrings);
     property Key: string read FKey write FKey;
     property SaveOnDestroy: Boolean read FSaveOnDestroy write FSaveOnDestroy;
   end;
 
 implementation
 
-constructor TLZCryptINI.Create(const AFileName: TFileName; AKey: string;
+constructor TLZCryptINI.Create(
+  const AFileName: TFileName;
+  AKey: string;
   ASaveOnDestroy: Boolean);
 begin
   inherited Create('');
@@ -58,7 +66,8 @@ begin
   end;
 end;
 
-function TLZCryptINI.CheckDirectoryExists(ADirectory: string;
+function TLZCryptINI.CheckDirectoryExists(
+  ADirectory: string;
   ACreate: Boolean): Boolean;
 begin
   try
@@ -82,7 +91,9 @@ begin
   end;
 end;
 
-procedure TLZCryptINI.WriteStrings(ASection: string; AStrings: TStrings);
+procedure TLZCryptINI.WriteStrings(
+  ASection: string;
+  AStrings: TStrings);
 var
   LIdx: integer;
 begin
@@ -98,7 +109,9 @@ begin
   LoadFile(FCryptFileName);
 end;
 
-procedure TLZCryptINI.ReadStrings(ASection: string; AStrings: TStrings);
+procedure TLZCryptINI.ReadStrings(
+  ASection: string;
+  AStrings: TStrings);
 var
   LLines: TStringList;
   LIdx: integer;

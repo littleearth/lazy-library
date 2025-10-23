@@ -3,15 +3,19 @@ program DelphiAzureManagementFMX;
 uses
   System.StartUpCopy,
   Lazy.Log,
-  Lazy.Log.Basic,
   FMX.Forms,
   FMX.AzureDemo in 'FMX.AzureDemo.pas' {frmAzureDemo};
 
 {$R *.res}
 
+procedure InitialiseLog;
 begin
+  LazyLog.ApplicationName := 'DelphiAzureManagementFMX';
+end;
+
+begin
+  InitialiseLog;
   ReportMemoryLeaksOnShutdown := TRue;
-  SetLazyLogClass(TLZLogBasic);
   Application.Initialize;
   Application.CreateForm(TfrmAzureDemo, frmAzureDemo);
   Application.Run;

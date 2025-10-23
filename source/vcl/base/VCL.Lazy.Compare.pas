@@ -2,23 +2,24 @@ unit VCL.Lazy.Compare;
 
 interface
 
-uses Classes, Windows, SysUtils, VCL.Lazy.Utils, Lazy.Types, Lazy.Compare;
+uses Classes, Windows, SysUtils, VCL.Lazy.Utils.Windows, Lazy.Types,
+  Lazy.Compare;
 
 type
   TLZCompare = class(TLZCompareBase)
   public
-    function GetFileVersion(AFilename: TFileName): string;
-    function GetFileProductVersion(AFilename: TFileName): string;
+    class function GetFileVersion(AFilename: TFileName): string;
+    class function GetFileProductVersion(AFilename: TFileName): string;
   end;
 
-  TCompareConsole = class(TLZCompare)
+  TLZCompareConsole = class(TLZCompare)
   protected
-    function GetUsage: string;
+    function GetUsage: string; virtual;
     function CheckCommandParameter(var AMessage: string;
-      var AMode: TLZCompareMode; var AValue1: string;
-      var AValue2: string): boolean;
+      var AMode: TLZCompareMode; var AValue1: string; var AValue2: string)
+      : boolean; virtual;
   public
-    function Execute(var AMessage: string): integer;
+    function Execute(var AMessage: string): integer; virtual;
   end;
 
 implementation
@@ -28,7 +29,7 @@ uses
 
 { TCompare }
 
-function TLZCompare.GetFileVersion(AFilename: TFileName): string;
+class function TLZCompare.GetFileVersion(AFilename: TFileName): string;
 var
   LFileVersionInformation: TLZFileVersionInformation;
 begin
@@ -41,7 +42,7 @@ begin
   end;
 end;
 
-function TLZCompare.GetFileProductVersion(AFilename: TFileName): string;
+class function TLZCompare.GetFileProductVersion(AFilename: TFileName): string;
 var
   LFileVersionInformation: TLZFileVersionInformation;
 begin
@@ -54,9 +55,9 @@ begin
   end;
 end;
 
-{ TCompareConsole }
+{ TLZCompareConsole }
 
-function TCompareConsole.CheckCommandParameter(var AMessage: string;
+function TLZCompareConsole.CheckCommandParameter(var AMessage: string;
   var AMode: TLZCompareMode; var AValue1, AValue2: string): boolean;
 var
   LValue: string;
@@ -102,7 +103,7 @@ begin
   end;
 end;
 
-function TCompareConsole.Execute(var AMessage: string): integer;
+function TLZCompareConsole.Execute(var AMessage: string): integer;
 var
   LMode: TLZCompareMode;
   LValue1, LValue2: string;
@@ -194,13 +195,13 @@ begin
   end;
 end;
 
-function TCompareConsole.GetUsage: string;
+function TLZCompareConsole.GetUsage: string;
 var
   LUsage: TStringList;
 begin
   LUsage := TStringList.Create;
   try
-    LUsage.Add('bobcompare will compare 2 values and with the comparison both');
+    LUsage.Add('Compare 2 values with the comparison both');
     LUsage.Add('displayed and returned in %ERRORLEVEL%');
     LUsage.Add('');
     LUsage.Add('   0 if Value1 = Value2');
@@ -225,7 +226,7 @@ begin
     LUsage.Add('Examples:');
     LUsage.Add('   /MODE:VERSIONSTRING /VALUE1:1.1.1.0 /VALUE2:1.1.1');
     LUsage.Add('   /MODE:DATE /VALUE1:2022-01-25 /VALUE2:2022/01/25');
-    LUsage.Add('   /MODE:GETMD5 /VALUE1:""C:\Windows\System32\cmd.exe"');
+    LUsage.Add('   /MODE:GETMD5 /VALUE1:"C:\MyFile.exe"');
     Result := LUsage.Text;
   finally
     FreeAndNil(LUsage);

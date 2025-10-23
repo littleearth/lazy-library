@@ -2,14 +2,18 @@ program DelphiDuoAccountsDemoVCL;
 
 uses
   Lazy.Log,
-  Lazy.Log.Basic,
   Vcl.Forms,
   frmAccountsDemoU in 'frmAccountsDemoU.pas' {frmAccountsDemo};
 
 {$R *.res}
 
+procedure InitialiseLog;
 begin
-  SetLazyLogClass(TLZLogBasic);
+  LazyLog.ApplicationName := 'DelphiDuoAccountsDemoVCL';
+end;
+
+begin
+  InitialiseLog;
   ReportMemoryLeaksOnShutdown := True;
   Application.Title := 'Delphi DUO Accounts Demo';
   Application.Initialize;

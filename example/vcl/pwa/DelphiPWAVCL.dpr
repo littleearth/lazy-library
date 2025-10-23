@@ -2,14 +2,18 @@ program DelphiPWAVCL;
 
 uses
   Lazy.Log,
-  Lazy.Log.Basic,
   Vcl.Forms,
   frmPWAExampleU in 'frmPWAExampleU.pas' {frmPWAExample};
 
 {$R *.res}
 
+procedure InitialiseLog;
 begin
-  SetLazyLogClass(TLZLogBasic);
+  LazyLog.ApplicationName := 'DelphiPWAVCL';
+end;
+
+begin
+  InitialiseLog;
   ReportMemoryLeaksOnShutdown := True;
   Application.Initialize;
   Application.MainFormOnTaskbar := True;

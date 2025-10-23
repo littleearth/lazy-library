@@ -158,7 +158,7 @@ type
 implementation
 
 uses
-  SysUtils, DateUtils,
+  SysUtils, DateUtils, Math,
   Lazy.Utils.Base, Lazy.Types;
 
 {$REGION 'Local procedures and functions'}
@@ -243,20 +243,21 @@ begin
     ' which is not equal to expected ' + DateTimeToStr(LExpected));
 end;
 
-procedure TLZUtilsBaseTests.StringToTime_ValidInputDate(AInput: string;
+procedure TLZUtilsBaseTests.StringToTime_ValidInputDate(
+  AInput: string;
   AExpectedAsStr: string);
 begin
   TestStringToTime(AInput, AExpectedAsStr);
 end;
 
-procedure TLZUtilsBaseTests.StringToDateTime_ValidInputDate(AInput: string;
+procedure TLZUtilsBaseTests.StringToDateTime_ValidInputDate(
+  AInput: string;
   AExpectedAsStr: string);
 begin
   TestStringToDateTime(AInput, AExpectedAsStr);
 end;
 
-procedure TLZUtilsBaseTests.StringToTime_ValidShortcutInput_Now
-  (AInput: string);
+procedure TLZUtilsBaseTests.StringToTime_ValidShortcutInput_Now(AInput: string);
 begin
   TestStringToTime(AInput, TimeToStr(NowMock));
 end;
@@ -277,8 +278,8 @@ begin
   TestStringToTime(AInput, TimeToStr(IncMinute(NowMock, StrToInt(AToAdd))));
 end;
 
-procedure TLZUtilsBaseTests.StringToTime_ValidShortcutInput_NowPlusHours
-  (AInput, AToAdd: string);
+procedure TLZUtilsBaseTests.StringToTime_ValidShortcutInput_NowPlusHours(AInput,
+  AToAdd: string);
 begin
   AToAdd := TrimLeft(AToAdd);
 

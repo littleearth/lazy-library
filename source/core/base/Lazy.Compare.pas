@@ -2,7 +2,7 @@ unit Lazy.Compare;
 
 interface
 
-uses Classes, Windows, SysUtils, Lazy.Utils, Lazy.Types;
+uses Classes, SysUtils, Lazy.Utils, Lazy.Types;
 
 type
   TLZCompareMode = (vcString, vcInteger, vcFloat, vcDate, vcTime, vcDateTime,
@@ -11,23 +11,24 @@ type
 
   TLZCompareBase = class(TLZObject)
   protected
-    function GetCompareMode(AVersionCompareMode: string): TLZCompareMode;
+    class function GetCompareMode(AVersionCompareMode: string): TLZCompareMode;
   public
-    function CompareVersion(AVersion1: string; AVersion2: string): integer;
-    function CompareInteger(AValue1, AValue2: string): integer;
-    function CompareFloat(AValue1, AValue2: string): integer;
-    function CompareDate(AValue1, AValue2: string): integer;
-    function CompareTime(AValue1, AValue2: string): integer;
-    function CompareDateTime(AValue1, AValue2: string): integer;
-    function GenerateMD5(AFilename: TFileName): string;
+    class function CompareVersion(AVersion1: string; AVersion2: string)
+      : integer;
+    class function CompareInteger(AValue1, AValue2: string): integer;
+    class function CompareFloat(AValue1, AValue2: string): integer;
+    class function CompareDate(AValue1, AValue2: string): integer;
+    class function CompareTime(AValue1, AValue2: string): integer;
+    class function CompareDateTime(AValue1, AValue2: string): integer;
+    class function GenerateMD5(AFilename: TFileName): string;
   end;
 
 implementation
 
 uses
-  IdHashMessageDigest, idHash, System.Math, System.DateUtils;
+  Lazy.MD5, System.Math, System.DateUtils;
 
-function TLZCompareBase.GetCompareMode(AVersionCompareMode: string)
+class function TLZCompareBase.GetCompareMode(AVersionCompareMode: string)
   : TLZCompareMode;
 begin
   Result := vcString;
@@ -57,7 +58,8 @@ begin
     Result := vcGetVersionProduct
 end;
 
-function TLZCompareBase.CompareVersion(AVersion1, AVersion2: string): integer;
+class function TLZCompareBase.CompareVersion(AVersion1,
+  AVersion2: string): integer;
 var
   LVersionDetails: TApplicationVersionDetails;
   LVersion1, LVersion2: string;
@@ -66,7 +68,6 @@ begin
   Result := -9999;
   LVersion1 := AVersion1;
   LVersion2 := AVersion2;
-  Log('Version1: ' + LVersion1 + ', Version2: ' + LVersion2);
   LVersionDetails := TApplicationVersionDetails.Create(nil);
   try
 
@@ -84,8 +85,6 @@ begin
     LVersionDetails.Reset;
     LVersionDetails.Version := LVersion1;
     LVersion1Current := LVersionDetails.IsCurrent(LVersion2);
-
-    Log('Version1: ' + LVersion1 + ', Version2: ' + LVersion2);
 
     if LVersion1Current and LVersion2Current then
     begin
@@ -107,7 +106,7 @@ begin
   end;
 end;
 
-function TLZCompareBase.CompareDate(AValue1, AValue2: string): integer;
+class function TLZCompareBase.CompareDate(AValue1, AValue2: string): integer;
 var
   LValue1, LValue2: TDate;
 begin
@@ -116,7 +115,8 @@ begin
   Result := System.DateUtils.CompareDate(LValue1, LValue2);
 end;
 
-function TLZCompareBase.CompareDateTime(AValue1, AValue2: string): integer;
+class function TLZCompareBase.CompareDateTime(AValue1, AValue2: string)
+  : integer;
 var
   LValue1, LValue2: TDateTime;
 begin
@@ -125,7 +125,7 @@ begin
   Result := System.DateUtils.CompareDateTime(LValue1, LValue2);
 end;
 
-function TLZCompareBase.CompareFloat(AValue1, AValue2: string): integer;
+class function TLZCompareBase.CompareFloat(AValue1, AValue2: string): integer;
 var
   LValue1, LValue2: Double;
 begin
@@ -134,7 +134,7 @@ begin
   Result := CompareValue(LValue1, LValue2);
 end;
 
-function TLZCompareBase.CompareInteger(AValue1, AValue2: string): integer;
+class function TLZCompareBase.CompareInteger(AValue1, AValue2: string): integer;
 var
   LValue1, LValue2: integer;
 begin
@@ -143,7 +143,7 @@ begin
   Result := CompareValue(LValue1, LValue2);
 end;
 
-function TLZCompareBase.CompareTime(AValue1, AValue2: string): integer;
+class function TLZCompareBase.CompareTime(AValue1, AValue2: string): integer;
 var
   LValue1, LValue2: TTime;
 begin
@@ -152,18 +152,15 @@ begin
   Result := System.DateUtils.CompareTime(LValue1, LValue2);
 end;
 
-function TLZCompareBase.GenerateMD5(AFilename: TFileName): string;
+class function TLZCompareBase.GenerateMD5(AFilename: TFileName): string;
 var
-  LIdMD5: TIdHashMessageDigest5;
-  LFileStream: TFileStream;
+  LMD5: TLZMD5;
 begin
-  LIdMD5 := TIdHashMessageDigest5.Create;
-  LFileStream := TFileStream.Create(AFilename, fmOpenRead OR fmShareDenyWrite);
+  LMD5 := TLZMD5.Create;
   try
-    Result := LIdMD5.HashBytesAsHex(LIdMD5.HashStream(LFileStream));
+    Result := LMD5.GenerateMD5(AFilename);
   finally
-    LFileStream.Free;
-    LIdMD5.Free;
+    LMD5.Free;
   end;
 end;
 

@@ -2,37 +2,55 @@ unit Lazy.Token;
 
 interface
 
-uses Lazy.Types, Classes;
+uses Classes;
+
+const
+  LZTokenDefaultSeperators: TArray<Char> = [';', ','];
 
 type
-  TLZToken = class(TLZObject)
+  TLZTokenSeperators = TArray<Char>;
+
+  TLZToken = class(TPersistent)
   private
     FTokens: TStringList;
     FSource: string;
-    FSeperator: char;
+    FSeperator: Char;
     FOutOfBoundsException: Boolean;
     FOutOfBoundsValue: string;
   protected
     procedure SetSource(AValue: string);
-    procedure SetSeperator(AValue: char);
-    function GetNextToken(const S: string; Separator: char;
+    procedure SetSeperator(AValue: Char);
+    function GetNextToken(
+      const S: string;
+      Separator: Char;
       var StartPos: integer): string;
     procedure Split;
     function GetToken(AIndex: integer): string;
-    procedure SetToken(AIndex: integer; AValue: string);
+    procedure SetToken(
+      AIndex: integer;
+      AValue: string);
     function GetText: string;
     function GetCount: integer;
   public
-    constructor Create(ASource: string; ASeperator: char); reintroduce;
-      overload;
+    constructor Create(
+      ASource: string;
+      ASeperator: Char); reintroduce; overload;
+    constructor Create(
+      ASource: string;
+      ASeperators: TLZTokenSeperators = []); overload;
     constructor Create; overload;
     destructor Destroy; override;
     property Tokens[AIndex: integer]: string read GetToken write SetToken;
-    function TokenExists(AValue: string;
+    function TokenExists(
+      AValue: string;
       ACaseSensitive: Boolean = false): Boolean;
+    class function GetTokens(
+      ASource: string;
+      ASeperators: TLZTokenSeperators): TStrings; overload;
+    class function GetTokens(ASource: string): TStrings; overload;
     property Strings: TStringList read FTokens;
     property Source: string Read FSource Write SetSource;
-    property Seperator: char Read FSeperator Write SetSeperator;
+    property Seperator: Char Read FSeperator Write SetSeperator;
     property Text: string read GetText;
     property OutOfBoundsException: Boolean read FOutOfBoundsException
       write FOutOfBoundsException;
@@ -45,7 +63,9 @@ implementation
 
 uses SysUtils;
 
-constructor TLZToken.Create(ASource: string; ASeperator: char);
+constructor TLZToken.Create(
+  ASource: string;
+  ASeperator: Char);
 begin
   inherited Create;
   FTokens := TStringList.Create;
@@ -59,6 +79,31 @@ end;
 constructor TLZToken.Create;
 begin
   Create('', ',');
+end;
+
+constructor TLZToken.Create(
+  ASource: string;
+  ASeperators: TLZTokenSeperators);
+var
+  LSource: String;
+  LSeperator: Char;
+  LSeperators: TLZTokenSeperators;
+begin
+  LSource := ASource;
+  LSeperators := ASeperators;
+  if Length(LSeperators) > 0 then
+  begin
+    LSeperators := LZTokenDefaultSeperators;
+  end;
+
+  FSeperator := LSeperators[0];
+  for LSeperator in LSeperators do
+  begin
+    LSource := StringReplace(LSource, LSeperator, FSeperator,
+      [rfReplaceAll, rfIgnoreCase]);
+  end;
+
+  Create(LSource, FSeperator);
 end;
 
 destructor TLZToken.Destroy;
@@ -81,13 +126,15 @@ begin
   end;
 end;
 
-procedure TLZToken.SetSeperator(AValue: char);
+procedure TLZToken.SetSeperator(AValue: Char);
 begin
   FSeperator := AValue;
   Split;
 end;
 
-function TLZToken.GetNextToken(const S: string; Separator: char;
+function TLZToken.GetNextToken(
+  const S: string;
+  Separator: Char;
   var StartPos: integer): string;
 var
   Index: integer;
@@ -117,12 +164,29 @@ end;
 
 procedure TLZToken.Split;
 var
+  // Idx: integer;
   SourceArray: TArray<string>;
   TokenStr: string;
 begin
   FTokens.Clear;
+  // Value := '';
   if Length(FSource) > 0 then
   begin
+    // while Start <= Length(FSource) do
+    // FTokens.Add(GetNextToken(FSource, FSeperator, Start));
+    // for Idx := Start to Length(FSource) do
+    // begin
+    // if FSource[Idx] = FSeperator then
+    // begin
+    // FTokens.Add(Value);
+    // Value := '';
+    // end
+    // else
+    // begin
+    // Value := Value + FSource[Idx];
+    // end;
+    // end;
+
     if FSource.Contains(FSeperator) then
     begin
 
@@ -141,7 +205,8 @@ begin
   end;
 end;
 
-function TLZToken.TokenExists(AValue: string;
+function TLZToken.TokenExists(
+  AValue: string;
   ACaseSensitive: Boolean): Boolean;
 var
   Idx: integer;
@@ -181,7 +246,30 @@ begin
   end;
 end;
 
-procedure TLZToken.SetToken(AIndex: integer; AValue: string);
+class function TLZToken.GetTokens(ASource: string): TStrings;
+begin
+  Result := GetTokens(ASource, LZTokenDefaultSeperators);
+end;
+
+class function TLZToken.GetTokens(
+  ASource: string;
+  ASeperators: TLZTokenSeperators): TStrings;
+var
+  LLZToken: TLZToken;
+begin
+  Result := TStringList.Create;
+  LLZToken := TLZToken.Create(ASource, ASeperators);
+  try
+    Result.Assign(LLZToken.Strings);
+  finally
+    FreeAndNil(LLZToken);
+  end;
+
+end;
+
+procedure TLZToken.SetToken(
+  AIndex: integer;
+  AValue: string);
 begin
   FTokens[AIndex] := AValue;
 end;

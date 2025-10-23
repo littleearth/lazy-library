@@ -22,8 +22,6 @@ object frmAdminDemo: TfrmAdminDemo
     Align = alClient
     Caption = 'Panel1'
     TabOrder = 1
-    ExplicitWidth = 620
-    ExplicitHeight = 175
     object imgLogo: TImage
       Left = 518
       Top = 1
@@ -48,8 +46,6 @@ object frmAdminDemo: TfrmAdminDemo
       ScrollBars = ssBoth
       TabOrder = 0
       WordWrap = False
-      ExplicitWidth = 507
-      ExplicitHeight = 167
     end
   end
   object Panel2: TPanel
@@ -59,7 +55,6 @@ object frmAdminDemo: TfrmAdminDemo
     Height = 265
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 620
     object GridPanel1: TGridPanel
       Left = 1
       Top = 204
@@ -98,7 +93,6 @@ object frmAdminDemo: TfrmAdminDemo
           Value = 100.000000000000000000
         end>
       TabOrder = 1
-      ExplicitWidth = 618
       object BitBtn1: TBitBtn
         AlignWithMargins = True
         Left = 4
@@ -168,7 +162,6 @@ object frmAdminDemo: TfrmAdminDemo
           Value = 33.333333333333310000
         end>
       TabOrder = 0
-      ExplicitWidth = 618
       object Panel3: TPanel
         AlignWithMargins = True
         Left = 4

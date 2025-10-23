@@ -69,35 +69,41 @@ object frmPWAExample: TfrmPWAExample
         Value = 33.333333333333310000
       end>
     TabOrder = 0
-    ExplicitWidth = 618
+    ExplicitWidth = 596
     object Label1: TLabel
       Left = 1
       Top = 1
-      Width = 48
-      Height = 15
+      Width = 140
+      Height = 34
       Align = alClient
       Caption = 'Endpoint'
+      ExplicitWidth = 48
+      ExplicitHeight = 15
     end
     object Label3: TLabel
       Left = 1
       Top = 35
-      Width = 53
-      Height = 15
+      Width = 140
+      Height = 35
       Align = alClient
       Caption = 'Username'
+      ExplicitWidth = 53
+      ExplicitHeight = 15
     end
     object Label5: TLabel
       Left = 1
       Top = 70
-      Width = 50
-      Height = 15
+      Width = 140
+      Height = 34
       Align = alClient
       Caption = 'Password'
+      ExplicitWidth = 50
+      ExplicitHeight = 15
     end
     object editEndPoint: TEdit
-      Left = 143
+      Left = 141
       Top = 1
-      Width = 474
+      Width = 466
       Height = 34
       Align = alClient
       TabOrder = 0
@@ -105,22 +111,26 @@ object frmPWAExample: TfrmPWAExample
       ExplicitHeight = 23
     end
     object editUsername: TEdit
-      Left = 143
+      Left = 141
       Top = 35
-      Width = 474
+      Width = 466
       Height = 35
       Align = alClient
       TabOrder = 1
+      ExplicitLeft = 138
+      ExplicitWidth = 457
       ExplicitHeight = 23
     end
     object editPassword: TEdit
-      Left = 143
+      Left = 141
       Top = 70
-      Width = 474
+      Width = 466
       Height = 34
       Align = alClient
       PasswordChar = '*'
       TabOrder = 2
+      ExplicitLeft = 138
+      ExplicitWidth = 457
       ExplicitHeight = 23
     end
   end
@@ -133,8 +143,6 @@ object frmPWAExample: TfrmPWAExample
     ScrollBars = ssBoth
     TabOrder = 2
     WordWrap = False
-    ExplicitWidth = 618
-    ExplicitHeight = 278
   end
   object GridPanel2: TGridPanel
     Left = 0
@@ -181,12 +189,12 @@ object frmPWAExample: TfrmPWAExample
         Value = 100.000000000000000000
       end>
     TabOrder = 1
-    ExplicitWidth = 618
+    ExplicitWidth = 596
     object BitBtn1: TBitBtn
       AlignWithMargins = True
       Left = 4
       Top = 4
-      Width = 148
+      Width = 146
       Height = 33
       Action = ActionSystems
       Align = alClient
@@ -195,9 +203,9 @@ object frmPWAExample: TfrmPWAExample
     end
     object BitBtn2: TBitBtn
       AlignWithMargins = True
-      Left = 158
+      Left = 156
       Top = 4
-      Width = 148
+      Width = 145
       Height = 33
       Action = ActionAssets
       Align = alClient
@@ -206,9 +214,9 @@ object frmPWAExample: TfrmPWAExample
     end
     object BitBtn3: TBitBtn
       AlignWithMargins = True
-      Left = 312
+      Left = 307
       Top = 4
-      Width = 148
+      Width = 146
       Height = 33
       Action = ActionPublishSystems
       Align = alClient
@@ -217,9 +225,9 @@ object frmPWAExample: TfrmPWAExample
     end
     object BitBtn4: TBitBtn
       AlignWithMargins = True
-      Left = 466
+      Left = 459
       Top = 4
-      Width = 148
+      Width = 145
       Height = 33
       Action = ActionSendNotification
       Align = alClient

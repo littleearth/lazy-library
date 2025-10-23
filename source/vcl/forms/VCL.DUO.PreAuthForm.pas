@@ -140,7 +140,7 @@ var
   LDUODevice: TLZDUODevice;
 begin
   Reset;
-  for LDUODevice in FDUODevices.Items do
+  for LDUODevice in FDUODevices do
   begin
     comboDevices.Items.Add(LDUODevice.Number);
   end;

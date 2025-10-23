@@ -4,23 +4,35 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, REST.Types, REST.client,
-  REST.Authenticator.Basic, System.JSON, duo.api, System.Generics.Collections,
-  duo.models, duo.admin;
+  System.JSON, DUO.api, System.Generics.Collections,
+  DUO.models;
 
 type
 
-  TOnDuoAccountsEvent = procedure(ASender: TObject; AAccounts: TLZDUOAccounts;
-    AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean) of object;
+  TOnDuoAccountsEvent = procedure(
+    ASender: TObject;
+    AAccounts: TLZDUOAccounts;
+    AMessage: string;
+    ASuccess: boolean;
+    var AOwnsObjects: boolean) of object;
   TOnDuoAccountsProc = reference to procedure(AAccounts: TLZDUOAccounts;
     AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean);
 
-  TOnDuoBillingEvent = procedure(ASender: TObject; AAcountID: string;
-    AEdition: string; AMessage: string; ASuccess: boolean) of object;
+  TOnDuoBillingEvent = procedure(
+    ASender: TObject;
+    AAcountID: string;
+    AEdition: string;
+    AMessage: string;
+    ASuccess: boolean) of object;
   TOnDuoBillingProc = reference to procedure(AAcountID: string;
     AEdition: string; AMessage: string; ASuccess: boolean);
 
-  TOnDuoTelephonyCreditsEvent = procedure(ASender: TObject; AAcountID: string;
-    ACredits: integer; AMessage: string; ASuccess: boolean) of object;
+  TOnDuoTelephonyCreditsEvent = procedure(
+    ASender: TObject;
+    AAcountID: string;
+    ACredits: integer;
+    AMessage: string;
+    ASuccess: boolean) of object;
   TOnDuoTelephonyCreditsProc = reference to procedure(AAcountID: string;
     ACredits: integer; AMessage: string; ASuccess: boolean);
 
@@ -36,12 +48,17 @@ type
     function GetBaseResource: string; override;
     function GetAdminBaseResource: string;
   public
-    procedure GetAccounts(AIncludeBillingEdition: boolean = false;
+    procedure GetAccounts(
+      AIncludeBillingEdition: boolean = false;
       AIncludeTeleponyCredits: boolean = false;
       AOnDuoAccountsProc: TOnDuoAccountsProc = nil);
-    procedure GetBilling(AAccountID: string; AAPIHostname: string;
+    procedure GetBilling(
+      AAccountID: string;
+      AAPIHostname: string;
       AOnDuoBillingProc: TOnDuoBillingProc = nil);
-    procedure GetTelephonyCredits(AAccountID: string; AAPIHostname: string;
+    procedure GetTelephonyCredits(
+      AAccountID: string;
+      AAPIHostname: string;
       AOnDuoTelephonyCreditsProc: TOnDuoTelephonyCreditsProc = nil);
   published
     property OnGetAccounts: TOnDuoAccountsEvent read FOnGetAccounts
@@ -54,13 +71,11 @@ type
 
 implementation
 
-uses
-  System.StrUtils;
-
 { TDUOAccounts }
 
-procedure TLZDUOAccountsApi.GetAccounts(AIncludeBillingEdition,
-  AIncludeTeleponyCredits: boolean; AOnDuoAccountsProc: TOnDuoAccountsProc);
+procedure TLZDUOAccountsApi.GetAccounts(
+  AIncludeBillingEdition, AIncludeTeleponyCredits: boolean;
+  AOnDuoAccountsProc: TOnDuoAccountsProc);
 var
   LAccounts: TLZDUOAccounts;
   LResult, LOwnsObjects: boolean;
@@ -89,7 +104,7 @@ begin
               LAccounts.FromJSONValue(ARESTResponse.JSONValue);
               if AIncludeBillingEdition then
               begin
-                for LAccount in LAccounts.Items do
+                for LAccount in LAccounts.models do
                 begin
                   GetBilling(LAccount.AccountID, LAccount.APIHostname,
                     procedure(AAcountID: string; AEdition: string;
@@ -102,7 +117,7 @@ begin
               end;
               if AIncludeTeleponyCredits then
               begin
-                for LAccount in LAccounts.Items do
+                for LAccount in LAccounts.models do
                 begin
                   GetTelephonyCredits(LAccount.AccountID, LAccount.APIHostname,
                     procedure(AAcountID: string; ACredits: integer;
@@ -159,8 +174,9 @@ begin
   Result := '/accounts/v1/';
 end;
 
-procedure TLZDUOAccountsApi.GetBilling(AAccountID, AAPIHostname: string;
-AOnDuoBillingProc: TOnDuoBillingProc);
+procedure TLZDUOAccountsApi.GetBilling(
+  AAccountID, AAPIHostname: string;
+  AOnDuoBillingProc: TOnDuoBillingProc);
 var
   LEdition: string;
   LResult: boolean;
@@ -224,8 +240,9 @@ begin
 
 end;
 
-procedure TLZDUOAccountsApi.GetTelephonyCredits(AAccountID, AAPIHostname: string;
-AOnDuoTelephonyCreditsProc: TOnDuoTelephonyCreditsProc);
+procedure TLZDUOAccountsApi.GetTelephonyCredits(
+  AAccountID, AAPIHostname: string;
+  AOnDuoTelephonyCreditsProc: TOnDuoTelephonyCreditsProc);
 var
   LCredits: integer;
   LResult: boolean;

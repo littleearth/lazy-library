@@ -2,7 +2,7 @@ unit Lazy.MD5;
 
 interface
 
-uses Classes, Windows, SysUtils, Lazy.Utils, Lazy.Types;
+uses Classes, SysUtils, Lazy.Utils, Lazy.Types;
 
 type
   TLZMD5Mode = (md5Generate, md5Compare);
@@ -13,7 +13,9 @@ type
     function GetMD5FileName(AFileName: TFileName): TFileName;
   public
     function LoadMD5(AFileName: TFileName): string;
-    function SaveMD5(AFileName: TFileName; AMD5: string): Boolean;
+    function SaveMD5(
+      AFileName: TFileName;
+      AMD5: string): Boolean;
     function GenerateMD5(AFileName: TFileName): string; overload;
     function CompareMD5(AFileName: TFileName): Boolean; overload;
   end;
@@ -21,7 +23,7 @@ type
 implementation
 
 uses
-  IdHashMessageDigest, idHash, System.Math, System.DateUtils, Lazy.Token;
+  IdHashMessageDigest, idHash, System.Math;
 
 function TLZMD5.GetMD5Mode(AVersionCompareMode: string): TLZMD5Mode;
 begin
@@ -47,7 +49,9 @@ begin
   end;
 end;
 
-function TLZMD5.SaveMD5(AFileName: TFileName; AMD5: string): Boolean;
+function TLZMD5.SaveMD5(
+  AFileName: TFileName;
+  AMD5: string): Boolean;
 var
   LFile: TStringList;
 begin

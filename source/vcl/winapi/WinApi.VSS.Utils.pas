@@ -302,7 +302,7 @@ procedure WriteStringToFile(const AFileName, bstrXML: string);
 { ---------------------------------------------------------------- }
 implementation
 
-uses System.StrUtils, VCL.Lazy.Utils, WinApi.VSS.Consts, WinApi.COMAdmin;
+uses System.StrUtils, VCL.Lazy.Utils.Windows, WinApi.VSS.Consts, WinApi.COMAdmin;
 
 procedure VssCoInitializeSecurity;
 begin

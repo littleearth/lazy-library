@@ -2,14 +2,18 @@ program DelphiSystemInformationVCL;
 
 uses
   Lazy.Log,
-  Lazy.Log.Basic,
   Vcl.Forms,
   frmSystemInformationU in 'frmSystemInformationU.pas' {frmSystemInformation};
 
 {$R *.res}
 
+procedure InitialiseLog;
 begin
-  SetLazyLogClass(TLZLogBasic);
+  LazyLog.ApplicationName := 'DelphiSystemInformationVCL';
+end;
+
+begin
+  InitialiseLog;
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
   Application.CreateForm(TfrmSystemInformation, frmSystemInformation);

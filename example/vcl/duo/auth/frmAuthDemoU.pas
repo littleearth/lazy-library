@@ -66,17 +66,31 @@ type
     FLogoFileName: TFileName;
     procedure LoadSettings;
     procedure SaveSettings;
-    procedure Login(ADevice: string = 'auto'; AFactor: string = 'auto';
+    procedure Login(
+      ADevice: string = 'auto';
+      AFactor: string = 'auto';
       APasscode: string = '');
     procedure Check;
     procedure PreAuth;
-    procedure OnPreAuth(ASender: TObject; ADevices: TLZDUODevices;
-      AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean);
-    procedure OnLogin(ASender: TObject; AMessage: string;
+    procedure OnPreAuth(
+      ASender: TObject;
+      ADevices: TLZDUODevices;
+      AMessage: string;
+      ASuccess: boolean;
+      var AOwnsObjects: boolean);
+    procedure OnLogin(
+      ASender: TObject;
+      AMessage: string;
       AResponse: TDUOLoginResponse);
-    procedure OnCheck(ASender: TObject; AMessage: string; ASuccess: boolean);
+    procedure OnCheck(
+      ASender: TObject;
+      AMessage: string;
+      ASuccess: boolean);
     procedure Ping;
-    procedure OnPing(ASender: TObject; AMessage: string; ASuccess: boolean);
+    procedure OnPing(
+      ASender: TObject;
+      AMessage: string;
+      ASuccess: boolean);
     procedure Logo;
   public
     { Public declarations }
@@ -90,8 +104,8 @@ implementation
 {$R *.dfm}
 
 uses
-  Vcl.duo.preauthform, System.IOUtils, Lazy.CryptINI, Lazy.Log, Lazy.Log.Basic;
-
+  Vcl.duo.preauthform, System.IOUtils, Lazy.CryptINI, Lazy.Log,
+  pngimage;
 
 procedure TfrmAuthDemo.FormCreate(Sender: TObject);
 begin
@@ -109,8 +123,12 @@ begin
   SaveSettings;
 end;
 
-procedure TfrmAuthDemo.OnPreAuth(ASender: TObject; ADevices: TLZDUODevices;
-  AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean);
+procedure TfrmAuthDemo.OnPreAuth(
+  ASender: TObject;
+  ADevices: TLZDUODevices;
+  AMessage: string;
+  ASuccess: boolean;
+  var AOwnsObjects: boolean);
 var
   LDevice, LFactor, LPasscode: string;
 begin
@@ -134,7 +152,9 @@ begin
   end;
 end;
 
-procedure TfrmAuthDemo.OnLogin(ASender: TObject; AMessage: string;
+procedure TfrmAuthDemo.OnLogin(
+  ASender: TObject;
+  AMessage: string;
   AResponse: TDUOLoginResponse);
 begin
   case AResponse of
@@ -151,7 +171,9 @@ begin
   end;
 end;
 
-procedure TfrmAuthDemo.OnCheck(ASender: TObject; AMessage: string;
+procedure TfrmAuthDemo.OnCheck(
+  ASender: TObject;
+  AMessage: string;
   ASuccess: boolean);
 begin
   if not ASuccess then
@@ -165,7 +187,9 @@ begin
   end;
 end;
 
-procedure TfrmAuthDemo.OnPing(ASender: TObject; AMessage: string;
+procedure TfrmAuthDemo.OnPing(
+  ASender: TObject;
+  AMessage: string;
   ASuccess: boolean);
 begin
   if not ASuccess then

@@ -9,31 +9,42 @@ uses
 type
   TLZNetworkTools = class(TLZObject)
   public
-    class procedure GetLocalNetworkList(AList: TStrings;
+    class procedure GetLocalNetworkList(
+      AList: TStrings;
       AIncludeSubnet: boolean = false);
     class function GetNetworkAddress(AIPAddress: string): string; static;
-    class procedure GetLocalNetwork(var ANetwork: string; var ASubnet: string);
-    class procedure GetIPList(AIPList: TStrings; ANetwork: string = '';
+    class procedure GetLocalNetwork(
+      var ANetwork: string;
+      var ASubnet: string);
+    class procedure GetIPList(
+      AIPList: TStrings;
+      ANetwork: string = '';
       ASubnet: string = '255.255.255.0'); overload;
-    class procedure GetIPList(AIPList: TStrings;
+    class procedure GetIPList(
+      AIPList: TStrings;
       ANetworkList: TStrings); overload;
     class procedure GetLocalNetworkIPList(AIPList: TStrings);
     class function IsIPAddress(AIP: string): boolean;
-    class function Ping(const AHost: string; ATimeout: integer = 200;
+    class function Ping(
+      const AHost: string;
+      ATimeout: integer = 200;
       APacketSize: integer = 24): boolean;
+    class function GetHostname: string;
+    class function GetIPAddress: string;
+    class function GetIPAddresses: string;
   end;
 
 implementation
 
 uses
   IdNetworkCalculator,
-  IdGlobal, IdStack, IdBaseComponent, IdComponent, IdUDPBase, IdUDPClient,
+  IdGlobal, IdStack, IdBaseComponent,
   IdIcmpClient;
 
 { TNetTools }
 
-
-class procedure TLZNetworkTools.GetIPList(AIPList: TStrings;
+class procedure TLZNetworkTools.GetIPList(
+  AIPList: TStrings;
   ANetwork, ASubnet: string);
 var
   LIdNetworkCalculator: TIdNetworkCalculator;
@@ -60,6 +71,38 @@ begin
     finally
       FreeAndNil(LIdNetworkCalculator);
     end;
+  end;
+end;
+
+{ TDuoNetworkTools }
+
+class function TLZNetworkTools.GetHostname: string;
+begin
+  TIdStack.IncUsage;
+  try
+    Result := GStack.Hostname;
+  finally
+    TIdStack.DecUsage;
+  end;
+end;
+
+class function TLZNetworkTools.GetIPAddress: string;
+begin
+  TIdStack.IncUsage;
+  try
+    Result := GStack.LocalAddress;
+  finally
+    TIdStack.DecUsage;
+  end;
+end;
+
+class function TLZNetworkTools.GetIPAddresses: string;
+begin
+  TIdStack.IncUsage;
+  try
+    Result := GStack.LocalAddresses.DelimitedText;
+  finally
+    TIdStack.DecUsage;
   end;
 end;
 
@@ -128,7 +171,8 @@ begin
   end;
 end;
 
-class procedure TLZNetworkTools.GetLocalNetworkList(AList: TStrings;
+class procedure TLZNetworkTools.GetLocalNetworkList(
+  AList: TStrings;
   AIncludeSubnet: boolean);
 var
   LList: TIdStackLocalAddressList;
@@ -176,7 +220,6 @@ begin
   end;
 end;
 
-
 class function TLZNetworkTools.IsIPAddress(AIP: string): boolean;
 var
   LIdNetworkCalculator: TIdNetworkCalculator;
@@ -194,7 +237,8 @@ begin
   end;
 end;
 
-class function TLZNetworkTools.Ping(const AHost: string;
+class function TLZNetworkTools.Ping(
+  const AHost: string;
   ATimeout, APacketSize: integer): boolean;
 var
   IdIcmpClient: TIdIcmpClient;

@@ -56,7 +56,7 @@ implementation
 {$R *.dfm}
 
 uses
-  Vcl.Lazy.Utils;
+  Vcl.Lazy.Utils.Windows;
 
 procedure TfrmVSSCopy.ActionBrowseDestinationExecute(Sender: TObject);
 begin

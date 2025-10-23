@@ -7,7 +7,7 @@ uses
   System.Variants, Lazy.RESTClient;
 
 const
-  PWA_DEFAULT_END_POINT = 'https://api.pulseway.com/v2/';
+  PWA_DEFAULT_END_POINT = 'https://api.pulseway.com/v3/';
 
 type
   TLZPWACore = class(TLZRESTClientBasicAuth)
@@ -31,10 +31,17 @@ type
 
   TLZPWANotifications = class(TLZPWACore)
   public
-    procedure RegisterSytem(AInstanceID: string; AName: string;
-      AGroup: string = ''; ADescription: string = '';
-      ANextRefreshInterval: integer = 5; ANotifyWhenOffline: boolean = true);
-    procedure Notify(AInstanceID: string; ATitle: string; AMessage: string;
+    procedure RegisterSytem(
+      AInstanceID: string;
+      AName: string;
+      AGroup: string = '';
+      ADescription: string = '';
+      ANextRefreshInterval: integer = 5;
+      ANotifyWhenOffline: boolean = true);
+    procedure Notify(
+      AInstanceID: string;
+      ATitle: string;
+      AMessage: string;
       APriority: TLZPWAPriority);
 
   end;
@@ -64,17 +71,18 @@ end;
 
 { TPWANotifications }
 
-procedure TLZPWANotifications.Notify(AInstanceID, ATitle, AMessage: string;
+procedure TLZPWANotifications.Notify(
+  AInstanceID, ATitle, AMessage: string;
   APriority: TLZPWAPriority);
 var
   LJSON: TJSONObject;
 begin
   LJSON := TJSONObject.Create;
   try
-    LJSON.AddPair('instance_id', AInstanceID);
-    LJSON.AddPair('title', ATitle);
-    LJSON.AddPair('message', AMessage);
-    LJSON.AddPair('priority', TLZPWAPriorityHelper.AsString(APriority));
+    LJSON.AddPair('InstanceId', AInstanceID);
+    LJSON.AddPair('Title', ATitle);
+    LJSON.AddPair('Message', AMessage);
+    LJSON.AddPair('Priority', TLZPWAPriorityHelper.AsString(APriority));
 
     Post('notifications', LJSON.ToJSON,
       procedure(Asender: TObject; ASuccess: boolean; AMessage: string;
@@ -94,20 +102,21 @@ begin
   end;
 end;
 
-procedure TLZPWANotifications.RegisterSytem(AInstanceID, AName, AGroup,
-  ADescription: string; ANextRefreshInterval: integer;
-ANotifyWhenOffline: boolean);
+procedure TLZPWANotifications.RegisterSytem(
+  AInstanceID, AName, AGroup, ADescription: string;
+  ANextRefreshInterval: integer;
+  ANotifyWhenOffline: boolean);
 var
   LJSON: TJSONObject;
 begin
   LJSON := TJSONObject.Create;
   try
-    LJSON.AddPair('instance_id', AInstanceID);
-    LJSON.AddPair('name', AName);
-    LJSON.AddPair('group', AGroup);
-    LJSON.AddPair('next_refresh_interval_minutes', ANextRefreshInterval);
-    LJSON.AddPair('notify_when_offline', ANotifyWhenOffline);
-    Post('systems', LJSON.ToJSON,
+    LJSON.AddPair('InstanceId', AInstanceID);
+    LJSON.AddPair('Name', AName);
+    LJSON.AddPair('GroupId', AGroup);
+    LJSON.AddPair('NextRefreshIntervalMinutes', ANextRefreshInterval);
+    LJSON.AddPair('NotifyWhenOffline', ANotifyWhenOffline);
+    Post('Devices', LJSON.ToJSON,
       procedure(Asender: TObject; ASuccess: boolean; AMessage: string;
         ARESTResponse: TRESTResponse; ACustomData: string)
       begin

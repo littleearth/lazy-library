@@ -1,0 +1,330 @@
+object frmSharepointDemo: TfrmSharepointDemo
+  Left = 0
+  Top = 0
+  Caption = 'Sharepoint'
+  ClientHeight = 480
+  ClientWidth = 640
+  Position = ScreenCenter
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  DesignerMasterStyle = 0
+  object GridPanelLayout1: TGridPanelLayout
+    Align = Top
+    Size.Width = 640.000000000000000000
+    Size.Height = 145.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 1
+    ColumnCollection = <
+      item
+        Value = 25.000000000000000000
+      end
+      item
+        Value = 25.000000000000000000
+      end
+      item
+        Value = 25.000000000000000000
+      end
+      item
+        Value = 25.000000000000000000
+      end>
+    ControlCollection = <
+      item
+        Column = 0
+        Control = Panel1
+        Row = 0
+      end
+      item
+        Column = 1
+        Control = Panel2
+        Row = 0
+      end
+      item
+        Column = 2
+        Control = Panel3
+        Row = 0
+      end
+      item
+        Column = 3
+        Control = Button1
+        Row = 0
+      end
+      item
+        Column = 0
+        Control = Panel4
+        Row = 1
+      end
+      item
+        Column = 1
+        Control = Panel5
+        Row = 1
+      end
+      item
+        Column = 2
+        Control = Panel6
+        Row = 1
+      end
+      item
+        Column = 3
+        Control = Button4
+        Row = 1
+      end>
+    RowCollection = <
+      item
+        Value = 50.000000000000000000
+      end
+      item
+        Value = 50.000000000000000000
+      end>
+    object Panel1: TPanel
+      Align = Client
+      Size.Width = 160.000000000000000000
+      Size.Height = 72.500000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 5
+      object Label1: TLabel
+        Align = Top
+        Size.Width = 160.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Tenant id'
+        TabOrder = 0
+      end
+      object editTennantID: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 1
+        Position.Y = 17.000000000000000000
+        Size.Width = 160.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+    object Panel2: TPanel
+      Align = Client
+      Size.Width = 160.000000000000000000
+      Size.Height = 72.500000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 2
+      object Label2: TLabel
+        Align = Top
+        Size.Width = 160.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Client id'
+        TabOrder = 1
+      end
+      object editClientID: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 2
+        Position.Y = 17.000000000000000000
+        Size.Width = 160.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+    object Panel3: TPanel
+      Align = Client
+      Size.Width = 160.000000000000000000
+      Size.Height = 72.500000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+      object Label3: TLabel
+        Align = Top
+        Size.Width = 160.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Secret'
+        TabOrder = 1
+      end
+      object editClientSecret: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 2
+        Password = True
+        Position.Y = 17.000000000000000000
+        Size.Width = 160.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+    object Button1: TButton
+      Action = ActionAuthenticate
+      Align = Center
+      Enabled = True
+      ImageIndex = -1
+      Size.Width = 119.000000000000000000
+      Size.Height = 51.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 7
+    end
+    object Panel4: TPanel
+      Align = Client
+      Size.Width = 160.000000000000000000
+      Size.Height = 72.500000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 4
+      object Label4: TLabel
+        Align = Top
+        Size.Width = 160.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Site'
+        TabOrder = 0
+      end
+      object comboSites: TComboBox
+        Align = Top
+        Position.Y = 17.000000000000000000
+        Size.Width = 160.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+        OnChange = comboSitesChange
+      end
+      object Button2: TButton
+        Action = ActionRefreshSites
+        Align = Top
+        Enabled = True
+        ImageIndex = -1
+        Position.Y = 39.000000000000000000
+        Size.Width = 160.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+      end
+    end
+    object Panel5: TPanel
+      Align = Client
+      Size.Width = 160.000000000000000000
+      Size.Height = 72.500000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 3
+      object Label5: TLabel
+        Align = Top
+        Size.Width = 160.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Drive'
+        TabOrder = 0
+      end
+      object comboDrives: TComboBox
+        Align = Top
+        Position.Y = 17.000000000000000000
+        Size.Width = 160.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 1
+      end
+      object Button3: TButton
+        Action = ActionRefreshDrives
+        Align = Top
+        Enabled = True
+        ImageIndex = -1
+        Position.Y = 39.000000000000000000
+        Size.Width = 160.000000000000000000
+        Size.Height = 26.000000000000000000
+        Size.PlatformDefault = False
+        TabOrder = 2
+      end
+    end
+    object Panel6: TPanel
+      Align = Client
+      Size.Width = 160.000000000000000000
+      Size.Height = 72.500000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 0
+      object Label6: TLabel
+        Align = Top
+        Size.Width = 160.000000000000000000
+        Size.Height = 17.000000000000000000
+        Size.PlatformDefault = False
+        Text = 'Path'
+        TabOrder = 1
+      end
+      object editFolderPath: TEdit
+        Touch.InteractiveGestures = [LongTap, DoubleTap]
+        Align = Top
+        TabOrder = 2
+        Position.Y = 17.000000000000000000
+        Size.Width = 160.000000000000000000
+        Size.Height = 22.000000000000000000
+        Size.PlatformDefault = False
+      end
+    end
+    object Button4: TButton
+      Action = ActionUpload
+      Align = Center
+      Enabled = True
+      ImageIndex = -1
+      Size.Width = 118.000000000000000000
+      Size.Height = 52.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 6
+    end
+  end
+  object memoLog: TMemo
+    Touch.InteractiveGestures = [Pan, LongTap, DoubleTap]
+    DataDetectorTypes = []
+    Align = Client
+    Size.Width = 640.000000000000000000
+    Size.Height = 262.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 2
+    Viewport.Width = 636.000000000000000000
+    Viewport.Height = 258.000000000000000000
+  end
+  object OpenDialog: TOpenDialog
+    Left = 104
+    Top = 293
+  end
+  object pnlProgress: TPanel
+    Align = Bottom
+    Position.Y = 407.000000000000000000
+    Size.Width = 640.000000000000000000
+    Size.Height = 73.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object ProgressBar: TProgressBar
+      Align = Top
+      Orientation = Horizontal
+      Position.Y = 17.000000000000000000
+      Size.Width = 640.000000000000000000
+      Size.Height = 20.000000000000000000
+      Size.PlatformDefault = False
+    end
+    object lblProgress: TLabel
+      Align = MostTop
+      Size.Width = 640.000000000000000000
+      Size.Height = 17.000000000000000000
+      Size.PlatformDefault = False
+      TabOrder = 1
+    end
+  end
+  object ActionList: TActionList
+    Left = 216
+    Top = 272
+    object ActionRefreshSites: TAction
+      Text = 'Refresh'
+      OnExecute = ActionRefreshSitesExecute
+      OnUpdate = ActionRefreshSitesUpdate
+    end
+    object ActionRefreshDrives: TAction
+      Text = 'Refresh'
+      OnExecute = ActionRefreshDrivesExecute
+      OnUpdate = ActionRefreshDrivesUpdate
+    end
+    object ActionAuthenticate: TAction
+      Text = 'Authenticate'
+      OnExecute = ActionAuthenticateExecute
+      OnUpdate = ActionAuthenticateUpdate
+    end
+    object ActionUpload: TAction
+      Text = 'Upload'
+      OnExecute = ActionUploadExecute
+      OnUpdate = ActionUploadUpdate
+    end
+  end
+end

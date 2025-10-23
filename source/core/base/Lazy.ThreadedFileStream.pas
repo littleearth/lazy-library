@@ -16,7 +16,7 @@ interface
 
 uses
   System.SysUtils, System.Variants,
-  System.Classes, System.SyncObjs, Winapi.Windows;
+  System.Classes, System.SyncObjs;
 
 type
   TLZThreadedFileStream = class(TThread)
@@ -36,7 +36,9 @@ type
     constructor Create(const AFileName: string); reintroduce;
     destructor Destroy; override;
 
-    function Write(const Buffer; Count: Longint): Longint;
+    function Write(
+      const Buffer;
+      Count: Longint): Longint;
     procedure AppendStr(const S: RawByteString); overload;
     procedure AppendStr(const S: UTF8String); overload;
     procedure AppendStr(const S: UnicodeString); overload;
@@ -48,7 +50,6 @@ type
   end;
 
 implementation
-
 
 procedure TLZThreadedFileStream.AppendStr(const S: RawByteString);
 begin
@@ -179,7 +180,7 @@ begin
 
   FFileStream.Seek(0, soEnd);
   FFileStream.Write(Buffer.Memory^, Buffer.Position);
-  FlushFileBuffers(FFileStream.Handle);
+  // FlushFileBuffers(FFileStream.Handle);
   Buffer.Position := 0;
 end;
 
@@ -193,7 +194,9 @@ begin
   FLocker.Leave;
 end;
 
-function TLZThreadedFileStream.Write(const Buffer; Count: integer): Longint;
+function TLZThreadedFileStream.Write(
+  const Buffer;
+  Count: integer): Longint;
 begin
   Lock;
   try

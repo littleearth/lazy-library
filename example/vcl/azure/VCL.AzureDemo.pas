@@ -24,8 +24,11 @@ type
     procedure SetCPUCreditsUsed(const Value: Double);
     procedure SetNetworkOut(const Value: Double);
   public
-    constructor Create(AID: string; AVMName: string;
-      ACPUCreditsRemaining: Double; ACPUCreditsUsed: Double;
+    constructor Create(
+      AID: string;
+      AVMName: string;
+      ACPUCreditsRemaining: Double;
+      ACPUCreditsUsed: Double;
       ANetworkOut: Double);
     property ID: string read FID write SetID;
     property VMName: string read FVMName write SetVMName;
@@ -57,14 +60,23 @@ type
     ApplicationEvents: TApplicationEvents;
     procedure ActionExecuteExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure ApplicationEventsIdle(Sender: TObject; var Done: Boolean);
+    procedure ApplicationEventsIdle(
+      Sender: TObject;
+      var Done: Boolean);
     procedure FormDestroy(Sender: TObject);
   private
     FAzureManagement: TLZAzureManagement;
-    procedure OnBrowserLoginRequest(ASender: TObject; AURL: string;
-      AConnection: TLZOAuth2Connection; AToken: TLZOAuth2Token);
-    procedure OnTokenRequestComplete(ASender: TObject; ASuccess: Boolean;
-      AMessage: string; AToken: TLZOAuth2Token);
+    procedure OnBrowserLoginRequest(
+      ASender: TObject;
+      AURL: string;
+      AConnection: TLZOAuth2Connection;
+      AToken: TLZOAuth2Token;
+      AUserDataFolder: string);
+    procedure OnTokenRequestComplete(
+      ASender: TObject;
+      ASuccess: Boolean;
+      AMessage: string;
+      AToken: TLZOAuth2Token);
   public
     procedure Authenticate;
     procedure GetCPUCreditsRemaining(AVirtualMachines: TStrings);
@@ -81,7 +93,7 @@ implementation
 {$R *.dfm}
 
 uses
-  VCL.Lazy.AuthorizeBrowserForm, System.JSON, Lazy.Log, Lazy.Log.Basic;
+  VCL.Lazy.AuthorizeBrowserForm, System.JSON, Lazy.Log;
 
 procedure TfrmAzureDemo.ActionExecuteExecute(Sender: TObject);
 begin
@@ -89,10 +101,11 @@ begin
   Authenticate;
 end;
 
-procedure TfrmAzureDemo.ApplicationEventsIdle(Sender: TObject;
+procedure TfrmAzureDemo.ApplicationEventsIdle(
+  Sender: TObject;
   var Done: Boolean);
 begin
-  memoLog.Lines.Text := (LazyLog as TLZLogBasic).LogText;
+  memoLog.Lines.Text := LazyLogCache;
 end;
 
 procedure TfrmAzureDemo.Authenticate;
@@ -101,6 +114,7 @@ begin
     editTennantID.Text;
   FAzureManagement.Connection.ClientId := editClientID.Text;
   FAzureManagement.Connection.ClientSecret := editClientSecret.Text;
+  FAzureManagement.ClearAuthentication;
   FAzureManagement.Authenticate;
 end;
 
@@ -126,7 +140,8 @@ begin
           (FloatToStr(LVirtualMachineMessage.CPUCreditsRemaining));
         LListItem.SubItems.Add
           (FloatToStr(LVirtualMachineMessage.CPUCreditsUsed));
-        LListItem.SubItems.Add(FloatToStr(LVirtualMachineMessage.NetworkOut / 1024 / 1024));
+        LListItem.SubItems.Add(FloatToStr(LVirtualMachineMessage.NetworkOut /
+          1024 / 1024));
       finally
         ListViewVirtualMachines.Items.EndUpdate;
       end;
@@ -397,17 +412,22 @@ begin
   end;
 end;
 
-procedure TfrmAzureDemo.OnBrowserLoginRequest(ASender: TObject; AURL: string;
-AConnection: TLZOAuth2Connection; AToken: TLZOAuth2Token);
+procedure TfrmAzureDemo.OnBrowserLoginRequest(
+  ASender: TObject;
+  AURL: string;
+  AConnection: TLZOAuth2Connection;
+  AToken: TLZOAuth2Token;
+  AUserDataFolder: string);
 var
   LMessage: string;
   LForm: TLZAuthorizeBrowserForm;
 begin
   LForm := TLZAuthorizeBrowserForm.Create(Self);
   try
-    if LForm.GetAuthToken(LMessage, AURL, AConnection, AToken) then
+    if LForm.GetAuthToken(LMessage, AURL, AConnection, AToken, AUserDataFolder)
+    then
     begin
-      LazyLog.Debug(Self, 'OnBrowserLoginRequest', AToken.AuthCode);
+      LazyLog.Debug(Self, 'OnBrowserLoginRequest', AToken.AuthToken);
       FAzureManagement.RequestToken;
     end
     else
@@ -419,8 +439,11 @@ begin
   end;
 end;
 
-procedure TfrmAzureDemo.OnTokenRequestComplete(ASender: TObject;
-ASuccess: Boolean; AMessage: string; AToken: TLZOAuth2Token);
+procedure TfrmAzureDemo.OnTokenRequestComplete(
+  ASender: TObject;
+  ASuccess: Boolean;
+  AMessage: string;
+  AToken: TLZOAuth2Token);
 begin
   if ASuccess then
   begin
@@ -434,8 +457,9 @@ end;
 
 { TVirtualMachineMessage }
 
-constructor TVirtualMachineMessage.Create(AID, AVMName: string;
-ACPUCreditsRemaining, ACPUCreditsUsed, ANetworkOut: Double);
+constructor TVirtualMachineMessage.Create(
+  AID, AVMName: string;
+  ACPUCreditsRemaining, ACPUCreditsUsed, ANetworkOut: Double);
 begin
   FVMName := AVMName;
   FID := AID;

@@ -35,7 +35,6 @@ type
     GridPanelLayout7: TGridPanelLayout;
     Label1: TLabel;
     editAccessToken: TEdit;
-    Label2: TLabel;
     editRefreshToken: TEdit;
     ActionList: TActionList;
     ActionGetSubscriptions: TAction;
@@ -51,6 +50,8 @@ type
     Label5: TLabel;
     editClientSecret: TEdit;
     TimerLog: TTimer;
+    Button1: TButton;
+    ActionRefreshToken: TAction;
     procedure FormCreate(Sender: TObject);
     procedure ActionIsAuthenticatedUpdate(Sender: TObject);
     procedure ActionGetSubscriptionsExecute(Sender: TObject);
@@ -61,14 +62,23 @@ type
     procedure ActionLoginUpdate(Sender: TObject);
     procedure TimerLogTimer(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure ActionRefreshTokenExecute(Sender: TObject);
+    procedure ActionRefreshTokenUpdate(Sender: TObject);
   private
     { Private declarations }
     FAzureManagement: TLZAzureManagement;
     procedure Log(AMessage: string);
-    procedure OnAzureBrowserLoginRequest(ASender: TObject; AURL: string;
-      AConnection: TLZOAuth2Connection; AToken: TLZOAuth2Token);
-    procedure OnLazyOAuth2TokenRequestComplete(ASender: TObject;
-      ASuccess: boolean; AMessage: string; AToken: TLZOAuth2Token);
+    procedure OnAzureBrowserLoginRequest(
+      ASender: TObject;
+      AURL: string;
+      AConnection: TLZOAuth2Connection;
+      AToken: TLZOAuth2Token;
+      AUserDataFolder: string);
+    procedure OnLazyOAuth2TokenRequestComplete(
+      ASender: TObject;
+      ASuccess: Boolean;
+      AMessage: string;
+      AToken: TLZOAuth2Token);
   public
     { Public declarations }
   end;
@@ -82,7 +92,7 @@ implementation
 
 uses
   FMX.Lazy.AuthorizeBrowserForm, System.NetEncoding, System.Net.URLClient,
-  System.DateUtils, Lazy.Log, Lazy.Log.Basic;
+  System.DateUtils, Lazy.Log, Lazy.Utils;
 
 procedure TfrmAzureDemo.ActionGetMetricsExecute(Sender: TObject);
 begin
@@ -90,7 +100,7 @@ begin
     (Format('subscriptions/%s/resourceGroups/%s/providers/Microsoft.Compute/virtualMachines/%s/providers/microsoft.insights/metrics'
     + '?api-version=2021-05-01&metricnames=CPU Credits Remaining,CPU Credits Consumed,Network Out Total',
     [editSubscription.Text, editResourceGroup.Text, editVM.Text]),
-    procedure(ASender: TObject; ASuccess: boolean; AMessage: string;
+    procedure(ASender: TObject; ASuccess: Boolean; AMessage: string;
       ARESTResponse: TRESTResponse; ACustomData: string)
     begin
       if ASuccess then
@@ -109,7 +119,7 @@ begin
   FAzureManagement.Get
     (Format('subscriptions/%s/resourceGroups/?api-version=2022-12-01',
     [editSubscription.Text]),
-    procedure(ASender: TObject; ASuccess: boolean; AMessage: string;
+    procedure(ASender: TObject; ASuccess: Boolean; AMessage: string;
       ARESTResponse: TRESTResponse; ACustomData: string)
     begin
       if ASuccess then
@@ -126,7 +136,7 @@ end;
 procedure TfrmAzureDemo.ActionGetSubscriptionsExecute(Sender: TObject);
 begin
   FAzureManagement.Get('subscriptions?api-version=2022-12-01',
-    procedure(ASender: TObject; ASuccess: boolean; AMessage: string;
+    procedure(ASender: TObject; ASuccess: Boolean; AMessage: string;
       ARESTResponse: TRESTResponse; ACustomData: string)
     begin
       if ASuccess then
@@ -146,7 +156,7 @@ begin
   FAzureManagement.Get
     (Format('subscriptions/%s/resourceGroups/%s/providers/Microsoft.Compute/virtualMachines/?api-version=2023-07-01',
     [editSubscription.Text, editResourceGroup.Text]),
-    procedure(ASender: TObject; ASuccess: boolean; AMessage: string;
+    procedure(ASender: TObject; ASuccess: Boolean; AMessage: string;
       ARESTResponse: TRESTResponse; ACustomData: string)
     begin
       if ASuccess then
@@ -188,7 +198,8 @@ begin
   if FAzureManagement.IsAuthenticated then
   begin
     (Sender as TAction).Text := 'Log out';
-    LabelAuthStatus.Text := FAzureManagement.Token.AuthCode.Substring(0, 8);
+    LabelAuthStatus.Text := 'Token expires: ' +
+      DateTimeToStr(FAzureManagement.Token.ExpiresIn);
   end
   else
   begin
@@ -197,17 +208,34 @@ begin
   end;
 end;
 
-procedure TfrmAzureDemo.OnAzureBrowserLoginRequest(ASender: TObject;
-AURL: string; AConnection: TLZOAuth2Connection; AToken: TLZOAuth2Token);
+procedure TfrmAzureDemo.ActionRefreshTokenExecute(Sender: TObject);
+begin
+  FAzureManagement.Token.GrantType := TLZOAuth2GrantType.gtRefreshToken;
+  FAzureManagement.RequestToken;
+end;
+
+procedure TfrmAzureDemo.ActionRefreshTokenUpdate(Sender: TObject);
+begin
+  (Sender as TAction).Enabled := not TLZString.IsEmptyString
+    (editRefreshToken.Text);
+end;
+
+procedure TfrmAzureDemo.OnAzureBrowserLoginRequest(
+  ASender: TObject;
+  AURL: string;
+  AConnection: TLZOAuth2Connection;
+  AToken: TLZOAuth2Token;
+  AUserDataFolder: string);
 var
   LMessage: string;
   LForm: TLZAuthorizeBrowserForm;
 begin
   LForm := TLZAuthorizeBrowserForm.Create(Self);
   try
-    if LForm.GetAuthToken(LMessage, AURL, AConnection, AToken) then
+    if LForm.GetAuthToken(LMessage, AURL, AConnection, AToken,
+       AUserDataFolder) then
     begin
-      Log(AToken.AuthCode);
+      Log(AToken.AuthToken);
       FAzureManagement.RequestToken;
     end
     else
@@ -219,8 +247,11 @@ begin
   end;
 end;
 
-procedure TfrmAzureDemo.OnLazyOAuth2TokenRequestComplete(ASender: TObject;
-ASuccess: boolean; AMessage: string; AToken: TLZOAuth2Token);
+procedure TfrmAzureDemo.OnLazyOAuth2TokenRequestComplete(
+  ASender: TObject;
+  ASuccess: Boolean;
+  AMessage: string;
+  AToken: TLZOAuth2Token);
 begin
   if ASuccess then
   begin
@@ -242,7 +273,7 @@ end;
 
 procedure TfrmAzureDemo.TimerLogTimer(Sender: TObject);
 begin
-  memoLog.Lines.Text := (LazyLog as TLZLogBasic).LogText;
+  memoLog.Lines.Text := LazyLogCache;
 end;
 
 procedure TfrmAzureDemo.FormCreate(Sender: TObject);

@@ -2,8 +2,8 @@ object frmAzureDemo: TfrmAzureDemo
   Left = 0
   Top = 0
   Caption = 'Azure Management Demo'
-  ClientHeight = 561
-  ClientWidth = 784
+  ClientHeight = 576
+  ClientWidth = 786
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -16,8 +16,8 @@ object frmAzureDemo: TfrmAzureDemo
   TextHeight = 15
   object Splitter1: TSplitter
     Left = 0
-    Top = 409
-    Width = 784
+    Top = 424
+    Width = 786
     Height = 3
     Cursor = crVSplit
     Align = alBottom
@@ -27,7 +27,7 @@ object frmAzureDemo: TfrmAzureDemo
   object GridPanel1: TGridPanel
     Left = 0
     Top = 0
-    Width = 784
+    Width = 786
     Height = 117
     Align = alTop
     ColumnCollection = <
@@ -83,16 +83,18 @@ object frmAzureDemo: TfrmAzureDemo
       AlignWithMargins = True
       Left = 4
       Top = 4
-      Width = 56
-      Height = 15
+      Width = 151
+      Height = 32
       Align = alClient
       Caption = 'Tennant ID'
+      ExplicitWidth = 56
+      ExplicitHeight = 15
     end
     object editTennantID: TEdit
       AlignWithMargins = True
-      Left = 160
+      Left = 161
       Top = 4
-      Width = 620
+      Width = 621
       Height = 32
       Align = alClient
       TabOrder = 0
@@ -102,16 +104,18 @@ object frmAzureDemo: TfrmAzureDemo
       AlignWithMargins = True
       Left = 4
       Top = 42
-      Width = 45
-      Height = 15
+      Width = 151
+      Height = 33
       Align = alClient
       Caption = 'Client ID'
+      ExplicitWidth = 45
+      ExplicitHeight = 15
     end
     object editClientID: TEdit
       AlignWithMargins = True
-      Left = 160
+      Left = 161
       Top = 42
-      Width = 620
+      Width = 621
       Height = 33
       Align = alClient
       TabOrder = 1
@@ -121,16 +125,18 @@ object frmAzureDemo: TfrmAzureDemo
       AlignWithMargins = True
       Left = 4
       Top = 81
-      Width = 66
-      Height = 15
+      Width = 151
+      Height = 32
       Align = alClient
       Caption = 'Client Secret'
+      ExplicitWidth = 66
+      ExplicitHeight = 15
     end
     object editClientSecret: TEdit
       AlignWithMargins = True
-      Left = 160
+      Left = 161
       Top = 81
-      Width = 620
+      Width = 621
       Height = 32
       Align = alClient
       PasswordChar = '*'
@@ -141,7 +147,7 @@ object frmAzureDemo: TfrmAzureDemo
   object GridPanel2: TGridPanel
     Left = 0
     Top = 117
-    Width = 784
+    Width = 786
     Height = 39
     Align = alTop
     ColumnCollection = <
@@ -183,8 +189,8 @@ object frmAzureDemo: TfrmAzureDemo
   object ListViewVirtualMachines: TListView
     Left = 0
     Top = 156
-    Width = 784
-    Height = 253
+    Width = 786
+    Height = 268
     Align = alClient
     Columns = <
       item
@@ -210,23 +216,24 @@ object frmAzureDemo: TfrmAzureDemo
   end
   object pnlLog: TPanel
     Left = 0
-    Top = 412
-    Width = 784
+    Top = 427
+    Width = 786
     Height = 149
     Align = alBottom
     TabOrder = 3
     object Label4: TLabel
       Left = 1
       Top = 1
-      Width = 20
+      Width = 784
       Height = 15
       Align = alTop
       Caption = 'Log'
+      ExplicitWidth = 20
     end
     object memoLog: TMemo
       Left = 1
       Top = 16
-      Width = 782
+      Width = 784
       Height = 132
       Align = alClient
       ReadOnly = True
@@ -245,7 +252,7 @@ object frmAzureDemo: TfrmAzureDemo
   end
   object ApplicationEvents: TApplicationEvents
     OnIdle = ApplicationEventsIdle
-    Left = 100
+    Left = 132
     Top = 204
   end
 end

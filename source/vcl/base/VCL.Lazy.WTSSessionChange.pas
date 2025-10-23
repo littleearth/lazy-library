@@ -12,7 +12,7 @@ unit VCL.Lazy.WTSSessionChange;
 interface
 
 uses Winapi.Windows, System.SysUtils, Lazy.Types, Lazy.Log,
-  VCL.Lazy.ThreadTimer, Winapi.Messages;
+  VCL.Lazy.ThreadTimer, Winapi.Messages, Winapi.Wtsapi32;
 
 type
   TOnWTSSessionChange = procedure(ASender: TObject; AParam: Cardinal) of object;

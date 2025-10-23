@@ -35,6 +35,10 @@ type
     class procedure QuickFileSearch(const PathName, FileName: string;
       const Recurse: Boolean; FileList: TStrings);
     class function RandomFileName(ALength: integer): string;
+    class function Copy(ASource: string; ADestination: string;
+      AOverwrite: Boolean = true): Boolean;
+    class function Move(ASource: string; ADestination: string): Boolean;
+    class function Delete(AFileName: string): Boolean; virtual;
 
   end;
 
@@ -71,7 +75,7 @@ type
       #127 .. #255]): string;
     class function ContainsNonAlphaNumberic(const AValue: string): Boolean;
     class function TitleCase(const AText: string;
-      const ALowerCaseFirst: Boolean = True): string;
+      const ALowerCaseFirst: Boolean = true): string;
     class function GeneratePassword(ALength: integer): string;
     class function LeadingZeroes(const ANumber, ALength: integer): string;
     class function SplitStringToWords(const AString: string;
@@ -163,6 +167,7 @@ type
   public
     class function BoolToInteger(ABoolean: Boolean): integer;
     class function IntegerToBool(AValue: integer): Boolean;
+    class function StringToBool(AValue: string): Boolean;
   end;
 
   // Math Routines
@@ -173,11 +178,16 @@ type
     class function HexToInt(S: String): LongInt;
   end;
 
+  TLZURLBase = class(TLZObject)
+  public
+    class function IsValidURL(AURL: string): Boolean;
+  end;
+
 implementation
 
 uses
   System.DateUtils, System.StrUtils, System.IOUtils, System.VarUtils,
-  Lazy.ISO8601;
+  Lazy.ISO8601, System.Net.URLClient;
 
 class function TLZDateTimeBase.MinutesToMetricMinutes
   (AMinutes: integer): integer;
@@ -215,7 +225,7 @@ begin
   try
     { Pass a Year, Month, and Day and get a date back }
     AEaster := encodedate(AYear, 3, 1) + N - 1;
-    Result := True;
+    Result := true;
   except
     Result := False;
     AEaster := 0;
@@ -353,7 +363,7 @@ class function TLZDateTimeBase.StringToDuration(AValue: string;
 var
   LDurationStr: string;
 begin
-  Result := True;
+  Result := true;
   AMinutes := 0;
   AHours := 0;
   LDurationStr := Trim(AValue);
@@ -406,12 +416,30 @@ begin
   end;
 end;
 
+class function TLZFileBase.Copy(ASource, ADestination: string;
+  AOverwrite: Boolean): Boolean;
+begin
+
+  TFile.Copy(ASource, ADestination, AOverwrite);
+  Result := FileExists(ADestination);
+end;
+
+class function TLZFileBase.Delete(AFileName: string): Boolean;
+begin
+  Result := False;
+  if FileExists(AFileName) then
+  begin
+    TFile.Delete(AFileName);
+    Result := not FileExists(AFileName);
+  end;
+end;
+
 class function TLZFileBase.ExtractUrlFileName(const AURL: string): string;
 var
   i: integer;
 begin
   i := LastDelimiter('/', AURL);
-  Result := Copy(AURL, i + 1, length(AURL) - (i));
+  Result := System.Copy(AURL, i + 1, length(AURL) - (i));
 end;
 
 class function TLZFileBase.GetTempFolder: string;
@@ -442,8 +470,8 @@ begin
   if TLZStringBase.IsEmptyString(Folder) then
     Folder := GetTempFolder;
   repeat
-    Result := IncludeTrailingPathDelimiter(Folder) + Copy(APrefix, 1, 3) +
-      RandomFileName(5) + AExtension;
+    Result := IncludeTrailingPathDelimiter(Folder) + System.Copy(APrefix, 1, 3)
+      + RandomFileName(5) + AExtension;
     Inc(Attempts);
   until (not FileExists(Result)) or (Attempts >= High(Cardinal));
   if (Attempts >= High(Cardinal)) then
@@ -500,7 +528,7 @@ begin
         AValue := StringReplace(AValue, AParameter, '',
           [rfReplaceAll, rfIgnoreCase]);
         AValue := AnsiDequotedStr(AValue, '"');
-        Result := True;
+        Result := true;
       end;
     finally
       Inc(LParamIdx);
@@ -549,17 +577,29 @@ begin
     end
     else
     begin
-      Result := True;
+      Result := true;
     end;
+  end;
+end;
+
+class function TLZFileBase.Move(ASource, ADestination: string): Boolean;
+begin
+  Result := False;
+  if FileExists(ASource) then
+  begin
+    if FileExists(ADestination) then
+      TFile.Delete(ADestination);
+    TFile.Move(ASource, ADestination);
+    Result := FileExists(ADestination);
   end;
 end;
 
 class function TLZFileBase.ValidateFileName(AFileName: TFileName): TFileName;
 begin
   Result := AFileName;
-  Result := TLZStringBase.StripExtraSpaces(Result, True, True);
-  Result := TLZStringBase.StripCharsInSet(Result,
-    ['\', '/', ':', '*', '?', '"', '<', '>', '|']);
+  Result := TLZStringBase.StripExtraSpaces(Result, true, true);
+  Result := TLZStringBase.StripCharsInSet(Result, ['\', '/', ':', '*', '?', '"',
+    '<', '>', '|']);
 end;
 
 class procedure TLZFileBase.QuickFileSearch(const PathName, FileName: string;
@@ -578,7 +618,7 @@ begin
         begin
           FileList.Add(path + Rec.Name);
         end;
-      until (FindNext(Rec) <> 0) or (Cancel = True);
+      until (FindNext(Rec) <> 0) or (Cancel = true);
     finally
       FindClose(Rec);
     end;
@@ -591,10 +631,10 @@ begin
           if ((Rec.Attr and faDirectory) = faDirectory) and (Rec.Name <> '.')
             and (Rec.Name <> '..') then
           begin
-            TLZFileBase.QuickFileSearch(path + Rec.Name, FileName, True,
+            TLZFileBase.QuickFileSearch(path + Rec.Name, FileName, true,
               FileList);
           end;
-        until (FindNext(Rec) <> 0) or (Cancel = True);
+        until (FindNext(Rec) <> 0) or (Cancel = true);
       finally
         FindClose(Rec);
       end;
@@ -612,14 +652,13 @@ begin
   begin
     if not CharInSet(AValue[i], ['A' .. 'Z', 'a' .. 'z', '0' .. '9']) then
     begin
-      Result := True;
+      Result := true;
     end;
     Inc(i);
   end;
 end;
 
-class function TLZStringBase.StripNonAlphaNumeric(const AValue
-  : string): string;
+class function TLZStringBase.StripNonAlphaNumeric(const AValue: string): string;
 var
   i: integer;
 begin
@@ -682,7 +721,7 @@ begin
   for i := 1 to length(S) do
   begin
     if S[i] = '<' then
-      InTag := True
+      InTag := true
     else if S[i] = '>' then
       InTag := False
     else if not InTag then
@@ -779,7 +818,7 @@ begin
 end;
 
 class function TLZStringBase.TitleCase(const AText: string;
-  const ALowerCaseFirst: Boolean = True): string;
+  const ALowerCaseFirst: Boolean = true): string;
 const
   cDelimiters = [#9, #10, #13, ' ', ',', '.', ':', ';', '"', '\', '/', '(', ')',
     '[', ']', '{', '}'];
@@ -826,8 +865,7 @@ begin
   end;
 end;
 
-class function TLZDateTimeBase.DecodeTimeTextToMinutes(ATime: string)
-  : integer;
+class function TLZDateTimeBase.DecodeTimeTextToMinutes(ATime: string): integer;
 var
   TempStr: string;
   idx, Hours, Minutes: integer;
@@ -1011,7 +1049,7 @@ begin
       ii := i + 1;
 
       // Keep going till not valid specifier
-      while True do
+      while true do
       begin
         if ii > length(LFormat) then
           Break;
@@ -1275,18 +1313,18 @@ begin
         if Pos('Y', UpperCase(DateStr)) = 1 then
         begin
           Date := (IncDay(NowFunc, -1));
-          LAllowOperation := True;
+          LAllowOperation := true;
         end;
         if Pos('T', UpperCase(DateStr)) = 1 then
         begin
           Date := (IncDay(NowFunc, 1));
-          LAllowOperation := True;
+          LAllowOperation := true;
         end;
         if (Pos('N', UpperCase(DateStr)) = 1) or
           (Pos('TODAY', UpperCase(DateStr)) = 1) then
         begin
           Date := NowFunc;
-          LAllowOperation := True;
+          LAllowOperation := true;
         end;
 
         for DayIdx := 0 to 6 do
@@ -1297,7 +1335,7 @@ begin
                 if Pos('MON', UpperCase(DateStr)) = 1 then
                 begin
                   Date := IncDay(NowFunc, DayIdx);
-                  LAllowOperation := True;
+                  LAllowOperation := true;
                 end;
               end;
             2:
@@ -1305,7 +1343,7 @@ begin
                 if Pos('TUE', UpperCase(DateStr)) = 1 then
                 begin
                   Date := IncDay(NowFunc, DayIdx);
-                  LAllowOperation := True;
+                  LAllowOperation := true;
                 end;
               end;
             3:
@@ -1313,7 +1351,7 @@ begin
                 if Pos('WED', UpperCase(DateStr)) = 1 then
                 begin
                   Date := IncDay(NowFunc, DayIdx);
-                  LAllowOperation := True;
+                  LAllowOperation := true;
                 end;
               end;
             4:
@@ -1321,7 +1359,7 @@ begin
                 if Pos('THU', UpperCase(DateStr)) = 1 then
                 begin
                   Date := IncDay(NowFunc, DayIdx);
-                  LAllowOperation := True;
+                  LAllowOperation := true;
                 end;
               end;
             5:
@@ -1329,7 +1367,7 @@ begin
                 if Pos('FRI', UpperCase(DateStr)) = 1 then
                 begin
                   Date := IncDay(NowFunc, DayIdx);
-                  LAllowOperation := True;
+                  LAllowOperation := true;
                 end;
               end;
             6:
@@ -1337,14 +1375,14 @@ begin
                 if Pos('SAT', UpperCase(DateStr)) = 1 then
                 begin
                   Date := IncDay(NowFunc, DayIdx);
-                  LAllowOperation := True;
+                  LAllowOperation := true;
                 end;
               end;
             7:
               begin
                 if Pos('SUN', UpperCase(DateStr)) = 1 then
                 begin
-                  LAllowOperation := True;
+                  LAllowOperation := true;
                   Date := IncDay(NowFunc, DayIdx);
                 end;
               end;
@@ -1354,35 +1392,35 @@ begin
         if Pos('BOM', UpperCase(DateStr)) = 1 then
         begin
           Date := (StartOfTheMonth(NowFunc));
-          LAllowOperation := True;
+          LAllowOperation := true;
         end;
 
         if Pos('EOM', UpperCase(DateStr)) = 1 then
         begin
           Date := (EndOfTheMonth(NowFunc));
-          LAllowOperation := True;
+          LAllowOperation := true;
         end;
 
         if Pos('BOW', UpperCase(DateStr)) = 1 then
         begin
           Date := (StartOfTheWeek(NowFunc));
-          LAllowOperation := True;
+          LAllowOperation := true;
         end;
         if Pos('EOW', UpperCase(DateStr)) = 1 then
         begin
           Date := (EndOfTheWeek(NowFunc));
-          LAllowOperation := True;
+          LAllowOperation := true;
         end;
 
         if Pos('BOY', UpperCase(DateStr)) = 1 then
         begin
           Date := (StartOfTheYear(NowFunc));
-          LAllowOperation := True;
+          LAllowOperation := true;
         end;
         if Pos('EOY', UpperCase(DateStr)) = 1 then
         begin
           Date := (EndOfTheYear(NowFunc));
-          LAllowOperation := True;
+          LAllowOperation := true;
         end;
 
         if LAllowOperation then
@@ -1427,8 +1465,7 @@ end;
 
 class function TLZDateTimeBase.StringToTime(AValue: string;
   ARounding: Boolean = False; ARoundUserEntries: Boolean = False;
-  ARoundValue: integer = 10;
-  ARoundingType: TLZTimeRounding = trNearest): TTime;
+  ARoundValue: integer = 10; ARoundingType: TLZTimeRounding = trNearest): TTime;
 var
   LTime: TTime;
   LDateTime: TDateTime;
@@ -1446,14 +1483,14 @@ begin
     LTimeStr := '0'
   else if length(AValue) > 0 then
   begin
-    LUserInput := True;
+    LUserInput := true;
 
     if not SameText(DateToStr(0), AValue) then
     begin
 
       if LTime = 0 then
       begin
-        LTimeStr := TLZStringBase.StringCleaner(AValue, True, True);
+        LTimeStr := TLZStringBase.StringCleaner(AValue, true, true);
         LTimeStr := StringReplace(LTimeStr, '%', '',
           [rfReplaceAll, rfIgnoreCase]);
 
@@ -1620,10 +1657,9 @@ begin
   Result := TimeOf(VarToDateTime(LTimeStr));
 end;
 
-class function TLZDateTimeBase.StringToTimeDef(AValue: string;
-  ADefault: TTime; ARounding: Boolean = False;
-  ARoundUserEntries: Boolean = False; ARoundValue: integer = 10;
-  ARoundingType: TLZTimeRounding = trNearest): TTime;
+class function TLZDateTimeBase.StringToTimeDef(AValue: string; ADefault: TTime;
+  ARounding: Boolean = False; ARoundUserEntries: Boolean = False;
+  ARoundValue: integer = 10; ARoundingType: TLZTimeRounding = trNearest): TTime;
 begin
   try
     Result := StringToTime(AValue, ARounding, ARoundUserEntries, ARoundValue,
@@ -1679,8 +1715,7 @@ begin
   Result := Date + Time;
 end;
 
-class function TLZDateTimeBase.ConvertDoubleDigitYear
-  (AValue: integer): integer;
+class function TLZDateTimeBase.ConvertDoubleDigitYear(AValue: integer): integer;
 var
   YearWindow: integer;
   century: integer;
@@ -1710,6 +1745,20 @@ end;
 class function TLZBooleanBase.IntegerToBool(AValue: integer): Boolean;
 begin
   Result := AValue = 1;
+end;
+
+class function TLZBooleanBase.StringToBool(AValue: string): Boolean;
+begin
+  Result := False;
+  if not Result then
+    Result := SameText('t', AValue);
+  if not Result then
+    Result := SameText('y', AValue);
+  if not Result then
+    Result := SameText('1', AValue);
+  if not Result then
+    Result := StrToBoolDef(AValue, False);
+
 end;
 
 class function TLZMathBase.CalculatePercentage(AValue: integer;
@@ -1893,8 +1942,7 @@ begin
   end;
 end;
 
-class function TLZStringBase.LeftPad(S: string; Ch: char;
-  Len: integer): string;
+class function TLZStringBase.LeftPad(S: string; Ch: char; Len: integer): string;
 var
   RestLen: integer;
 begin
@@ -1948,6 +1996,24 @@ class function TLZStringBase.LeadingZeroes(const ANumber,
   ALength: integer): string;
 begin
   Result := SysUtils.Format('%.*d', [ALength, ANumber]);
+end;
+
+{ TLZURLBase }
+
+class function TLZURLBase.IsValidURL(AURL: string): Boolean;
+begin
+  Result := not TLZStringBase.IsEmptyString(AURL);
+  if Result then
+  begin
+    try
+      TURI.Create(AURL);
+    except
+      on E: ENetURIException do
+      begin
+        Result := False;
+      end;
+    end;
+  end;
 end;
 
 initialization

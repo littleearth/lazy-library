@@ -7,14 +7,12 @@
   Copyright (c) 2023 Tristan David Marlow
   Copyright (c) 2023 Little Earth Solutions
 
-----------------------------------------------------------------------------; }
+  ----------------------------------------------------------------------------; }
 unit Lazy.ThreadedStringList;
-
 
 interface
 
 uses
-  Windows, Messages,
   System.SyncObjs, System.SysUtils, System.Variants, System.Classes;
 
 type
@@ -35,9 +33,13 @@ type
     procedure SetDelimitedText(const S: string);
     function GetNames(Index: integer): string;
     function GetValues(const Name: string): string;
-    procedure SetValues(const Name: string; S: string);
+    procedure SetValues(
+      const Name: string;
+      S: string);
     function GetStrings(Index: integer): string;
-    procedure SetStrings(Index: integer; S: string);
+    procedure SetStrings(
+      Index: integer;
+      S: string);
     function GetAsText: string;
     procedure SetAsText(S: string);
     function GetSorted: boolean;
@@ -52,8 +54,12 @@ type
     procedure Delete(Index: integer);
     procedure Clear;
     procedure Exchange(Index1, Index2: integer);
-    function Find(const S: string; var Index: integer): boolean;
-    procedure Insert(Index: integer; const S: string);
+    function Find(
+      const S: string;
+      var Index: integer): boolean;
+    procedure Insert(
+      Index: integer;
+      const S: string);
     function IndexOf(const S: string): integer;
     function IndexOfName(const Name: string): integer;
     procedure Sort;
@@ -77,7 +83,6 @@ type
   end;
 
 implementation
-
 
 constructor TLZThreadStringList.Create;
 begin
@@ -184,7 +189,9 @@ begin
   end;
 end;
 
-function TLZThreadStringList.Find(const S: string; var Index: integer): boolean;
+function TLZThreadStringList.Find(
+  const S: string;
+  var Index: integer): boolean;
 begin
   Result := false;
   if not LockList then
@@ -196,7 +203,9 @@ begin
   end;
 end;
 
-procedure TLZThreadStringList.Insert(Index: integer; const S: string);
+procedure TLZThreadStringList.Insert(
+  Index: integer;
+  const S: string);
 begin
   if not LockList then
     Exit;
@@ -446,7 +455,9 @@ begin
   end;
 end;
 
-procedure TLZThreadStringList.SetValues(const Name: string; S: string);
+procedure TLZThreadStringList.SetValues(
+  const Name: string;
+  S: string);
 begin
   if not LockList then
     Exit;
@@ -494,7 +505,9 @@ begin
   end;
 end;
 
-procedure TLZThreadStringList.SetStrings(Index: integer; S: string);
+procedure TLZThreadStringList.SetStrings(
+  Index: integer;
+  S: string);
 begin
   if not LockList then
     Exit;

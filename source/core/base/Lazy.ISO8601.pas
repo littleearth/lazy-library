@@ -15,7 +15,8 @@ type
 
   TLZToIso8601 = class(TLZUtc)
   public
-    class function DateTimeToIso8601(const Value: TDateTime;
+    class function DateTimeToIso8601(
+      const Value: TDateTime;
       AReturnUTC: boolean = false): string; static;
     class function DateToIso8601(const Value: TDate): string; static;
     class function TimeToIso8601(const Value: TTime): string; static;
@@ -25,7 +26,8 @@ type
   TLZIso8601 = class(TLZToIso8601)
   public
     class function DateFromIso8601(const Value: string): TDate; static;
-    class function DateTimeFromIso8601(const Value: string;
+    class function DateTimeFromIso8601(
+      const Value: string;
       AReturnUTC: boolean = false): TDateTime; static;
     class function TimeFromIso8601(const Value: string): TTime; static;
     class function UtcDateTimeToIso8601(const Value: TDateTime): string; static;
@@ -51,7 +53,8 @@ begin
     end;
 end;
 
-class function TLZIso8601.DateTimeFromIso8601(const Value: string;
+class function TLZIso8601.DateTimeFromIso8601(
+  const Value: string;
   AReturnUTC: boolean): TDateTime;
 begin
   try
@@ -120,7 +123,8 @@ begin
   Result := ToUtc(Now);
 end;
 
-class function TLZToIso8601.DateTimeToIso8601(const Value: TDateTime;
+class function TLZToIso8601.DateTimeToIso8601(
+  const Value: TDateTime;
   AReturnUTC: boolean): string;
 begin
   try

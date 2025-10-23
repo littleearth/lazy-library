@@ -73,7 +73,7 @@ implementation
 {$R *.dfm}
 
 uses
-  System.IOUtils, Lazy.CryptINI, Lazy.Log, Lazy.Log.Basic;
+  System.IOUtils, Lazy.CryptINI, Lazy.Log, Vcl.Imaging.pngimage;
 
 procedure TfrmAccountsDemo.OnGetBilling(ASender: TObject;
   AAcountID, AEdition: string; Amessage: string; ASuccess: Boolean);
@@ -114,7 +114,7 @@ begin
   end
   else
   begin
-    for LUser in AUsers.Items do
+    for LUser in AUsers do
     begin
       LazyLog.Log(Self, 'UserID: ' + LUser.UserID + ', Username:' +
         LUser.Username + 'Aliases: ' + LUser.Aliases.DelimitedText + ', Email:'
@@ -205,7 +205,7 @@ end;
 procedure TfrmAccountsDemo.ActionListUpdate(Action: TBasicAction;
   var Handled: Boolean);
 begin
-  memoLog.Lines.Text := TLZLogBasic.Text;
+  memoLog.Lines.Text := LazyLogCache;
 end;
 
 procedure TfrmAccountsDemo.FormCreate(Sender: TObject);
@@ -277,7 +277,7 @@ begin
         end
         else
         begin
-          for LItem in AAccounts.Items do
+          for LItem in AAccounts do
           begin
             LazyLog.Log(Self, 'AccountID: ' + LItem.AccountID +
               ', Account name:' + LItem.AccountName + 'Hostname: ' +

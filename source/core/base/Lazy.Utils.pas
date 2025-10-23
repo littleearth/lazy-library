@@ -24,6 +24,7 @@ type
   TLZDateTime = class(TLZDateTimeBase);
   TLZBoolean = class(TLZBooleanBase);
   TLZMath = class(TLZMathBase);
+  TLZURL = class(TLZURLBase);
 
 implementation
 

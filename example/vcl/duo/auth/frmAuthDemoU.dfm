@@ -22,13 +22,11 @@ object frmAuthDemo: TfrmAuthDemo
     Align = alClient
     Caption = 'Panel1'
     TabOrder = 1
-    ExplicitWidth = 620
-    ExplicitHeight = 175
     object imgLogo: TImage
-      Left = 518
+      Left = 508
       Top = 1
       Width = 105
-      Height = 174
+      Height = 156
       Align = alRight
       Center = True
       Proportional = True
@@ -41,15 +39,13 @@ object frmAuthDemo: TfrmAuthDemo
       AlignWithMargins = True
       Left = 4
       Top = 4
-      Width = 511
-      Height = 168
+      Width = 501
+      Height = 150
       Align = alClient
       ReadOnly = True
       ScrollBars = ssBoth
       TabOrder = 0
       WordWrap = False
-      ExplicitWidth = 507
-      ExplicitHeight = 167
     end
   end
   object Panel2: TPanel
@@ -59,11 +55,10 @@ object frmAuthDemo: TfrmAuthDemo
     Height = 265
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 620
     object GridPanel1: TGridPanel
       Left = 1
       Top = 204
-      Width = 622
+      Width = 612
       Height = 60
       Align = alBottom
       ColumnCollection = <
@@ -113,12 +108,11 @@ object frmAuthDemo: TfrmAuthDemo
           Value = 100.000000000000000000
         end>
       TabOrder = 1
-      ExplicitWidth = 618
       object BitBtn1: TBitBtn
         AlignWithMargins = True
         Left = 4
         Top = 4
-        Width = 118
+        Width = 116
         Height = 52
         Action = ActionPing
         Align = alClient
@@ -127,9 +121,9 @@ object frmAuthDemo: TfrmAuthDemo
       end
       object BitBtn2: TBitBtn
         AlignWithMargins = True
-        Left = 128
+        Left = 126
         Top = 4
-        Width = 118
+        Width = 116
         Height = 52
         Action = ActionCheck
         Align = alClient
@@ -138,9 +132,9 @@ object frmAuthDemo: TfrmAuthDemo
       end
       object BitBtn3: TBitBtn
         AlignWithMargins = True
-        Left = 252
+        Left = 248
         Top = 4
-        Width = 118
+        Width = 116
         Height = 52
         Action = ActionLogo
         Align = alClient
@@ -149,9 +143,9 @@ object frmAuthDemo: TfrmAuthDemo
       end
       object BitBtn4: TBitBtn
         AlignWithMargins = True
-        Left = 376
+        Left = 370
         Top = 4
-        Width = 118
+        Width = 116
         Height = 52
         Action = ActionPreAuth
         Align = alClient
@@ -160,9 +154,9 @@ object frmAuthDemo: TfrmAuthDemo
       end
       object BitBtn5: TBitBtn
         AlignWithMargins = True
-        Left = 500
+        Left = 492
         Top = 4
-        Width = 118
+        Width = 116
         Height = 52
         Action = ActionLogin
         Align = alClient
@@ -173,7 +167,7 @@ object frmAuthDemo: TfrmAuthDemo
     object GridPanel2: TGridPanel
       Left = 1
       Top = 1
-      Width = 622
+      Width = 612
       Height = 203
       Align = alClient
       ColumnCollection = <
@@ -246,12 +240,11 @@ object frmAuthDemo: TfrmAuthDemo
           Value = 33.333333333333310000
         end>
       TabOrder = 0
-      ExplicitWidth = 618
       object Panel3: TPanel
         AlignWithMargins = True
         Left = 4
         Top = 4
-        Width = 149
+        Width = 146
         Height = 61
         Align = alClient
         BevelOuter = bvNone
@@ -259,15 +252,16 @@ object frmAuthDemo: TfrmAuthDemo
         object Label1: TLabel
           Left = 0
           Top = 0
-          Width = 80
+          Width = 146
           Height = 15
           Align = alTop
           Caption = 'Integration Key'
+          ExplicitWidth = 80
         end
         object editIntegrationKey: TEdit
           Left = 0
           Top = 15
-          Width = 149
+          Width = 146
           Height = 23
           Align = alTop
           TabOrder = 0
@@ -275,9 +269,9 @@ object frmAuthDemo: TfrmAuthDemo
       end
       object Panel4: TPanel
         AlignWithMargins = True
-        Left = 159
+        Left = 156
         Top = 4
-        Width = 149
+        Width = 147
         Height = 61
         Align = alClient
         BevelOuter = bvNone
@@ -285,15 +279,16 @@ object frmAuthDemo: TfrmAuthDemo
         object Label2: TLabel
           Left = 0
           Top = 0
-          Width = 54
+          Width = 147
           Height = 15
           Align = alTop
           Caption = 'Secret Key'
+          ExplicitWidth = 54
         end
         object editSecretKey: TEdit
           Left = 0
           Top = 15
-          Width = 149
+          Width = 147
           Height = 23
           Align = alTop
           PasswordChar = '*'
@@ -302,9 +297,9 @@ object frmAuthDemo: TfrmAuthDemo
       end
       object Panel5: TPanel
         AlignWithMargins = True
-        Left = 314
+        Left = 309
         Top = 4
-        Width = 149
+        Width = 146
         Height = 61
         Align = alClient
         BevelOuter = bvNone
@@ -312,15 +307,16 @@ object frmAuthDemo: TfrmAuthDemo
         object Label3: TLabel
           Left = 0
           Top = 0
-          Width = 55
+          Width = 146
           Height = 15
           Align = alTop
           Caption = 'Hostname'
+          ExplicitWidth = 55
         end
         object editHostname: TEdit
           Left = 0
           Top = 15
-          Width = 149
+          Width = 146
           Height = 23
           Align = alTop
           TabOrder = 0
@@ -328,9 +324,9 @@ object frmAuthDemo: TfrmAuthDemo
       end
       object Panel6: TPanel
         AlignWithMargins = True
-        Left = 469
+        Left = 461
         Top = 4
-        Width = 149
+        Width = 147
         Height = 61
         Align = alClient
         BevelOuter = bvNone
@@ -338,15 +334,16 @@ object frmAuthDemo: TfrmAuthDemo
         object Label4: TLabel
           Left = 0
           Top = 0
-          Width = 53
+          Width = 147
           Height = 15
           Align = alTop
           Caption = 'Username'
+          ExplicitWidth = 53
         end
         object editUsername: TEdit
           Left = 0
           Top = 15
-          Width = 149
+          Width = 147
           Height = 23
           Align = alTop
           TabOrder = 0
@@ -356,7 +353,7 @@ object frmAuthDemo: TfrmAuthDemo
         AlignWithMargins = True
         Left = 4
         Top = 71
-        Width = 149
+        Width = 146
         Height = 61
         Align = alClient
         BevelOuter = bvNone
@@ -364,15 +361,16 @@ object frmAuthDemo: TfrmAuthDemo
         object Label5: TLabel
           Left = 0
           Top = 0
-          Width = 71
+          Width = 146
           Height = 15
           Align = alTop
           Caption = 'Display name'
+          ExplicitWidth = 71
         end
         object editDisplayName: TEdit
           Left = 0
           Top = 15
-          Width = 149
+          Width = 146
           Height = 23
           Align = alTop
           TabOrder = 0
@@ -380,9 +378,9 @@ object frmAuthDemo: TfrmAuthDemo
       end
       object Panel8: TPanel
         AlignWithMargins = True
-        Left = 159
+        Left = 156
         Top = 71
-        Width = 149
+        Width = 147
         Height = 61
         Align = alClient
         BevelOuter = bvNone
@@ -390,15 +388,16 @@ object frmAuthDemo: TfrmAuthDemo
         object Label6: TLabel
           Left = 0
           Top = 0
-          Width = 50
+          Width = 147
           Height = 15
           Align = alTop
           Caption = 'Push info'
+          ExplicitWidth = 50
         end
         object editPushInfo: TEdit
           Left = 0
           Top = 15
-          Width = 149
+          Width = 147
           Height = 23
           Align = alTop
           TabOrder = 0
@@ -407,9 +406,9 @@ object frmAuthDemo: TfrmAuthDemo
       end
       object Panel9: TPanel
         AlignWithMargins = True
-        Left = 314
+        Left = 309
         Top = 71
-        Width = 149
+        Width = 146
         Height = 61
         Align = alClient
         BevelOuter = bvNone
@@ -417,15 +416,16 @@ object frmAuthDemo: TfrmAuthDemo
         object Label7: TLabel
           Left = 0
           Top = 0
-          Width = 24
+          Width = 146
           Height = 15
           Align = alTop
           Caption = 'Type'
+          ExplicitWidth = 24
         end
         object editType: TEdit
           Left = 0
           Top = 15
-          Width = 149
+          Width = 146
           Height = 23
           Align = alTop
           TabOrder = 0
@@ -434,9 +434,9 @@ object frmAuthDemo: TfrmAuthDemo
       end
       object Panel10: TPanel
         AlignWithMargins = True
-        Left = 469
+        Left = 461
         Top = 71
-        Width = 149
+        Width = 147
         Height = 61
         Align = alClient
         BevelOuter = bvNone
@@ -444,15 +444,16 @@ object frmAuthDemo: TfrmAuthDemo
         object Label8: TLabel
           Left = 0
           Top = 0
-          Width = 98
+          Width = 147
           Height = 15
           Align = alTop
           Caption = 'Request hostname'
+          ExplicitWidth = 98
         end
         object editRequestHostname: TEdit
           Left = 0
           Top = 15
-          Width = 149
+          Width = 147
           Height = 23
           Align = alTop
           TabOrder = 0
@@ -462,7 +463,7 @@ object frmAuthDemo: TfrmAuthDemo
         AlignWithMargins = True
         Left = 4
         Top = 138
-        Width = 149
+        Width = 146
         Height = 61
         Align = alClient
         BevelOuter = bvNone
@@ -470,15 +471,16 @@ object frmAuthDemo: TfrmAuthDemo
         object Label9: TLabel
           Left = 0
           Top = 0
-          Width = 98
+          Width = 146
           Height = 15
           Align = alTop
           Caption = 'Request ip address'
+          ExplicitWidth = 98
         end
         object editRequestIPAddress: TEdit
           Left = 0
           Top = 15
-          Width = 149
+          Width = 146
           Height = 23
           Align = alTop
           TabOrder = 0

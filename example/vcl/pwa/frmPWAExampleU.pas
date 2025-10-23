@@ -34,7 +34,9 @@ type
     procedure ActionSystemsExecute(Sender: TObject);
     procedure ActionAssetsExecute(Sender: TObject);
     procedure ActionSendNotificationExecute(Sender: TObject);
-    procedure ApplicationEventsIdle(Sender: TObject; var Done: Boolean);
+    procedure ApplicationEventsIdle(
+      Sender: TObject;
+      var Done: Boolean);
     procedure ActionPublishSystemsExecute(Sender: TObject);
   private
   public
@@ -47,7 +49,7 @@ var
 implementation
 
 uses
-  Lazy.Log, Lazy.Log.Basic;
+  Lazy.Log;
 
 {$R *.dfm}
 
@@ -133,10 +135,11 @@ begin
     end)
 end;
 
-procedure TfrmPWAExample.ApplicationEventsIdle(Sender: TObject;
-var Done: Boolean);
+procedure TfrmPWAExample.ApplicationEventsIdle(
+  Sender: TObject;
+  var Done: Boolean);
 begin
-  memoLog.Lines.Text := (LazyLog as TLZLogBasic).LogText;
+  memoLog.Lines.Text := LazyLogCache;
 end;
 
 procedure TfrmPWAExample.FormCreate(Sender: TObject);

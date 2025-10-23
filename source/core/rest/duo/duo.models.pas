@@ -4,7 +4,7 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, REST.Types, REST.client,
-  REST.Authenticator.Basic, System.JSON, DUO.api, System.Generics.Collections;
+  System.JSON, DUO.api, System.Generics.Collections;
 
 type
   TLZDUODevice = class(TLZDuoModel)
@@ -23,28 +23,37 @@ type
     procedure SetNumber(const Value: string);
     procedure SetSMSNextCode(const Value: string);
     function GetCapabilities: TStrings;
+    procedure SetCapabilities(const Value: TStrings);
+  protected
+    procedure AfterModelCreated; override;
+    procedure BeforeModelDestroyed; override;
   public
-    constructor Create; reintroduce; overload;
-    constructor Create(ADevice: string; ADisplayName: string;
-      ADeviceName: string; ADeviceType: string; ANumber: string;
-      ASMSNextCode: string; ACapabilities: TStrings = nil); overload;
-    destructor Destroy; override;
-    procedure Assign(ADUODevice: TLZDUODevice); reintroduce;
+    constructor CreateEx(
+      ADevice: string;
+      ADisplayName: string;
+      ADeviceName: string;
+      ADeviceType: string;
+      ANumber: string;
+      ASMSNextCode: string;
+      ACapabilities: TStrings = nil); overload;
     procedure FromJSONValue(AJSONValue: TJSONValue); override;
+    function ToJSONValue: TJSONValue; override;
     property Device: string read FDevice write SetDevice;
     property DisplayName: string read FDisplayName write SetDisplayName;
     property DeviceName: string read FDeviceName write SetDeviceName;
     property DeviceType: string read FDeviceType write SetDeviceType;
     property Number: string read FNumber write SetNumber;
     property SMSNextCode: string read FSMSNextCode write SetSMSNextCode;
-    property Capabilities: TStrings read GetCapabilities;
+    property Capabilities: TStrings read GetCapabilities write SetCapabilities;
   end;
 
   TLZDUODevices = class(TLZDuoModelList<TLZDUODevice>)
   protected
   public
-    function Add(ADevice, ADisplayName, ADeviceName, ADeviceType, ANumber,
-      ASMSNextCode: string; ACapabilities: TStrings;
+    function Add(
+      ADevice, ADisplayName, ADeviceName, ADeviceType, ANumber,
+      ASMSNextCode: string;
+      ACapabilities: TStrings;
       AUpdateExisting: boolean = true): TLZDUODevice; reintroduce; overload;
     function Find(ADevice: string): TLZDUODevice;
     function FindByNumber(ANumber: string): TLZDUODevice;
@@ -86,13 +95,15 @@ type
     procedure SetScreenLock(const Value: string);
     procedure SetSMSPasscodesSent(const Value: boolean);
     procedure SetTampered(const Value: string);
+    procedure SetCapabilities(const Value: TStrings);
+  protected
+    procedure AfterModelCreated; override;
+    procedure BeforeModelDestroyed; override;
   public
-    constructor Create; reintroduce;
-    destructor Destroy; override;
-    procedure Assign(ASource: TLZDUOPhone); reintroduce;
     procedure FromJSONValue(AJSONValue: TJSONValue); override;
+    function ToJSONValue: TJSONValue; override;
     property Activated: boolean read FActivated write SetActivated;
-    property Capabilities: TStrings read GetCapabilities;
+    property Capabilities: TStrings read GetCapabilities write SetCapabilities;
     property Encrypted: string read FEncrypted write SetEncrypted;
     property Extension: string read FExtension write SetExtension;
     property Fingerprint: string read FFingerprint write SetFingerprint;
@@ -146,11 +157,12 @@ type
     function GetAliases: TStrings;
     procedure SetStatus(const Value: string);
     function GetPhones: TLZDUOPhones;
+  protected
+    procedure AfterModelCreated; override;
+    procedure BeforeModelDestroyed; override;
   public
-    constructor Create; reintroduce;
-    destructor Destroy; override;
-    procedure Assign(ASource: TLZDUOUser); reintroduce;
     procedure FromJSONValue(AJSONValue: TJSONValue); override;
+    function ToJSONValue: TJSONValue; override;
     function HasAlias(AAlias: string): boolean;
     function HasPhone(APhoneID: string): boolean;
     property UserID: string read FUserID write SetUserID;
@@ -191,8 +203,8 @@ type
     procedure SetBillingEdition(const Value: string);
     procedure SetTeleponyCredits(const Value: integer);
   public
-    procedure Assign(ASource: TLZDUOAccount); reintroduce;
     procedure FromJSONValue(AJSONValue: TJSONValue); override;
+    function ToJSONValue: TJSONValue; override;
     property AccountID: string read FAccountID write SetAccountID;
     property AccountName: string read FAccountName write SetAccountName;
     property APIHostname: string read FAPIHostname write SetAPIHostname;
@@ -206,23 +218,29 @@ type
 
 implementation
 
+uses
+  Lazy.Utils;
+
 { TDUODevice }
 
-procedure TLZDUODevice.Assign(ADUODevice: TLZDUODevice);
+procedure TLZDUODevice.AfterModelCreated;
 begin
-  FDevice := ADUODevice.Device;
-  FDisplayName := ADUODevice.DisplayName;
-  FDeviceName := ADUODevice.DeviceName;
-  FDeviceType := ADUODevice.DeviceType;
-  FNumber := ADUODevice.Number;
-  FSMSNextCode := ADUODevice.SMSNextCode;
-  FCapabilities.Assign(ADUODevice.Capabilities);
+  inherited;
+  FCapabilities := TStringList.Create;
 end;
 
-constructor TLZDUODevice.Create(ADevice, ADisplayName, ADeviceName, ADeviceType,
-  ANumber, ASMSNextCode: string; ACapabilities: TStrings);
+procedure TLZDUODevice.BeforeModelDestroyed;
 begin
-  Create;
+  FreeAndNil(FCapabilities);
+  inherited;
+end;
+
+constructor TLZDUODevice.CreateEx(
+  ADevice, ADisplayName, ADeviceName, ADeviceType, ANumber,
+  ASMSNextCode: string;
+  ACapabilities: TStrings);
+begin
+  inherited Create;
   FDevice := ADevice;
   FDisplayName := ADisplayName;
   FDeviceName := ADeviceName;
@@ -232,21 +250,6 @@ begin
   if Assigned(ACapabilities) then
   begin
     FCapabilities.Assign(ACapabilities);
-  end;
-end;
-
-constructor TLZDUODevice.Create;
-begin
-  inherited Create;
-  FCapabilities := TStringList.Create;
-end;
-
-destructor TLZDUODevice.Destroy;
-begin
-  try
-    FreeAndNil(FCapabilities);
-  finally
-    inherited;
   end;
 end;
 
@@ -271,9 +274,58 @@ begin
   DeviceType := AJSONValue.GetValue<string>('type');
 end;
 
+function TLZDUODevice.ToJSONValue: TJSONValue;
+var
+  LJSONObject: TJSONObject;
+  LJSONArray: TJSONArray;
+  LIdx: integer;
+begin
+  LJSONObject := TJSONObject.Create;
+  try
+    // Capabilities array
+    if FCapabilities.Count > 0 then
+    begin
+      LJSONArray := TJSONArray.Create;
+      for LIdx := 0 to FCapabilities.Count - 1 do
+      begin
+        LJSONArray.Add(FCapabilities[LIdx]);
+      end;
+      LJSONObject.AddPair('capabilities', LJSONArray);
+    end;
+    
+    if not TLZString.IsEmptyString(FDevice) then
+      LJSONObject.AddPair('device', FDevice);
+    
+    if not TLZString.IsEmptyString(FDisplayName) then
+      LJSONObject.AddPair('display_name', FDisplayName);
+    
+    if not TLZString.IsEmptyString(FDeviceName) then
+      LJSONObject.AddPair('name', FDeviceName);
+    
+    if not TLZString.IsEmptyString(FNumber) then
+      LJSONObject.AddPair('number', FNumber);
+    
+    if not TLZString.IsEmptyString(FSMSNextCode) then
+      LJSONObject.AddPair('sms_nextcode', FSMSNextCode);
+    
+    if not TLZString.IsEmptyString(FDeviceType) then
+      LJSONObject.AddPair('type', FDeviceType);
+    
+    Result := LJSONObject;
+  except
+    LJSONObject.Free;
+    raise;
+  end;
+end;
+
 function TLZDUODevice.GetCapabilities: TStrings;
 begin
   Result := FCapabilities;
+end;
+
+procedure TLZDUODevice.SetCapabilities(const Value: TStrings);
+begin
+  FCapabilities.Assign(Value);
 end;
 
 procedure TLZDUODevice.SetDevice(const Value: string);
@@ -308,14 +360,16 @@ end;
 
 { TDUODevices }
 
-function TLZDUODevices.Add(ADevice, ADisplayName, ADeviceName, ADeviceType,
-  ANumber, ASMSNextCode: string; ACapabilities: TStrings;
+function TLZDUODevices.Add(
+  ADevice, ADisplayName, ADeviceName, ADeviceType, ANumber,
+  ASMSNextCode: string;
+  ACapabilities: TStrings;
   AUpdateExisting: boolean): TLZDUODevice;
 begin
   Result := Find(ADevice);
   if not Assigned(Result) then
   begin
-    Result := TLZDUODevice.Create(ADevice, ADisplayName, ADeviceName,
+    Result := TLZDUODevice.CreateEx(ADevice, ADisplayName, ADeviceName,
       ADeviceType, ANumber, ASMSNextCode, ACapabilities);
     Add(Result);
   end
@@ -340,9 +394,9 @@ begin
   LIdx := 0;
   while (Result = nil) and (LIdx < Count) do
   begin
-    if SameText(Items[LIdx].Device, ADevice) then
+    if SameText(Models[LIdx].Device, ADevice) then
     begin
-      Result := Items[LIdx];
+      Result := Models[LIdx];
     end;
     Inc(LIdx);
   end;
@@ -356,9 +410,9 @@ begin
   LIdx := 0;
   while (Result = nil) and (LIdx < Count) do
   begin
-    if SameText(Items[LIdx].Number, ANumber) then
+    if SameText(Models[LIdx].Number, ANumber) then
     begin
-      Result := Items[LIdx];
+      Result := Models[LIdx];
     end;
     Inc(LIdx);
   end;
@@ -366,39 +420,20 @@ end;
 
 { TDUOUser }
 
-procedure TLZDUOUser.Assign(ASource: TLZDUOUser);
+procedure TLZDUOUser.AfterModelCreated;
 begin
-  FCreatedTimeStamp := ASource.CreatedTimeStamp;
-  FLastName := ASource.LastName;
-  FEmail := ASource.Email;
-  FNotes := ASource.Notes;
-  FUserID := ASource.UserID;
-  FIsEnrolled := ASource.IsEnrolled;
-  FRealName := ASource.RealName;
-  FAliases.Assign(ASource.Aliases);
-  FFirstName := ASource.FirstName;
-  FUsername := ASource.Username;
-  FLastLogin := ASource.LastLogin;
-  FLastDirectorySync := ASource.LastDirectorySync;
-  FPhones.Assign(ASource.Phones);
-end;
-
-constructor TLZDUOUser.Create;
-begin
-  inherited Create;
+  inherited;
   FAliases := TStringList.Create;
   FAliases.Duplicates := dupIgnore;
   FPhones := TLZDUOPhones.Create;
 end;
 
-destructor TLZDUOUser.Destroy;
+procedure TLZDUOUser.BeforeModelDestroyed;
 begin
-  try
-    FreeAndNil(FAliases);
-    FreeAndNil(FPhones);
-  finally
-    inherited;
-  end;
+  FreeAndNil(FAliases);
+  FreeAndNil(FPhones);
+  inherited;
+
 end;
 
 function TLZDUOUser.HasAlias(AAlias: string): boolean;
@@ -450,6 +485,79 @@ begin
   Notes := AJSONValue.GetValue<string>('notes', '');
   Status := AJSONValue.GetValue<string>('status', '');
 
+end;
+
+function TLZDUOUser.ToJSONValue: TJSONValue;
+var
+  LJSONObject: TJSONObject;
+  LAliasesObject: TJSONObject;
+  LPhonesArray: TJSONValue;
+  LIdx: integer;
+begin
+  LJSONObject := TJSONObject.Create;
+  try
+    if not TLZString.IsEmptyString(FUserID) then
+      LJSONObject.AddPair('user_id', FUserID);
+    
+    if not TLZString.IsEmptyString(FUsername) then
+      LJSONObject.AddPair('username', FUsername);
+    
+    if FCreatedTimeStamp <> 0 then
+      LJSONObject.AddPair('created', TLZDuoDateTimeHelpers.DateTimeToUnixTimestamp(FCreatedTimeStamp));
+    
+    if FLastLogin <> 0 then
+      LJSONObject.AddPair('last_login', TLZDuoDateTimeHelpers.DateTimeToUnixTimestamp(FLastLogin));
+    
+    if not TLZString.IsEmptyString(FEmail) then
+      LJSONObject.AddPair('email', FEmail);
+    
+    if not TLZString.IsEmptyString(FFirstName) then
+      LJSONObject.AddPair('firstname', FFirstName);
+    
+    if not TLZString.IsEmptyString(FLastName) then
+      LJSONObject.AddPair('lastname', FLastName);
+    
+    if not TLZString.IsEmptyString(FRealName) then
+      LJSONObject.AddPair('realname', FRealName);
+    
+    if FLastDirectorySync <> 0 then
+      LJSONObject.AddPair('last_directory_sync', TLZDuoDateTimeHelpers.DateTimeToUnixTimestamp(FLastDirectorySync));
+    
+    LJSONObject.AddPair('is_enrolled', TJSONBool.Create(FIsEnrolled));
+    
+    if not TLZString.IsEmptyString(FNotes) then
+      LJSONObject.AddPair('notes', FNotes);
+    
+    if not TLZString.IsEmptyString(FStatus) then
+      LJSONObject.AddPair('status', FStatus);
+    
+    // Aliases as object with alias1, alias2, etc.
+    if FAliases.Count > 0 then
+    begin
+      LAliasesObject := TJSONObject.Create;
+      for LIdx := 0 to FAliases.Count - 1 do
+      begin
+        LAliasesObject.AddPair(Format('alias%d', [LIdx + 1]), FAliases[LIdx]);
+      end;
+      LJSONObject.AddPair('aliases', LAliasesObject);
+    end;
+    
+    // Phones array
+    if FPhones.Count > 0 then
+    begin
+      LPhonesArray := TJSONArray.Create;
+      for LIdx := 0 to FPhones.Count - 1 do
+      begin
+        (LPhonesArray as TJSONArray).AddElement(FPhones.Model[LIdx].ToJSONValue);
+      end;
+      LJSONObject.AddPair('phones', LPhonesArray);
+    end;
+    
+    Result := LJSONObject;
+  except
+    LJSONObject.Free;
+    raise;
+  end;
 end;
 
 function TLZDUOUser.GetAliases: TStrings;
@@ -532,9 +640,9 @@ begin
   LIdx := 0;
   while (Result = nil) and (LIdx < Count) do
   begin
-    if SameText(Items[LIdx].Username, AUsername) then
+    if SameText(Models[LIdx].Username, AUsername) then
     begin
-      Result := Items[LIdx];
+      Result := Models[LIdx];
     end;
     Inc(LIdx);
   end;
@@ -548,9 +656,9 @@ begin
   LIdx := 0;
   while (Result = nil) and (LIdx < Count) do
   begin
-    if Items[LIdx].HasAlias(AAlias) then
+    if Models[LIdx].HasAlias(AAlias) then
     begin
-      Result := Items[LIdx];
+      Result := Models[LIdx];
     end;
     Inc(LIdx);
   end;
@@ -564,9 +672,9 @@ begin
   LIdx := 0;
   while (Result = nil) and (LIdx < Count) do
   begin
-    if SameText(Items[LIdx].UserID, AUserID) then
+    if SameText(Models[LIdx].UserID, AUserID) then
     begin
-      Result := Items[LIdx];
+      Result := Models[LIdx];
     end;
     Inc(LIdx);
   end;
@@ -574,40 +682,16 @@ end;
 
 { TDUOPhone }
 
-procedure TLZDUOPhone.Assign(ASource: TLZDUOPhone);
+procedure TLZDUOPhone.AfterModelCreated;
 begin
-  FPhoneType := ASource.PhoneType;
-  FTampered := ASource.Tampered;
-  FScreenLock := ASource.ScreenLock;
-  FLastSeen := ASource.LastSeen;
-  FModel := ASource.Model;
-  FSMSPasscodesSent := ASource.SMSPasscodesSent;
-  FPostDelay := ASource.PostDelay;
-  FExtension := ASource.Extension;
-  FActivated := ASource.Activated;
-  FPhoneName := ASource.PhoneName;
-  FPlatform := ASource.Platform;
-  FNumber := ASource.Number;
-  FFingerprint := ASource.Fingerprint;
-  FEncrypted := ASource.Encrypted;
-  FPreDelay := ASource.PreDelay;
-  FPhoneID := ASource.PhoneID;
-  FCapabilities.Assign(ASource.Capabilities);
-end;
-
-constructor TLZDUOPhone.Create;
-begin
-  inherited Create;
+  inherited;
   FCapabilities := TStringList.Create;
 end;
 
-destructor TLZDUOPhone.Destroy;
+procedure TLZDUOPhone.BeforeModelDestroyed;
 begin
-  try
-    FreeAndNil(FCapabilities);
-  finally
-    inherited;
-  end;
+  FreeAndNil(FCapabilities);
+  inherited;
 
 end;
 
@@ -615,6 +699,25 @@ procedure TLZDUOPhone.FromJSONValue(AJSONValue: TJSONValue);
 begin
   PhoneID := AJSONValue.GetValue<string>('phone_id', '');
   Number := AJSONValue.GetValue<string>('number', '');
+end;
+
+function TLZDUOPhone.ToJSONValue: TJSONValue;
+var
+  LJSONObject: TJSONObject;
+begin
+  LJSONObject := TJSONObject.Create;
+  try
+    if not TLZString.IsEmptyString(FPhoneID) then
+      LJSONObject.AddPair('phone_id', FPhoneID);
+    
+    if not TLZString.IsEmptyString(FNumber) then
+      LJSONObject.AddPair('number', FNumber);
+    
+    Result := LJSONObject;
+  except
+    LJSONObject.Free;
+    raise;
+  end;
 end;
 
 function TLZDUOPhone.GetCapabilities: TStrings;
@@ -625,6 +728,11 @@ end;
 procedure TLZDUOPhone.SetActivated(const Value: boolean);
 begin
   FActivated := Value;
+end;
+
+procedure TLZDUOPhone.SetCapabilities(const Value: TStrings);
+begin
+  FCapabilities.Assign(Value);
 end;
 
 procedure TLZDUOPhone.SetEncrypted(const Value: string);
@@ -712,25 +820,15 @@ begin
   LIdx := 0;
   while (Result = nil) and (LIdx < Count) do
   begin
-    if SameText(Items[LIdx].PhoneID, APhoneID) then
+    if SameText(Models[LIdx].PhoneID, APhoneID) then
     begin
-      Result := Items[LIdx];
+      Result := Models[LIdx];
     end;
     Inc(LIdx);
   end;
 end;
 
 { TDUOAccount }
-
-procedure TLZDUOAccount.Assign(ASource: TLZDUOAccount);
-begin
-  inherited;
-  APIHostname := ASource.APIHostname;
-  AccountID := ASource.AccountID;
-  AccountName := ASource.AccountName;
-  BillingEdition := ASource.BillingEdition;
-  TeleponyCredits := ASource.TeleponyCredits;
-end;
 
 procedure TLZDUOAccount.FromJSONValue(AJSONValue: TJSONValue);
 begin
@@ -739,6 +837,33 @@ begin
   APIHostname := AJSONValue.GetValue<string>('api_hostname', '');
   AccountName := AJSONValue.GetValue<string>('name', '');
   AccountID := AJSONValue.GetValue<string>('account_id', '');
+end;
+
+function TLZDUOAccount.ToJSONValue: TJSONValue;
+var
+  LJSONObject: TJSONObject;
+begin
+  LJSONObject := TJSONObject.Create;
+  try
+    if not TLZString.IsEmptyString(FAPIHostname) then
+      LJSONObject.AddPair('api_hostname', FAPIHostname);
+    
+    if not TLZString.IsEmptyString(FAccountName) then
+      LJSONObject.AddPair('name', FAccountName);
+    
+    if not TLZString.IsEmptyString(FAccountID) then
+      LJSONObject.AddPair('account_id', FAccountID);
+    
+    if not TLZString.IsEmptyString(FBillingEdition) then
+      LJSONObject.AddPair('billing_edition', FBillingEdition);
+    
+    LJSONObject.AddPair('telephony_credits', TJSONNumber.Create(FTeleponyCredits));
+    
+    Result := LJSONObject;
+  except
+    LJSONObject.Free;
+    raise;
+  end;
 end;
 
 procedure TLZDUOAccount.SetAccountID(const Value: string);

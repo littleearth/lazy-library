@@ -4,19 +4,25 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, REST.Types, REST.client,
-  REST.Authenticator.Basic, System.JSON, duo.api, System.Generics.Collections,
+  System.JSON, duo.api,
   duo.models;
 
 type
 
   TDuoLoginResponse = (loginFail, loginSuccess, loginSMSCodes);
 
-  TOnDuoPreAuthEvent = procedure(ASender: TObject; ADevices: TLZDUODevices;
-    AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean) of object;
+  TOnDuoPreAuthEvent = procedure(
+    ASender: TObject;
+    ADevices: TLZDUODevices;
+    AMessage: string;
+    ASuccess: boolean;
+    var AOwnsObjects: boolean) of object;
   TOnDuoPreAuthProc = reference to procedure(ADevices: TLZDUODevices;
     AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean);
 
-  TOnDuoLoginEvent = procedure(ASender: TObject; AMessage: string;
+  TOnDuoLoginEvent = procedure(
+    ASender: TObject;
+    AMessage: string;
     AResponse: TDuoLoginResponse) of object;
   TOnDuoLoginProc = reference to procedure(AMessage: string;
     AResponse: TDuoLoginResponse);
@@ -34,17 +40,30 @@ type
   protected
     function GetBaseResource: string; override;
   public
-    procedure Logo(AFileName: TFilename; var AMessage: string;
+    procedure Logo(
+      AFileName: TFilename;
+      var AMessage: string;
       var ASuccess: boolean);
-    procedure Login(AUsername: string; ADisplayName: string = '';
-      APushInfo: string = ''; AType: string = 'Login request';
-      ADevice: string = 'auto'; AFactor: string = 'auto';
-      APasscode: string = ''; AHostname: string = ''; AIPAddr: string = '';
-      AUserID: boolean = false; AAsync: boolean = false;
+    procedure Login(
+      AUsername: string;
+      ADisplayName: string = '';
+      APushInfo: string = '';
+      AType: string = 'Login request';
+      ADevice: string = 'auto';
+      AFactor: string = 'auto';
+      APasscode: string = '';
+      AHostname: string = '';
+      AIPAddr: string = '';
+      AUserID: boolean = false;
+      AAsync: boolean = false;
       AOnDuoLoginProc: TOnDuoLoginProc = nil);
-    procedure PreAuth(AUsername: string; AHostname: string = '';
-      AIPAddr: string = ''; ATrustedDeviceToken: string = '';
-      AUserID: boolean = false; AOnDuoPreAuthProc: TOnDuoPreAuthProc = nil);
+    procedure PreAuth(
+      AUsername: string;
+      AHostname: string = '';
+      AIPAddr: string = '';
+      ATrustedDeviceToken: string = '';
+      AUserID: boolean = false;
+      AOnDuoPreAuthProc: TOnDuoPreAuthProc = nil);
     procedure Check(AOnDuoNotifyProc: TOnDuoNotifyProc = nil);
     procedure Ping(AOnDuoNotifyProc: TOnDuoNotifyProc = nil);
   published
@@ -99,9 +118,11 @@ begin
     FOnCheck(Self, LMessage, LResult);
 end;
 
-procedure TLZDUOAuthAPI.Login(AUsername, ADisplayName, APushInfo, AType, ADevice,
-  AFactor, APasscode, AHostname, AIPAddr: string; AUserID, AAsync: boolean;
-AOnDuoLoginProc: TOnDuoLoginProc);
+procedure TLZDUOAuthAPI.Login(
+  AUsername, ADisplayName, APushInfo, AType, ADevice, AFactor, APasscode,
+  AHostname, AIPAddr: string;
+  AUserID, AAsync: boolean;
+  AOnDuoLoginProc: TOnDuoLoginProc);
 var
   LLoginResponse: TDuoLoginResponse;
   LMessage: string;
@@ -232,8 +253,10 @@ begin
     FOnLogin(Self, LMessage, LLoginResponse);
 end;
 
-procedure TLZDUOAuthAPI.Logo(AFileName: TFilename; var AMessage: string;
-var ASuccess: boolean);
+procedure TLZDUOAuthAPI.Logo(
+  AFileName: TFilename;
+  var AMessage: string;
+  var ASuccess: boolean);
 begin
   ASuccess := ExecuteRequest(AMessage, BaseResource + 'logo', rmGET, nil,
     procedure(ARESTResponse: TRESTResponse; var ASuccess: boolean;
@@ -301,8 +324,10 @@ begin
     FOnPing(Self, LMessage, LResult);
 end;
 
-procedure TLZDUOAuthAPI.PreAuth(AUsername, AHostname, AIPAddr, ATrustedDeviceToken
-  : string; AUserID: boolean; AOnDuoPreAuthProc: TOnDuoPreAuthProc);
+procedure TLZDUOAuthAPI.PreAuth(
+  AUsername, AHostname, AIPAddr, ATrustedDeviceToken: string;
+  AUserID: boolean;
+  AOnDuoPreAuthProc: TOnDuoPreAuthProc);
 var
   LResult, LOwnsObjects: boolean;
   LMessage: string;

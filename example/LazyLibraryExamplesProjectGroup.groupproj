@@ -30,6 +30,33 @@
         <Projects Include="vcl\vsscopy\DelphiVSSCopyVCL.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="vcl\ms-graph\DelphiMSGraphManagementVCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\oauth\DelphiOAuthVCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="fmx\sharepoint\DelphiSharepointFMX.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\unifi\DelphiUniFiClientVCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\sasboss\DelphiSASSBOSSClientVCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\csv-json\DelphiCSVJSONConverter.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\logging\DelphiLazyLogVCL.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\logging\DelphiLazyLogConsole.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="vcl\logging\DelphiLazyLogMessagingVCL.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -119,14 +146,95 @@
     <Target Name="DelphiVSSCopyVCL:Make">
         <MSBuild Projects="vcl\vsscopy\DelphiVSSCopyVCL.dproj" Targets="Make"/>
     </Target>
+    <Target Name="DelphiMSGraphManagementVCL">
+        <MSBuild Projects="vcl\ms-graph\DelphiMSGraphManagementVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiMSGraphManagementVCL:Clean">
+        <MSBuild Projects="vcl\ms-graph\DelphiMSGraphManagementVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiMSGraphManagementVCL:Make">
+        <MSBuild Projects="vcl\ms-graph\DelphiMSGraphManagementVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiOAuthVCL">
+        <MSBuild Projects="vcl\oauth\DelphiOAuthVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiOAuthVCL:Clean">
+        <MSBuild Projects="vcl\oauth\DelphiOAuthVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiOAuthVCL:Make">
+        <MSBuild Projects="vcl\oauth\DelphiOAuthVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiSharepointFMX">
+        <MSBuild Projects="fmx\sharepoint\DelphiSharepointFMX.dproj"/>
+    </Target>
+    <Target Name="DelphiSharepointFMX:Clean">
+        <MSBuild Projects="fmx\sharepoint\DelphiSharepointFMX.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiSharepointFMX:Make">
+        <MSBuild Projects="fmx\sharepoint\DelphiSharepointFMX.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiUniFiClientVCL">
+        <MSBuild Projects="vcl\unifi\DelphiUniFiClientVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiUniFiClientVCL:Clean">
+        <MSBuild Projects="vcl\unifi\DelphiUniFiClientVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiUniFiClientVCL:Make">
+        <MSBuild Projects="vcl\unifi\DelphiUniFiClientVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiSASSBOSSClientVCL">
+        <MSBuild Projects="vcl\sasboss\DelphiSASSBOSSClientVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiSASSBOSSClientVCL:Clean">
+        <MSBuild Projects="vcl\sasboss\DelphiSASSBOSSClientVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiSASSBOSSClientVCL:Make">
+        <MSBuild Projects="vcl\sasboss\DelphiSASSBOSSClientVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiCSVJSONConverter">
+        <MSBuild Projects="vcl\csv-json\DelphiCSVJSONConverter.dproj"/>
+    </Target>
+    <Target Name="DelphiCSVJSONConverter:Clean">
+        <MSBuild Projects="vcl\csv-json\DelphiCSVJSONConverter.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiCSVJSONConverter:Make">
+        <MSBuild Projects="vcl\csv-json\DelphiCSVJSONConverter.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiLazyLogVCL">
+        <MSBuild Projects="vcl\logging\DelphiLazyLogVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiLazyLogVCL:Clean">
+        <MSBuild Projects="vcl\logging\DelphiLazyLogVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiLazyLogVCL:Make">
+        <MSBuild Projects="vcl\logging\DelphiLazyLogVCL.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiLazyLogConsole">
+        <MSBuild Projects="vcl\logging\DelphiLazyLogConsole.dproj"/>
+    </Target>
+    <Target Name="DelphiLazyLogConsole:Clean">
+        <MSBuild Projects="vcl\logging\DelphiLazyLogConsole.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiLazyLogConsole:Make">
+        <MSBuild Projects="vcl\logging\DelphiLazyLogConsole.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DelphiLazyLogMessagingVCL">
+        <MSBuild Projects="vcl\logging\DelphiLazyLogMessagingVCL.dproj"/>
+    </Target>
+    <Target Name="DelphiLazyLogMessagingVCL:Clean">
+        <MSBuild Projects="vcl\logging\DelphiLazyLogMessagingVCL.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DelphiLazyLogMessagingVCL:Make">
+        <MSBuild Projects="vcl\logging\DelphiLazyLogMessagingVCL.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="DelphiAzureManagementVCL;DelphiAzureManagementFMX;DelphiPWAVCL;DelphiStopWatchVCL;DelphiDuoAccountsDemoVCL;DelphiDuoAdminDemoVCL;DelphiDuoAuthDemoVCL;DelphiSystemInformationVCL;DelphiVSSCopyVCL"/>
+        <CallTarget Targets="DelphiAzureManagementVCL;DelphiAzureManagementFMX;DelphiPWAVCL;DelphiStopWatchVCL;DelphiDuoAccountsDemoVCL;DelphiDuoAdminDemoVCL;DelphiDuoAuthDemoVCL;DelphiSystemInformationVCL;DelphiVSSCopyVCL;DelphiMSGraphManagementVCL;DelphiOAuthVCL;DelphiSharepointFMX;DelphiUniFiClientVCL;DelphiSASSBOSSClientVCL;DelphiCSVJSONConverter;DelphiLazyLogVCL;DelphiLazyLogConsole;DelphiLazyLogMessagingVCL"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="DelphiAzureManagementVCL:Clean;DelphiAzureManagementFMX:Clean;DelphiPWAVCL:Clean;DelphiStopWatchVCL:Clean;DelphiDuoAccountsDemoVCL:Clean;DelphiDuoAdminDemoVCL:Clean;DelphiDuoAuthDemoVCL:Clean;DelphiSystemInformationVCL:Clean;DelphiVSSCopyVCL:Clean"/>
+        <CallTarget Targets="DelphiAzureManagementVCL:Clean;DelphiAzureManagementFMX:Clean;DelphiPWAVCL:Clean;DelphiStopWatchVCL:Clean;DelphiDuoAccountsDemoVCL:Clean;DelphiDuoAdminDemoVCL:Clean;DelphiDuoAuthDemoVCL:Clean;DelphiSystemInformationVCL:Clean;DelphiVSSCopyVCL:Clean;DelphiMSGraphManagementVCL:Clean;DelphiOAuthVCL:Clean;DelphiSharepointFMX:Clean;DelphiUniFiClientVCL:Clean;DelphiSASSBOSSClientVCL:Clean;DelphiCSVJSONConverter:Clean;DelphiLazyLogVCL:Clean;DelphiLazyLogConsole:Clean;DelphiLazyLogMessagingVCL:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="DelphiAzureManagementVCL:Make;DelphiAzureManagementFMX:Make;DelphiPWAVCL:Make;DelphiStopWatchVCL:Make;DelphiDuoAccountsDemoVCL:Make;DelphiDuoAdminDemoVCL:Make;DelphiDuoAuthDemoVCL:Make;DelphiSystemInformationVCL:Make;DelphiVSSCopyVCL:Make"/>
+        <CallTarget Targets="DelphiAzureManagementVCL:Make;DelphiAzureManagementFMX:Make;DelphiPWAVCL:Make;DelphiStopWatchVCL:Make;DelphiDuoAccountsDemoVCL:Make;DelphiDuoAdminDemoVCL:Make;DelphiDuoAuthDemoVCL:Make;DelphiSystemInformationVCL:Make;DelphiVSSCopyVCL:Make;DelphiMSGraphManagementVCL:Make;DelphiOAuthVCL:Make;DelphiSharepointFMX:Make;DelphiUniFiClientVCL:Make;DelphiSASSBOSSClientVCL:Make;DelphiCSVJSONConverter:Make;DelphiLazyLogVCL:Make;DelphiLazyLogConsole:Make;DelphiLazyLogMessagingVCL:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

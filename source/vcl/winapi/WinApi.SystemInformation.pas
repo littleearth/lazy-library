@@ -20,7 +20,7 @@ unit WinApi.SystemInformation;
 interface
 
 uses
-  VCL.Lazy.Utils, Lazy.Types, VCL.Lazy.Types,
+  VCL.Lazy.Utils.Windows, Lazy.Types, VCL.Lazy.Types.Windows,
   Windows, Messages, SysUtils, Classes,
   ExtCtrls, System.Win.Registry, Printers,
   WinSock, SHFolder, System.Generics.Collections;
@@ -118,7 +118,7 @@ type
 implementation
 
 uses
-  IdStack, WinApi.Nb30, IpHlpApi, IpTypes, WinApi.PerformanceDataHelper;
+  IdStack, WinApi.Nb30, IpHlpApi, IpTypes, WinAPI.PerformanceDataHelper;
 
 constructor TLZSystemInformation.Create(AOwner: TComponent);
 begin

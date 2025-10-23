@@ -8,17 +8,35 @@ uses
 type
   TLZBase64 = class(TLZPersistent)
   private
-    function LoadFromBlob(const AField: TField; const Stream: TStream): boolean;
+    function LoadFromBlob(
+      const AField: TField;
+      const Stream: TStream): boolean;
   protected
-    function Base64ToFileName(ABase64: string; AFileName: string): boolean;
-    function FileNameToBase64(AFileName: string; var ABase64: string): boolean;
-    function Base64ToField(ABase64: string; AField: TField): boolean;
-    function FieldToBase64(AField: TField; var ABase64: string): boolean;
+    function Base64ToFileName(
+      ABase64: string;
+      AFileName: string): boolean;
+    function FileNameToBase64(
+      AFileName: string;
+      var ABase64: string): boolean;
+    function Base64ToField(
+      ABase64: string;
+      AField: TField): boolean;
+    function FieldToBase64(
+      AField: TField;
+      var ABase64: string): boolean;
   public
-    class function ToFile(ABase64: string; AFileName: string): boolean;
-    class function FromFile(AFileName: string; var ABase64: string): boolean;
-    class function ToField(ABase64: string; AField: TField): boolean;
-    class function FromField(AField: TField; var ABase64: string): boolean;
+    class function ToFile(
+      ABase64: string;
+      AFileName: string): boolean;
+    class function FromFile(
+      AFileName: string;
+      var ABase64: string): boolean;
+    class function ToField(
+      ABase64: string;
+      AField: TField): boolean;
+    class function FromField(
+      AField: TField;
+      var ABase64: string): boolean;
   end;
 
 implementation
@@ -26,8 +44,9 @@ implementation
 uses
   IdCoderMIME, System.NetEncoding;
 
-function TLZBase64.Base64ToFileName(ABase64: string; AFileName: string)
-  : boolean;
+function TLZBase64.Base64ToFileName(
+  ABase64: string;
+  AFileName: string): boolean;
 var
   IdDecoderMIME: TIdDecoderMIME;
   FileStream: TFileStream;
@@ -51,7 +70,9 @@ begin
   end;
 end;
 
-function TLZBase64.Base64ToField(ABase64: string; AField: TField): boolean;
+function TLZBase64.Base64ToField(
+  ABase64: string;
+  AField: TField): boolean;
 var
   IdDecoderMIME: TIdDecoderMIME;
   Blob: TStream;
@@ -69,7 +90,8 @@ begin
   end;
 end;
 
-function TLZBase64.FileNameToBase64(AFileName: string;
+function TLZBase64.FileNameToBase64(
+  AFileName: string;
   var ABase64: string): boolean;
 var
   IdEncoderMIME: TIdEncoderMIME;
@@ -90,8 +112,9 @@ begin
   end;
 end;
 
-class function TLZBase64.FromField(AField: TField; var ABase64: string)
-  : boolean;
+class function TLZBase64.FromField(
+  AField: TField;
+  var ABase64: string): boolean;
 var
   LBase64: TLZBase64;
 begin
@@ -103,7 +126,8 @@ begin
   end;
 end;
 
-class function TLZBase64.FromFile(AFileName: string;
+class function TLZBase64.FromFile(
+  AFileName: string;
   var ABase64: string): boolean;
 var
   LBase64: TLZBase64;
@@ -116,7 +140,8 @@ begin
   end;
 end;
 
-function TLZBase64.LoadFromBlob(const AField: TField;
+function TLZBase64.LoadFromBlob(
+  const AField: TField;
   const Stream: TStream): boolean;
 var
   Blob: TStream;
@@ -131,7 +156,9 @@ begin
   end;
 end;
 
-class function TLZBase64.ToField(ABase64: string; AField: TField): boolean;
+class function TLZBase64.ToField(
+  ABase64: string;
+  AField: TField): boolean;
 var
   LBase64: TLZBase64;
 begin
@@ -155,7 +182,9 @@ begin
   end;
 end;
 
-function TLZBase64.FieldToBase64(AField: TField; var ABase64: string): boolean;
+function TLZBase64.FieldToBase64(
+  AField: TField;
+  var ABase64: string): boolean;
 var
   MemoryStream: TMemoryStream;
   IdEncoderMIME: TIdEncoderMIME;

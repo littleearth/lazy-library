@@ -19,7 +19,7 @@ type
 implementation
 
 uses
-  System.StrUtils, System.SysUtils, Winapi.Windows, Lazy.Utils;
+  System.SysUtils, Lazy.Utils;
 
 const
   NATOUpper: array [65 .. 90] of string = ('ALPHA', 'BRAVO', 'CHARLIE', 'DELTA',

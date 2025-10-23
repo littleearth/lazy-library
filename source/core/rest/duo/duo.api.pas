@@ -5,14 +5,16 @@ interface
 uses
   System.SysUtils, System.Variants, System.Classes, REST.Types, REST.client,
   REST.Authenticator.Basic, System.JSON, System.Generics.Collections,
-  Lazy.Types, Lazy.Log;
+  Lazy.Types, Lazy.Log, Lazy.Model;
 
 const
   DUO_Line_Seperator = #10;
 
 type
 
-  TOnDuoNotifyEvent = procedure(ASender: TObject; AMessage: string;
+  TOnDuoNotifyEvent = procedure(
+    ASender: TObject;
+    AMessage: string;
     ASuccess: boolean) of object;
   TOnDuoNotifyProc = reference to procedure(AMessage: string;
     ASuccess: boolean);
@@ -21,31 +23,11 @@ type
 
   TLZDuoBaseComponent = class(TLZComponent);
 
-  TLZDuoModel = class(TLZDuoBase)
-  public
-    constructor CreateClone(ASource: TLZDuoModel); virtual;
-    class function CreateModel<T: TLZDuoModel>: T;
-    procedure Assign(ASource: TLZDuoModel); virtual; abstract;
-    procedure FromJSONValue(AJSONValue: TJSONValue); virtual; abstract;
-  end;
+  TLZDuoModel = class(TLZModel);
 
-  TLZDuoModelList<T: TLZDuoModel> = class(TObject)
-  private
-    FItems: TObjectList<T>;
-    function GetCount: integer;
-    function GetItems: TObjectList<T>;
+  TLZDuoModelList<T: TLZDuoModel> = class(TLZModelList<T>)
   protected
-  public
-    constructor Create; reintroduce;
-    constructor CreateClone(ASource: TLZDuoModelList<T>); virtual;
-    destructor Destroy; override;
-    procedure Assign(ASource: TLZDuoModelList<T>); virtual;
-    function Add(ASource: T): T; virtual;
-    procedure Clear;
-    procedure FromJSONValue(AJSONValue: TJSONValue; AClear: boolean = true;
-      AArrayName: string = 'response'); virtual;
-    property Count: integer read GetCount;
-    property Items: TObjectList<T> read GetItems;
+    function GetDefaultArrayName: string; override;
   end;
 
   TBeforeDUORequestProc = reference to procedure(ARESTRequest: TRESTRequest);
@@ -61,8 +43,11 @@ type
 
   TLZDuoDateTimeHelpers = class(TLZDuoBase)
   public
-    class function UnixTimestampToDateTime(AValue: string;
-      ADefault: TDateTime = 0; AReturnUTC: boolean = true): TDateTime;
+    class function UnixTimestampToDateTime(
+      AValue: string;
+      ADefault: TDateTime = 0;
+      AReturnUTC: boolean = true): TDateTime;
+    class function DateTimeToUnixTimestamp(AValue: TDateTime): string;
   end;
 
   TLZDuoAPIBase = class(TLZDuoBaseComponent)
@@ -74,7 +59,9 @@ type
     procedure SetIntegrationKey(const Value: string);
     procedure SetSecretKey(const Value: string);
   protected
-    function ExecuteRequest(var AMessage: string; AResource: string;
+    function ExecuteRequest(
+      var AMessage: string;
+      AResource: string;
       AMethod: TRESTRequestMethod = rmGET;
       ABeforeDUORequestProc: TBeforeDUORequestProc = nil;
       AAfterDUORequestProc: TAfterDUORequestProc = nil): boolean; virtual;
@@ -95,8 +82,8 @@ implementation
 
 uses
   IdGlobal, IdHMAC, IdSSLOpenSSL, IdCoderMIME, IdGlobalProtocols, IdStack,
-  System.DateUtils, Rtti, TypInfo,
-  System.Hash, System.Net.URLClient, System.NetEncoding;
+  System.DateUtils, Rtti, TypInfo, Lazy.NetworkTools,
+  System.Hash, System.NetEncoding;
 
 { TDuoAPIBase }
 
@@ -105,8 +92,11 @@ begin
   Result := Trim(AValue) = '';
 end;
 
-function TLZDuoAPIBase.ExecuteRequest(var AMessage: string; AResource: string;
-  AMethod: TRESTRequestMethod; ABeforeDUORequestProc: TBeforeDUORequestProc;
+function TLZDuoAPIBase.ExecuteRequest(
+  var AMessage: string;
+  AResource: string;
+  AMethod: TRESTRequestMethod;
+  ABeforeDUORequestProc: TBeforeDUORequestProc;
   AAfterDUORequestProc: TAfterDUORequestProc): boolean;
 var
   LHTTPBasicAuthenticator: THTTPBasicAuthenticator;
@@ -272,38 +262,25 @@ end;
 
 class function TLZDuoNetworkTools.GetHostname: string;
 begin
-  TIdStack.IncUsage;
-  try
-    Result := GStack.Hostname;
-  finally
-    TIdStack.DecUsage;
-  end;
+  Result := TLZNetworkTools.GetHostname;
 end;
 
 class function TLZDuoNetworkTools.GetIPAddress: string;
 begin
-  TIdStack.IncUsage;
-  try
-    Result := GStack.LocalAddress;
-  finally
-    TIdStack.DecUsage;
-  end;
+  Result := TLZNetworkTools.GetIPAddress;
 end;
 
 class function TLZDuoNetworkTools.GetIPAddresses: string;
 begin
-  TIdStack.IncUsage;
-  try
-    Result := GStack.LocalAddresses.DelimitedText;
-  finally
-    TIdStack.DecUsage;
-  end;
+  Result := TLZNetworkTools.GetIPAddresses;
 end;
 
 { TDuoDateTimeHelpers }
 
-class function TLZDuoDateTimeHelpers.UnixTimestampToDateTime(AValue: string;
-  ADefault: TDateTime; AReturnUTC: boolean): TDateTime;
+class function TLZDuoDateTimeHelpers.UnixTimestampToDateTime(
+  AValue: string;
+  ADefault: TDateTime;
+  AReturnUTC: boolean): TDateTime;
 var
   LDateTimeUnix: Int64;
 begin
@@ -315,107 +292,19 @@ begin
   end;
 end;
 
-{ TDuoModelList<T> }
-
-function TLZDuoModelList<T>.Add(ASource: T): T;
-begin
-  FItems.Add(ASource);
-end;
-
-procedure TLZDuoModelList<T>.Assign(ASource: TLZDuoModelList<T>);
+class function TLZDuoDateTimeHelpers.DateTimeToUnixTimestamp(AValue: TDateTime): string;
 var
-  LSourceDevice, LDestDevice: T;
+  LUnixTime: Int64;
 begin
-  Clear;
-  for LSourceDevice in ASource.Items do
-  begin
-    LDestDevice := T.CreateClone(LSourceDevice);
-    FItems.Add(LDestDevice);
-  end;
+  LUnixTime := DateTimeToUnix(AValue, true);
+  Result := IntToStr(LUnixTime);
 end;
 
-procedure TLZDuoModelList<T>.Clear;
+{ TLZDuoModelList<T> }
+
+function TLZDuoModelList<T>.GetDefaultArrayName: string;
 begin
-  FItems.Clear;
-end;
-
-constructor TLZDuoModelList<T>.Create;
-begin
-  FItems := TObjectList<T>.Create;
-end;
-
-constructor TLZDuoModelList<T>.CreateClone(ASource: TLZDuoModelList<T>);
-begin
-  inherited Create;
-  Assign(ASource);
-end;
-
-destructor TLZDuoModelList<T>.Destroy;
-begin
-  try
-    FreeAndNil(FItems);
-  finally
-    inherited;
-  end;
-end;
-
-procedure TLZDuoModelList<T>.FromJSONValue(AJSONValue: TJSONValue;
-  AClear: boolean; AArrayName: string);
-var
-  LArray: TJSONArray;
-  LIdx: integer;
-  LModel: T;
-begin
-  if AClear then
-    Clear;
-  LArray := AJSONValue.GetValue<TJSONArray>(AArrayName, nil);
-  if Assigned(LArray) then
-  begin
-    for LIdx := 0 to Pred(LArray.Count) do
-    begin
-      LModel := TLZDuoModel.CreateModel<T>;
-      LModel.FromJSONValue(LArray.Items[LIdx]);
-      Add(LModel);
-    end;
-  end;
-end;
-
-function TLZDuoModelList<T>.GetCount: integer;
-begin
-  Result := FItems.Count;
-end;
-
-function TLZDuoModelList<T>.GetItems: TObjectList<T>;
-begin
-  Result := FItems;
-end;
-
-{ TDuoModel }
-
-constructor TLZDuoModel.CreateClone(ASource: TLZDuoModel);
-begin
-  inherited Create;
-  Assign(ASource);
-end;
-
-class function TLZDuoModel.CreateModel<T>: T;
-var
-  LRttiContext: TRTTIContext;
-  AValue: TValue;
-  rType: TRttiType;
-  AMethCreate: TRttiMethod;
-  instanceType: TRttiInstanceType;
-begin
-  Result := nil;
-  rType := LRttiContext.GetType(TypeInfo(T));
-  AMethCreate := rType.GetMethod('Create');
-
-  if Assigned(AMethCreate) and rType.IsInstance then
-  begin
-    instanceType := rType.AsInstance;
-    AValue := AMethCreate.Invoke(instanceType.MetaclassType, []);
-    Result := AValue.AsType<T>;
-  end;
+  Result := 'response';
 end;
 
 end.

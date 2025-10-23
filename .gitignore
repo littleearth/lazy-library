@@ -61,3 +61,6 @@ OSX32
 
 *.db
 .DS_Store
+
+# Specific to this project
+/build

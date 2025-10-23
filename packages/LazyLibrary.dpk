@@ -1,0 +1,107 @@
+package LazyLibrary;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS OFF}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION ON}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO OFF}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES OFF}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE RELEASE}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'Lazy Library Runtime'}
+{$LIBSUFFIX 'Athens'}
+{$RUNONLY}
+{$IMPLICITBUILD ON}
+
+requires
+  rtl,
+  bindengine,
+  bindcomp,
+  RESTComponents,
+  xmlrtl,
+  soaprtl,
+  inet,
+  IndySystem,
+  IndyProtocols,
+  IndyCore;
+
+contains
+  Azure.Core in '..\..\source\core\rest\azure\Azure.Core.pas',
+  Azure.Management in '..\..\source\core\rest\azure\Azure.Management.pas',
+  PWA.Core in '..\..\source\core\rest\pwa\PWA.Core.pas',
+  MSGraph.API in '..\..\source\core\rest\msgraph\MSGraph.API.pas',
+  MSGraph.Core in '..\..\source\core\rest\msgraph\MSGraph.Core.pas',
+  Lazy.BASE64 in '..\..\source\core\base\Lazy.BASE64.pas',
+  Lazy.Compare in '..\..\source\core\base\Lazy.Compare.pas',
+  Lazy.CryptINI in '..\..\source\core\base\Lazy.CryptINI.pas',
+  Lazy.GUID in '..\..\source\core\base\Lazy.GUID.pas',
+  Lazy.ISO8601 in '..\..\source\core\base\Lazy.ISO8601.pas',
+  Lazy.MD5 in '..\..\source\core\base\Lazy.MD5.pas',
+  Lazy.NATO in '..\..\source\core\base\Lazy.NATO.pas',
+  Lazy.Passwords in '..\..\source\core\base\Lazy.Passwords.pas',
+  Lazy.StopWatch in '..\..\source\core\base\Lazy.StopWatch.pas',
+  Lazy.ThreadedFileStream in '..\..\source\core\base\Lazy.ThreadedFileStream.pas',
+  Lazy.ThreadedStringList in '..\..\source\core\base\Lazy.ThreadedStringList.pas',
+  Lazy.Token in '..\..\source\core\base\Lazy.Token.pas',
+  Lazy.Types in '..\..\source\core\base\Lazy.Types.pas',
+  Lazy.Utils.Base in '..\..\source\core\base\Lazy.Utils.Base.pas',
+  Lazy.Utils in '..\..\source\core\base\Lazy.Utils.pas',
+  Lazy.Log.FileStream in '..\..\source\core\log\Lazy.Log.FileStream.pas',
+  Lazy.Log in '..\..\source\core\log\Lazy.Log.pas',
+  Lazy.NetworkTools in '..\..\source\core\network\Lazy.NetworkTools.pas',
+  Lazy.SNMP.Client in '..\..\source\core\network\Lazy.SNMP.Client.pas',
+  Lazy.REST.Types in '..\..\source\core\rest\Lazy.REST.Types.pas',
+  Lazy.RESTClient in '..\..\source\core\rest\Lazy.RESTClient.pas',
+  duo.accounts in '..\..\source\core\rest\duo\duo.accounts.pas',
+  duo.admin in '..\..\source\core\rest\duo\duo.admin.pas',
+  duo.api in '..\..\source\core\rest\duo\duo.api.pas',
+  duo.auth in '..\..\source\core\rest\duo\duo.auth.pas',
+  duo.models in '..\..\source\core\rest\duo\duo.models.pas',
+  O365.WebHook in '..\..\source\core\rest\o365\O365.WebHook.pas',
+  Lazy.Model in '..\..\source\core\base\Lazy.Model.pas',
+  MSGraph.Models in '..\..\source\core\rest\msgraph\MSGraph.Models.pas',
+  UniFi.Api in '..\..\source\core\rest\unifi\UniFi.Api.pas',
+  Unifi.Models in '..\..\source\core\rest\unifi\Unifi.Models.pas',
+  Lazy.CSVJSONUtils in '..\..\source\core\base\Lazy.CSVJSONUtils.pas',
+  Lazy.CSVtoJSON in '..\..\source\core\base\Lazy.CSVtoJSON.pas',
+  Lazy.JSONtoCSV in '..\..\source\core\base\Lazy.JSONtoCSV.pas',
+  SASBOSS.Api in '..\..\source\core\rest\sasboss\SASBOSS.Api.pas',
+  SASBOSS.Models in '..\..\source\core\rest\sasboss\SASBOSS.Models.pas',
+  Lazy.StringDifference in '..\..\source\core\base\Lazy.StringDifference.pas',
+  Lazy.Nullable in '..\..\source\core\base\Lazy.Nullable.pas',
+  Lazy.Log.Memory in '..\..\source\core\log\Lazy.Log.Memory.pas',
+  Lazy.Log.Debugger in '..\..\source\core\log\Lazy.Log.Debugger.pas',
+  Lazy.Log.Console in '..\..\source\core\log\Lazy.Log.Console.pas',
+  Lazy.Exception.Details in '..\..\source\core\log\Lazy.Exception.Details.pas',
+  Lazy.Log.Messaging in '..\..\source\core\log\Lazy.Log.Messaging.pas',
+  WinApi.DeviceNotifier in '..\..\source\core\winapi\WinApi.DeviceNotifier.pas',
+  WinApi.DirectoryWatch in '..\..\source\core\winapi\WinApi.DirectoryWatch.pas',
+  WinApi.FileVersionInformation.Base in '..\..\source\core\winapi\WinApi.FileVersionInformation.Base.pas',
+  WinApi.ICMP in '..\..\source\core\winapi\WinApi.ICMP.pas',
+  WinApi.NamedPipes.Client in '..\..\source\core\winapi\WinApi.NamedPipes.Client.pas',
+  WinApi.NamedPipes.Server in '..\..\source\core\winapi\WinApi.NamedPipes.Server.pas',
+  WinApi.NamedPipes.Types in '..\..\source\core\winapi\WinApi.NamedPipes.Types.pas',
+  WinAPI.PerformanceDataHelper in '..\..\source\core\winapi\WinAPI.PerformanceDataHelper.pas',
+  WinApi.VSS.Api in '..\..\source\core\winapi\WinApi.VSS.Api.pas',
+  WinApi.VSS.Consts in '..\..\source\core\winapi\WinApi.VSS.Consts.pas',
+  WinAPi.WinPerf in '..\..\source\core\winapi\WinAPi.WinPerf.pas';
+
+end.
+

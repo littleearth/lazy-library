@@ -4,16 +4,20 @@ interface
 
 uses
   System.SysUtils, System.Variants, System.Classes, REST.Types, REST.client,
-  REST.Authenticator.Basic, System.JSON, duo.api, System.Generics.Collections,
+  System.JSON, duo.api,
   duo.models;
 
 type
 
-  TOnDuoUsersEvent = procedure(ASender: TObject; AUsers: TLZDUOUsers;
-    AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean) of object;
+  TOnDuoUsersEvent = procedure(
+    ASender: TObject;
+    AUsers: TLZDUOUsers;
+    AMessage: string;
+    ASuccess: boolean;
+    var AOwnsObjects: boolean) of object;
 
-  TOnDuoUsersProc = reference to procedure(AUsers: TLZDUOUsers; AMessage: string;
-    ASuccess: boolean; var AOwnsObjects: boolean);
+  TOnDuoUsersProc = reference to procedure(AUsers: TLZDUOUsers;
+    AMessage: string; ASuccess: boolean; var AOwnsObjects: boolean);
 
   TLZDUOAdminApi = class(TLZDuoAPIBase)
   private
@@ -24,11 +28,18 @@ type
   protected
     function GetBaseResource: string; override;
   public
-    procedure GetLogo(AFileName: TFilename; var AMessage: string;
+    procedure GetLogo(
+      AFileName: TFilename;
+      var AMessage: string;
       var ASuccess: boolean);
-    procedure GetUsers(ALimit: integer = -1; AOffset: integer = -1;
-      AUsername: string = ''; AEmail: string = ''; AUserID: boolean = false;
-      AGetAllUsers: boolean = false; AOnDuoUsersProc: TOnDuoUsersProc = nil);
+    procedure GetUsers(
+      ALimit: integer = -1;
+      AOffset: integer = -1;
+      AUsername: string = '';
+      AEmail: string = '';
+      AUserID: boolean = false;
+      AGetAllUsers: boolean = false;
+      AOnDuoUsersProc: TOnDuoUsersProc = nil);
     procedure GetAllUsers(AOnDuoUsersProc: TOnDuoUsersProc = nil);
   published
     property AccountID: string read FAccountID write SetAccountID;
@@ -52,7 +63,9 @@ begin
   Result := '/admin/v1/';
 end;
 
-procedure TLZDUOAdminApi.GetLogo(AFileName: TFilename; var AMessage: string;
+procedure TLZDUOAdminApi.GetLogo(
+  AFileName: TFilename;
+  var AMessage: string;
   var ASuccess: boolean);
 begin
   ASuccess := ExecuteRequest(AMessage, BaseResource + 'logo', rmGET,
@@ -93,9 +106,11 @@ begin
     end);
 end;
 
-procedure TLZDUOAdminApi.GetUsers(ALimit, AOffset: integer;
-AUsername, AEmail: string; AUserID, AGetAllUsers: boolean;
-AOnDuoUsersProc: TOnDuoUsersProc);
+procedure TLZDUOAdminApi.GetUsers(
+  ALimit, AOffset: integer;
+  AUsername, AEmail: string;
+  AUserID, AGetAllUsers: boolean;
+  AOnDuoUsersProc: TOnDuoUsersProc);
 var
   LUsers: TLZDUOUsers;
   LResult, LOwnsObjects, LComplete: boolean;
