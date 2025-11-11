@@ -3,7 +3,7 @@ unit VCL.Lazy.Utils.Windows;
 interface
 
 uses Windows, Messages, SysUtils, Classes, Lazy.Utils.Base,
-  VCL.Lazy.Types.Windows,
+  VCL.Lazy.Types.Windows, VCL.Graphics,
   Lazy.Types;
 
 type
@@ -89,6 +89,12 @@ type
     class procedure OpenDefaultBrowser(AURL: string);
     class procedure OpenDefaultMailClient(ARecipient: string;
       ASubject: string = '');
+  end;
+
+  TLZGraphics = class(TLZObject)
+  public
+    class function ColorToHex(AColor: TColor; APrefix: string = '#'): string;
+    class function HexToColor(const AHex: string): TColor;
   end;
 
   TLZDateTime = class(TLZDateTimeBase);
@@ -334,7 +340,7 @@ end;
 class function TLZFile.GetCommonAppDataFolder: string;
 begin
   Result := IncludeTrailingPathDelimiter
-    (GetKnownFolderPath(FOLDERID_LocalAppDataLow) + Application.Title);
+    (GetKnownFolderPath(FOLDERID_ProgramData) + Application.Title);
   CheckDirectoryExists(Result, true);
 end;
 
@@ -937,6 +943,37 @@ end;
 class procedure TLZURL.OpenDefaultMailClient(ARecipient, ASubject: string);
 begin
   OpenDefaultBrowser('mailto:' + ARecipient + '?subject=' + ASubject);
+end;
+
+{ TLZGraphics }
+
+class function TLZGraphics.ColorToHex(AColor: TColor; APrefix: string): string;
+var
+  LRGBColor: LongInt;
+begin
+  LRGBColor := ColorToRGB(AColor); // Converts system colors to RGB
+  Result := Format('%.2x%.2x%.2x', [GetRValue(LRGBColor), GetGValue(LRGBColor),
+    GetBValue(LRGBColor)]);
+  Result := Trim(APrefix + Result);
+end;
+
+class function TLZGraphics.HexToColor(const AHex: string): TColor;
+var
+  LHex: string;
+  R, G, B: Byte;
+begin
+  // Remove the '#' if present
+  LHex := AHex;
+  if LHex[1] = '#' then
+    Delete(LHex, 1, 1);
+
+  // Convert HEX to RGB components
+  R := System.SysUtils.StrToInt('$' + Copy(LHex, 1, 2));
+  G := System.SysUtils.StrToInt('$' + Copy(LHex, 3, 2));
+  B := System.SysUtils.StrToInt('$' + Copy(LHex, 5, 2));
+
+  // Combine into a TColor
+  Result := RGB(R, G, B);
 end;
 
 end.

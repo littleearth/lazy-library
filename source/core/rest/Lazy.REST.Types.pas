@@ -41,6 +41,12 @@ type
     function Add(
       AKey: string;
       AValue: string): integer; overload;
+    function AddOrUpdate(
+      AKey: string;
+      AValue: string): integer;
+    function Find(AKey: string): TLZOAuth2ConnectionHeader;
+    function GetKeyIndex(AKey: string): integer;
+
     procedure FromString(AValue: string);
     procedure FromStrings(AValue: TStrings);
   end;
@@ -332,6 +338,33 @@ begin
   Result := Add(LHEader);
 end;
 
+function TLZOAuth2ConnectionHeaders.Find(AKey: string)
+  : TLZOAuth2ConnectionHeader;
+var
+  LIdx: integer;
+begin
+  Result := nil;
+  LIdx := GetKeyIndex(AKey);
+  if LIdx <> -1 then
+  begin
+    Result := Items[LIdx];
+  end;
+end;
+
+function TLZOAuth2ConnectionHeaders.GetKeyIndex(AKey: string): integer;
+var
+  LIdx: integer;
+begin
+  Result := -1;
+  LIdx := 0;
+  While (Result = -1) and (LIdx < Count) do
+  begin
+    if SameText(Items[LIdx].Key, AKey) then
+      Result := LIdx;
+    Inc(LIdx);
+  end;
+end;
+
 procedure TLZOAuth2ConnectionHeaders.FromString(AValue: string);
 var
   LStrings: TStrings;
@@ -351,6 +384,19 @@ begin
   for LIdx := 0 to Pred(AValue.Count) do
   begin
     Add(AValue.Names[LIdx], AValue.ValueFromIndex[LIdx]);
+  end;
+end;
+
+function TLZOAuth2ConnectionHeaders.AddOrUpdate(AKey, AValue: string): integer;
+begin
+  Result := GetKeyIndex(AKey);
+  if REsult = -1 then
+  begin
+    Result := Add(AKey, AValue);
+  end
+  else
+  begin
+    Items[Result].Value := AValue;
   end;
 end;
 

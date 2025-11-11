@@ -45,6 +45,10 @@ type
     procedure Assign(ASource: TLZModelList<T>); virtual;
     procedure Add(ASource: T); overload;
     function Add: T; overload;
+    procedure Delete(AIndex: integer);
+    function Remove(ASource: T): integer;
+    function Extract(ASource: T): T;
+    function ExtractAt(AIndex: integer): T;
     procedure Clear;
     procedure FromJSONValue(AJSONValue: TJSONValue; AClear: boolean = true;
       AArrayName: string = ''; AFreeJSONValue: boolean = false); virtual;
@@ -102,6 +106,16 @@ begin
   Assign(ASource);
 end;
 
+procedure TLZModelList<T>.Delete(AIndex: integer);
+begin
+  FItems.Delete(AIndex);
+end;
+
+function TLZModelList<T>.Remove(ASource: T): integer;
+begin
+  Result := FItems.Remove(ASource);
+end;
+
 destructor TLZModelList<T>.Destroy;
 begin
   try
@@ -109,6 +123,16 @@ begin
   finally
     inherited;
   end;
+end;
+
+function TLZModelList<T>.Extract(ASource: T): T;
+begin
+  Result := FItems.Extract(ASource);
+end;
+
+function TLZModelList<T>.ExtractAt(AIndex: integer): T;
+begin
+  Result := FItems.ExtractAt(AIndex);
 end;
 
 procedure TLZModelList<T>.FromJSON(AJSON: string);
